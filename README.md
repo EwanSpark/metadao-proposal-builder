@@ -1,0 +1,163 @@
+# MetaDAO Proposal Builder
+
+A local front-end for creating and driving proposals on any MetaDAO futarchy DAO
+(program `FUTARELBfJfQ8RDGhg1wdhddq1odMAJUePHFuBYfUxKq`, v0.6).
+
+> **This app signs real mainnet transactions.** It is unaudited, was built to solve a
+> specific problem, and moves DAO treasury funds. Read what an instruction does before
+> you sign it. Rehearse on devnet first.
+
+```bash
+npm install
+npm run dev
+```
+
+Then open http://localhost:5173.
+
+## DAO picker
+
+Lists **every futarchy DAO on the cluster** (84 on mainnet at the time of writing), with
+names and symbols from Metaplex metadata, sorted by proposal count. Filter by name,
+symbol or address; pasting an address by hand still works.
+
+The list comes from `getProgramAccounts` on the futarchy program, **which most public
+RPCs refuse**. A snapshot ships with the app (`src/daos.snapshot.json`) so the picker
+works on first load, and it switches to live data as soon as the RPC allows it. A banner
+tells you which source you are looking at.
+
+Regenerate the snapshot:
+
+```bash
+node scripts/snapshot-daos.mjs
+RPC=https://mainnet.helius-rpc.com/?api-key=… node scripts/snapshot-daos.mjs
+```
+
+## Three modes
+
+**1 · Create** — compose the instructions, then create the proposal (Draft state).
+**2 · Stake & Launch** — works on **any** existing proposal, not just the one created in
+this session: it lists the DAO's proposals automatically, or takes a pasted address.
+Stake, unstake, sponsor, launch.
+**3 · Finalize & Execute** — same picker, then finalization and vault-transaction
+execution.
+
+Discovery does not use `getProgramAccounts` (public RPCs throttle or refuse it). Since
+every futarchy proposal is a PDA of a Squads proposal, itself a PDA of
+(multisig, transactionIndex), the app walks `1..multisig.transactionIndex` and derives
+everything. That also yields the `transactionIndex`, which the `Proposal` account does
+not store although `vaultTransactionExecute` needs it. Falls back to sequential
+`getAccountInfo` when the RPC blocks `getMultipleAccounts`.
+
+## What a proposal can do
+
+The full lifecycle, in the order the program enforces:
+
+1. **Load a DAO** — parameters, spot pool reserves, price, and whether a launch is
+   currently possible.
+2. **Compose the instructions** the treasury will execute if the proposal passes:
+   spend USDC, buyback via Jupiter DCA, add or remove liquidity, liquidation mandate,
+   or a raw JSON instruction.
+3. **Create** — Squads vault transaction and proposal, then the binary question, both
+   conditional vaults and the futarchy proposal. Result: `Draft`.
+4. **Stake** up to `base_to_stake` (or sponsor if you hold `team_address`).
+5. **Launch** — splits the spot reserves in half and starts the clock.
+6. **Finalize** after `seconds_per_proposal`, then **execute** the vault transaction as
+   a separate transaction (the Solana runtime forbids futarchy → squads → futarchy).
+
+## Implementation notes worth knowing
+
+**The vault transaction is built by hand.** The SDK's `squadsProposalCreateTx` sets the
+inner message's `payerKey` to the proposer's wallet, while the program's own tests use
+`payerKey = vaultPda`. Since the vault is what signs at execution time, this app follows
+the tested path — see `src/lib/flow.ts`.
+
+**`withdrawLiquidityIx` is missing from the published SDK** (0.1.1-alpha.0). The
+instruction is built directly from the Anchor program in `src/lib/actions.ts`.
+
+**Liquidity withdrawal passes `min_base = min_quote = 0`.** Reserves move during the
+3-day vote; a tight bound would make execution fail on `SwapSlippageExceeded`. This is a
+deliberate trade-off, not an oversight.
+
+**The buyback reproduces Ranger #2 byte for byte** — 2M USDC → RNGR, 8640 orders of
+231.481481 every 300s, max price $0.78. The Jupiter DCA instruction list, account flags,
+argument layout and every PDA were reverse-engineered from that executed mainnet
+transaction. Note that the "max price" does not exist in Jupiter's interface: it is
+encoded as `minOutAmount` per cycle, i.e. `inAmountPerCycle / maxPrice`.
+
+**A liquidation proposal is a memo, not a transfer.** Both real ones on mainnet are a
+single SPL memo with zero accounts — the market votes a mandate, and MetaDAO then runs
+the `liquidation` program (`LiQnow…`) with its own authorities. Verified on-chain:
+Ranger #4 (passed) and Superclaw #3 (rejected).
+
+**The creation transaction caps at 1232 bytes.** It carries the whole serialized inner
+message, so a long memo overflows it. The app checks the size up front and says so
+instead of surfacing a raw web3.js error.
+
+**The raw-instruction tab** covers everything the forms do not: Metaplex metadata,
+Meteora DAMM withdrawals, liquidation setup, mint governor, Omnipair.
+
+## RPC
+
+Public Solana endpoints return **403 to browser requests**. Use the "custom RPC" field
+with your own Helius / Triton / QuickNode endpoint. For quick testing,
+`https://solana-rpc.publicnode.com` allows CORS but blocks `getProgramAccounts` and
+`getMultipleAccounts`.
+
+## Deploying to Cloudflare Pages
+
+The app is a static Vite SPA — no server, no environment variables, no secrets.
+
+| Setting | Value |
+|---|---|
+| Build command | `npm run build` |
+| Build output directory | `dist` |
+| Root directory | this folder, if the repo has other projects |
+| Node version | 20 or later |
+
+Or from the CLI:
+
+```bash
+npm run build
+npx wrangler pages deploy dist
+```
+
+There is no client-side router, so no `_redirects` file is needed.
+
+Two things to know before you publish it. The app talks to whatever RPC the user enters,
+so a public deployment needs users to bring their own endpoint — the bundled default
+will rate-limit. And the bundle includes `PERMISSIONLESS_ACCOUNT` from the MetaDAO SDK,
+a keypair whose private key is public by design (it is what makes proposal creation
+permissionless); that is expected, but it does mean a real keypair ships in the
+JavaScript.
+
+## Scripts
+
+Generic tools, usable on any DAO or proposal:
+
+```bash
+node scripts/decode-proposal.mjs <proposalAddress>   # decode a proposal's vault transaction
+node scripts/snapshot-daos.mjs                       # regenerate the bundled DAO list
+node scripts/survey-proposals.mjs                    # decode every proposal on every DAO
+```
+
+`scripts/survey.json` is the output of the last survey: 130 proposals across 22 DAOs,
+with each one's instructions classified by program. Useful as a reference for what
+proposals actually do in practice.
+
+`examples/` holds the one-off scripts written for a specific Basket proposal — building
+its instructions, sizing the transaction, and verifying on-chain that the created
+proposal matches intent. They are hardcoded to that proposal and are meant as worked
+examples, not tools.
+
+## Verification status
+
+| | |
+|---|---|
+| Typecheck and production build | ✅ |
+| Loading and decoding a DAO, listing proposals | ✅ tested on mainnet |
+| Create / stake / launch / finalize / execute | ⚠️ create tested on mainnet; the rest **not executed** |
+
+Devnet runs futarchy **v0.6.0** (mainnet is v0.6.1). Verified identical there:
+`initializeProposal`, `stakeToProposal`, `launchProposal`, `finalizeProposal`,
+`provideLiquidity`, `withdrawLiquidity`. Only **`sponsorProposal` is absent from
+devnet** — that button will fail there.

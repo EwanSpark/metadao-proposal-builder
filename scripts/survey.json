@@ -1,0 +1,3081 @@
+[
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6jHhzNYy4y6oExDpgqkZqXwZ23quaEZXn7vDMqmYxtHY",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "this also be a memo",
+        "disc": "7468697320616c73",
+        "accounts": 0,
+        "dataLen": 19
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "9xEPGJjhpSrX2iP5n3rpYFBeDa2g6g9Cyo58vdZ8zZSr",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "m",
+        "disc": "6d",
+        "accounts": 0,
+        "dataLen": 1
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 3,
+    "squadsIndex": 3,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DZ65Dg1rnf3r9JSPc2b5rsEXqVjkSN248wemvZgNcrxn",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 36
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 4,
+    "squadsIndex": 4,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8merHybpNyxF1zkogkQC4LRLN5dwaXGVJKwJdJcF5UVo",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 188
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 5,
+    "squadsIndex": 5,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8bimtsyiNEC5D5SJZf3624CUPhFH8AFE7VbMbxRwu3wv",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "070080c6a47e8d03",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 6,
+    "squadsIndex": 6,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6hwnL631bv8qVsrEmwLYDTXzB3gpC4E7qbYSjzhMbvb4",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "030010a5d4e80000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 7,
+    "squadsIndex": 7,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "BAveZiGCEoVmT1ch3ntPJZCozKcmtQtmNpgyfzuMd8Vc",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "070000c16ff28623",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 8,
+    "squadsIndex": 8,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3YnEXG837g8josARXam9Yr4N3uGiBvg2rvDGcQrWnUcn",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing squads fixes",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 20
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 9,
+    "squadsIndex": 9,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "bL87QyGojEQn8yxwyEqiwmWRCBqvA6xxYiGM7GXtiQi",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 36
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 10,
+    "squadsIndex": 10,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "HyzrVpo634DqpRnZG2HC9npHnNXGBpJVUhchbXoxx1Pg",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0340420f00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 11,
+    "squadsIndex": 11,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "4KYmugWyEw9wC71JeW6yr2J6E9SqbpPLyeoWL9Vs8kAT",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0340420f00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 12,
+    "squadsIndex": 12,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "AV7kNC3ZUAiyEHYHVGcA5Dga5VGjN4pdwmp8U8qrfz7u",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 36
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 13,
+    "squadsIndex": 13,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DqCf2yhnxkSW9TRabUazP1mFSz2VQDJaDPKPqYu4g9Nu",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 252
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 14,
+    "squadsIndex": 14,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7ruoZrvJEMd3BGNkkZmG6knaZVJLsS4L2t7hKJGffmU8",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 252
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 15,
+    "squadsIndex": 15,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "AxVzFwY23Dv9NtkAMfeNyJGrqXxt9Y6NuxVsB5zsyDsF",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 252
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 16,
+    "squadsIndex": 16,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "Xszzqo2FTGfjyKFpoVFw8rnp3tbgTsrXiDqK1tFZbta",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 77
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 17,
+    "squadsIndex": 17,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3LjDSGhjArp6DKb19Z1ft9chxqRKrkgZg9gZ4z3ZaQx3",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Memo",
+        "disc": "4d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 18,
+    "squadsIndex": 18,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CvAzf7Fn1Fwyt2z6Mux4bj9ivs86Xaz8A49sLAev2jd4",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "memo",
+        "disc": "6d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 19,
+    "squadsIndex": 19,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "69rM1mrWKJKAuBwenPT1smzVtqj4jer3qwTfcCx9ghj4",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "memo",
+        "disc": "6d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 20,
+    "squadsIndex": 20,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DJJV5Vg3e39w1UHJRjcZAwxVvKrip1UuZmVfgC4iZxzJ",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "memo",
+        "disc": "6d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 21,
+    "squadsIndex": 21,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3uaBMCQvwTDX6WCy5whqegBerRBqmwvwBmWBjgvhwAUp",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "memo",
+        "disc": "6d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 22,
+    "squadsIndex": 22,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "FZJLyiJgkPLzYshrzN8NLiz4WdMbNDNFzHfbJq21F9di",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0340420f00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 23,
+    "squadsIndex": 23,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "HAWJGCLp7VeDhZUugLhLaCh7wpaahngHoUNRwFekNjHN",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0340420f00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 24,
+    "squadsIndex": 24,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2EAgNh8gHAJjnickgJRoSLZHN3LKbhmhpCaXKHt5Kd1y",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 36
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 25,
+    "squadsIndex": 25,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "BVmTdeWm7bmQse62jD5WMcPoYsFA6fYiNrBmPrbG2QHV",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 188
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 26,
+    "squadsIndex": 26,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "De9GJyQEnwnQv6pBk5keCoUT3YVS5jY8ePLTTXoKgRRr",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300093d00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 27,
+    "squadsIndex": 27,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "5M7qRUdBDfhxRVT8JGPFvRxg3tNpiwtN4BQc2JfxgwBS",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "test memo",
+        "disc": "74657374206d656d",
+        "accounts": 0,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 28,
+    "squadsIndex": 28,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DPEYxC9rLDRbNmPwG3TKmpo9d8o14QR3GQcRagicF1e",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc indexer",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 20
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 29,
+    "squadsIndex": 29,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2ZjxcwFHBp7mp7fxCWgpKzFkX4iAX56VyZbhVhTWS6to",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc indexer v2",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 23
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 30,
+    "squadsIndex": 30,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "ASJddqr5UMocRZmgowGp73uTETF9Kw9mu2rNhAovn3ix",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc indexer v3",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 23
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 31,
+    "squadsIndex": 31,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3e9MN5V4nmWzJbVP7LQVgC6m6TR164A8RH8dwjk7Epkw",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc indexer 4",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 22
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 32,
+    "squadsIndex": 32,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "A9thiFVQjUgp8cTJxnyQWGNdAse68mmKuebX4T58iK4m",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Meteora DAMM v2",
+        "label": "Meteora DAMM v2",
+        "disc": "5055d14818ceb16c",
+        "accounts": 15,
+        "dataLen": 40
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.burn",
+        "disc": "08837781fd6c0000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 33,
+    "squadsIndex": 33,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "FcmMiNZQL9wpWFi5Hyc2u9Hrs1AWGh7NXnSSb6gykkLC",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 86
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 34,
+    "squadsIndex": 38,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8nLhjLcyDk8dzzy12BVZqoC1nKySstWpsw2Ays2nBHZy",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0263b70100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 35,
+    "squadsIndex": 39,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6t6tFaGkKpjJfzka4NawLXVgmWSbaXEpF4cssx1biLym",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0263b70100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 36,
+    "squadsIndex": 40,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6HFsy5P464T8bekf7srtiKH8pDy4AEAGRxkkJo8Vjsmo",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0293e10100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 37,
+    "squadsIndex": 41,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7s5S8kYyXUnECCwE4bLhjS6XLJ1DKV53Y7LGpfqJWS9a",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "the lid",
+        "disc": "746865206c6964",
+        "accounts": 0,
+        "dataLen": 7
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 38,
+    "squadsIndex": 42,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2Q6RqniH4PLGX1E9XfqLhmwmkKuJepEAnwQMZwYCBN8c",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "this is a test",
+        "disc": "7468697320697320",
+        "accounts": 0,
+        "dataLen": 14
+      }
+    ]
+  },
+  {
+    "dao": "TST30M",
+    "daoAddress": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
+    "number": 39,
+    "squadsIndex": 43,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7kVh37KZ4xN3EhvtrTY7y2tFkkz1vwx74kDj3pPWbEDx",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "this is a test",
+        "disc": "7468697320697320",
+        "accounts": 0,
+        "dataLen": 14
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 1,
+    "squadsIndex": 7,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "GcdHiq8jzmYUHLg4inBagUTdjDmU8Z4zWeeX5ghTCAkd",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "test",
+        "disc": "74657374",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 2,
+    "squadsIndex": 8,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "EfXs6QvSAm7pdw6suGP7RhnHpJLhroEUo4s8oqxp6FAc",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Another test",
+        "disc": "416e6f7468657220",
+        "accounts": 0,
+        "dataLen": 12
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 3,
+    "squadsIndex": 9,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3Sgd9mVrDQU8B6MsfvWscFoYoAATTYpyB1cxDCkT1Q5u",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing",
+        "disc": "74657374696e67",
+        "accounts": 0,
+        "dataLen": 7
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 4,
+    "squadsIndex": 10,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "JBsHtThHapegcD6T8WfCg13f2yP4fZvLfPLmaWLbEMVQ",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 252
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 5,
+    "squadsIndex": 11,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DKWB5onK3S6awkgm7VwnkrNpuAnPbsYAWbcTBD15Vroo",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 252
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 6,
+    "squadsIndex": 12,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "NCYdLgJ1vd8JuMDTGDPUCWtUiLmiC1NTLSKjuE8pzL7",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 29
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 7,
+    "squadsIndex": 13,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "88BZwgGux4mm1anUcYzbQFZpcbPfbFzzZUyMb2JqgM1M",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "0740af0d86487000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 8,
+    "squadsIndex": 14,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "B618aWVhhVW5cEaLAggPo9MNaN7iCBMXP9M8zU11Yqqv",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 12
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 9,
+    "squadsIndex": 15,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "CZZnYfoVKG2Xmcnwga4y748wiGft7YRdxBMP2Lexjhcy",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 12
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 10,
+    "squadsIndex": 16,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "DcVUBEEmKbHqYLheDFT1PGa3krUzG6v5ySHBCgLXX4it",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 12
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 11,
+    "squadsIndex": 17,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "AZBxfjwyRBET6GNujAWd2WV4svVHMUbo6SFCMqKrKMUT",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Meteora DAMM v2",
+        "label": "Meteora DAMM v2",
+        "disc": "5055d14818ceb16c",
+        "accounts": 15,
+        "dataLen": 40
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.burn",
+        "disc": "0874efc873e70000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+    "number": 12,
+    "squadsIndex": 18,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "ALWLPUuSjMbimLXiitMD5QDB35BYCPNjbw6KBjD9vrhb",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 64
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "GAHUBQzZbvTpESCkkFbQyim8wB7kgyJsgvHRp2MtidQW",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "030080c6a47e8d03",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3LL34L6U6B6Y6hAx459aLtLibkaGST8nZbRmdQCoYeM5",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0380841e00000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 3,
+    "squadsIndex": 3,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7HmH21uioRETmP6DDJb5aVV5pQksnqnCkVwnD1CsFC3T",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "he",
+        "disc": "6865",
+        "accounts": 0,
+        "dataLen": 2
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 4,
+    "squadsIndex": 4,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2g8kCL1rwZwyjwK18Fhs3oRUgZx8H27nwnP7at1UzY1N",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Memo",
+        "disc": "4d656d6f",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 5,
+    "squadsIndex": 5,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "HLVsFzsVnUQgoamco7z3sJJ1FoEYC9nM3BEndSYZF5fg",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 29
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 6,
+    "squadsIndex": 6,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "BSXRezN7ySoX2Hf6pqU5R3PnQjB4xZ1nJwGwoU4K1ECT",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "0740af0d86487000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 7,
+    "squadsIndex": 7,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "56JRY3EVNvGtSPvx3ykGcgbReh6os9tGKK1CikqsgN2q",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "testing grpc indexer",
+        "disc": "74657374696e6720",
+        "accounts": 0,
+        "dataLen": 20
+      }
+    ]
+  },
+  {
+    "dao": "TSTAVI",
+    "daoAddress": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
+    "number": 8,
+    "squadsIndex": 8,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "8R6CSiDgYoHpRBXNmJy3jJB3gmq1pbMkgd2qEg4FSd9L",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Meteora DAMM v2",
+        "label": "Meteora DAMM v2",
+        "disc": "5055d14818ceb16c",
+        "accounts": 15,
+        "dataLen": 40
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.burn",
+        "disc": "0848ffd75a740000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CYr2YPr7MEUHZrdRs6ZbHMKXVBHPAwR4aocvwnUzHoj2",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Burn team performance package",
+        "disc": "4275726e20746561",
+        "accounts": 0,
+        "dataLen": 29
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 2,
+    "squadsIndex": 8,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "4P35jGwheMhNCk1UNfeTdMYUfrSWyV41sFwWeMLAV7zx",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "02ed400200",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 3,
+    "squadsIndex": 9,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "54eAuD8NKHvJy7WurCwZirFEJfVvmH6cz8yYPDWpwLTc",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "02f0490200",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 4,
+    "squadsIndex": 12,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "Gte4BCXKvQdzzN8sXMCXNwvKdrYSUHkTQWZVA8DECM2y",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "029be50100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 5,
+    "squadsIndex": 19,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "71YB7b8WdVLkCwTuoBP7wxae49PMYmoAUnd3r1ZzNEQM",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "MetaDAO proposal\nTitle: ZKFG OTC\nBody: OTC sale:\nUp to 2,000,000 ZKFG at 75% of ZKFG/USDC market price.\nUSDC to treasury before/atomically with ZKFG transfer. \n\nFull proposal: https://drive.google.com/file/d/1Zv0G75gVJ45PO_afs-ZtFMNF2EaxAK_L/view?usp=drive_link",
+        "disc": "4d65746144414f20",
+        "accounts": 0,
+        "dataLen": 261
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 6,
+    "squadsIndex": 20,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "BWachMwZJZS9y6pDuYFr7xusQZU3azNGSsm2jeRj7qXb",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "MetaDAO proposal\nTitle: Orderly ZKFG Liquidation Offer Capped at $0.15 per Token\nBody: Authorize an orderly ZKFG liquidation offer capped at $0.15 USDC per ZKFG.\nThe offer gives holders a clean premium exit and avoids a contested governance process.\nFull proposal: https://drive.google.com/file/d/1PP582ysjUE4BjCv_MVPbh_luuUsvIacA/view?usp=sharing",
+        "disc": "4d65746144414f20",
+        "accounts": 0,
+        "dataLen": 347
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 7,
+    "squadsIndex": 24,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "Fi9CjytnPxRjyPjCcy7AoowoY9sDHfBSWo65iR6mGXfU",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the execution of the proposal to escrow and offer liquidation to ZKFG, if conditions not met, authorize a moratorium for up to 90 days.",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 155
+      }
+    ]
+  },
+  {
+    "dao": "ZKFG",
+    "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+    "number": 8,
+    "squadsIndex": 30,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "APk1tpQq75LyrMmE4ryhuEjV37qggVaqrJgYpzKJ975z",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "MetaDAO proposal\nTitle: Take ZKFG private round 2\nBody: We hereby authorize the execution of the proposal\n\nhttps://assets.zinc.cash/prop-008/Take%20ZKFG%20private%20round%202.pdf",
+        "disc": "4d65746144414f20",
+        "accounts": 0,
+        "dataLen": 178
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 1,
+    "squadsIndex": 6,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DAxuUHwkLm5rQyFjx8Cnm28bBuApUL9pBrxAMnr8i3VU",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 2,
+    "squadsIndex": 7,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "4fvXFc8LyCQqCoRdk6ytvrhGeoknphy18CW2njiZpGgf",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "test ",
+        "disc": "7465737420",
+        "accounts": 0,
+        "dataLen": 5
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 3,
+    "squadsIndex": 8,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6fJBg3YLRuauvvAAPXv4fgEPtT5xmUrLi7E3n6B6Ayb8",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "test",
+        "disc": "74657374",
+        "accounts": 0,
+        "dataLen": 4
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 4,
+    "squadsIndex": 9,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "5xLJcrtWpdkRL75dRMLs6zB5gAuNW25VQT95SEDhMx7U",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 66
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 5,
+    "squadsIndex": 18,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7LRNcA2emNCKcM9LDtuaHnCh7qjVGa8H9ccEycyjMB96",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "02c6040200",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 6,
+    "squadsIndex": 19,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6V4Bh5wEWPxPmA9r6Lc3NMFRcdYtuJ3R6qCib5st7YSA",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "02c05c1500",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03a0860100000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0296da0100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "PPRD",
+    "daoAddress": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
+    "number": 7,
+    "squadsIndex": 20,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "4Lab6QfYUWmx6nfzNzHK7ErgR47WVZ9XJ8QNdmsNtK8L",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "029ee10100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 1,
+    "squadsIndex": 12,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7xXqxr3uNH6V54qyXzeYkMxJGLXxBN8Z2ataUPkiZCVF",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the liquidation of the treasury and return of IP to the original owners",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 91
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 2,
+    "squadsIndex": 13,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CrKXzzdovrRp5NzCKqdEm3S3m9Ef4fCLa4KzrPoEZqwq",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the liquidation of the treasury and return of IP to the original owners",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 91
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 3,
+    "squadsIndex": 14,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "FZNt29qdEhvnJWswpoWvvAFV5TBhnpBzUaFced3ZFx1X",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the liquidation of the treasury and return of IP to the original owners",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 91
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 4,
+    "squadsIndex": 15,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "2kKjgU1s3u1ADGyX5Yiv5aJ11biL9W1jTwHmbCUC926a",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the burning of the performance package and approve the Q2 roadmap",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 85
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 5,
+    "squadsIndex": 16,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DFvVT3CQFfaH3azpYMbj8H6B3RCN5wfdQXDQHd9pDXQT",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the burning of the performance package and approve the Q2 roadmap",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 85
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 6,
+    "squadsIndex": 17,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2WibJqbmjWCH6a6R5s6hs3U2q3UmEefSYj6hwgU3C8U1",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the burning of the performance package and approve the Q2 roadmap",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 85
+      }
+    ]
+  },
+  {
+    "dao": "SUPER",
+    "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+    "number": 7,
+    "squadsIndex": 20,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "omxRS821cznVw3pAxYApwMQ2BurFi5FjDPWzevFjXGv",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "Hw4KF6uZxdu8demt2z1Z9ePSF9Bxuyqtt3nFgoLK9EHu",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We authorize the token burn, reduction in monthly allowance and one time payment for Dexscreener/Jupiter update as per the proposal.",
+        "disc": "576520617574686f",
+        "accounts": 0,
+        "dataLen": 132
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 2,
+    "squadsIndex": 20,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "HiihSh8H6D1JAPpDeD8oNwqQ8AkTmYA9QS82p5NPSRhN",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "026f130200",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 43
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 3,
+    "squadsIndex": 28,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "HJWbYbt7v5gDmg8AmgcyCgf5F4S4MU2xrx2V2Ku4sBCA",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 4,
+    "squadsIndex": 33,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "E5AEP2hCTfYVq4Rnc1TKZjTauSSEYFFBr8g49ktoN3pU",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Content creator / Social media manager hire",
+        "disc": "436f6e74656e7420",
+        "accounts": 0,
+        "dataLen": 43
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 5,
+    "squadsIndex": 60,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "FBzwMNr1s37eTkLY7iUGeC1fC7gfRvgdPx5D8sNxvWKJ",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300f2052a010000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "FUTARDIO",
+    "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+    "number": 6,
+    "squadsIndex": 61,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "BbGa5nx6owLwJ9Wt9Pr3FHccpove9uSvNX4C59Andxf3",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300f2052a010000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "9gRnca9UVoJLrpYLWFnXEPmFbQ1EbAAK155AzxdFRBpP",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 36
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3a45qx4Wjm8mLyrrKN88hc7rpBCtLaZZySpGzWHGcFLg",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "0740af0d86487000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
+    "number": 3,
+    "squadsIndex": 3,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "y9dVPDNTFByFLEdeHmpE4GC8N1ysnpTE1rwRww5wbJj",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "0700e40b54020000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
+    "number": 4,
+    "squadsIndex": 4,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "9jxXK2o4FKLgufC3hoUKFU2jLqPGyVa23MFU1dggCZL5",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 29
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
+    "number": 5,
+    "squadsIndex": 9,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 2,
+    "proposal": "BjjEs3AsxYWxHJRNk6bbWTKgRUSCKjVK6tGoGzACLPs7",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "UMBRA",
+    "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "71nYHjLpgY7evn9G4UaGCBd6cYHpGWzrzd3ESs2KUduG",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300da7c72180000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "UMBRA",
+    "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+    "number": 2,
+    "squadsIndex": 6,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "3seyB3i5bLQcUReaQoLkgwkNbVH7U7nnfiAFVaNawU6F",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "03005cb2ec220000",
+        "accounts": 3,
+        "dataLen": 9
+      },
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 54
+      }
+    ]
+  },
+  {
+    "dao": "UMBRA",
+    "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+    "number": 3,
+    "squadsIndex": 73,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6pQtSD1uUEpj35AgDT8Bjkqt2VxvZw4wDVBLbF5cqXo8",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "UMBRA",
+    "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+    "number": 4,
+    "squadsIndex": 74,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "2a5qE2E8pSv2EqHAfDvAuKHqMpMubBVjGPZr7bChiZKy",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the removal of liquidity OTC sale and creation of pool and if necessary a minting of additional supply.",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "UMBRA",
+    "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+    "number": 5,
+    "squadsIndex": 149,
+    "state": "failed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8sysa3XPrvKPmUA4qoZCn9h4vp7Mb45Ynezg542nui8Q",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "03a2f1e6286d0100",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "LOYAL",
+    "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2VjKHNQdkLfHtoH1GtPVseJv1kP3VUoLGcZLc29SttgS",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "LOYAL",
+    "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "GXdWao4Cy6EsvvS9atMb1kCPEAFwPXBe5kKCeLDtRJNm",
+    "instructions": [
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Meteora DAMM v2",
+        "label": "Meteora DAMM v2",
+        "disc": "5055d14818ceb16c",
+        "accounts": 15,
+        "dataLen": 40
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.burn",
+        "disc": "08d091e14b5e0000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "LOYAL",
+    "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+    "number": 3,
+    "squadsIndex": 12,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "ARoMjFnFfe66QK7rtLXKHkSAqwZohr4Z5GeU55x6zRzt",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "LOYAL",
+    "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+    "number": 4,
+    "squadsIndex": 14,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "98zXsz1RtvYw4zHrxaZDdGBU3BgqfsX9XJbXBLSJUBST",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Upon confirmation of the integrity of the Loyal Autonomous Treasury Vault, authorize the rebalancing of liquidity described in Part 1, the program migrations and upgrades described in Parts 3 and 4, and the OTC sale of up to 2,142,857 LOYAL from the treasury (targeting $300,000), subject to the conditions outlined in Part 2.",
+        "disc": "55706f6e20636f6e",
+        "accounts": 0,
+        "dataLen": 326
+      }
+    ]
+  },
+  {
+    "dao": "META",
+    "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "8PHuBBwqsL9EzNT1PXSs5ZEnTVDCQ6UcvUC4iCgCMynx",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "070070c9b28b0000",
+        "accounts": 3,
+        "dataLen": 9
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "030010a5d4e80000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "META",
+    "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "Dt6QxTtaPz87oEK4m95ztP36wZCXA9LGLrJf1sDYAwxi",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We authorize the signature on the pending agreement and transfer of funds as outlined in the proposal.",
+        "disc": "576520617574686f",
+        "accounts": 0,
+        "dataLen": 102
+      }
+    ]
+  },
+  {
+    "dao": "META",
+    "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+    "number": 3,
+    "squadsIndex": 5,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "FG93KeoUdUmBtTcxWhJZicc6ef824qccpFdesbw2RJjM",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "030010acd1530000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "META",
+    "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+    "number": 4,
+    "squadsIndex": 6,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "8HW2EN4eczYhdQWMERS8GwJzLq1884WRfrFAQNTxABzv",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300204aa9d10100",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "PAYS",
+    "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+    "number": 1,
+    "squadsIndex": 7,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CVTekSB5HrzRG5WFEeEN8Zn4GfEriGHSm2r6QvuSRyy5",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0200000000",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "PAYS",
+    "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+    "number": 2,
+    "squadsIndex": 8,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "7nBSHmeTi2KXZMYmcynZVNm38KvaLP7FUuGSsU7nxG17",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "028dec0100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "PAYS",
+    "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+    "number": 3,
+    "squadsIndex": 9,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "EQfFJLvfm3nXTEXuHUM9G3aqGT2LZAjbzzKPoHgUDSUB",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "PAYS",
+    "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+    "number": 4,
+    "squadsIndex": 10,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "2VmEeSdSfwDBWUYHH61iJCz8TwdmEqhTSmXWBgpHrWzN",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the execution of the proposal as indicated",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 62
+      }
+    ]
+  },
+  {
+    "dao": "RNGR",
+    "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+    "number": 1,
+    "squadsIndex": 2,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "4TKTgoXf2oM92aEmgbBN6vsW2ceC3CqEeYnYsxfHecjT",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0200000000",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "RNGR",
+    "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+    "number": 2,
+    "squadsIndex": 3,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6cdhy4j6CAAJjE1z2iQDsFda2BrqJkhtHrRWT9QasSoa",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0298ec0100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "RNGR",
+    "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+    "number": 3,
+    "squadsIndex": 12,
+    "state": "removed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6MGyFXnTKTWNEc5FYvADPKW7LJ7YvaqFT6AykbchrPxr",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_remove_spending_limit",
+        "disc": "e4c6886f7b04b271",
+        "accounts": 4,
+        "dataLen": 47
+      },
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 156
+      }
+    ]
+  },
+  {
+    "dao": "RNGR",
+    "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+    "number": 4,
+    "squadsIndex": 13,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "DPATwR2HLcGZCBZCTffzagV4r7dp5FF2C9aJmiuCDUpS",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Approve the liquidation of Ranger and transfer the IP to Glint House Pte. Ltd.",
+        "disc": "417070726f766520",
+        "accounts": 0,
+        "dataLen": 78
+      }
+    ]
+  },
+  {
+    "dao": "SOLO",
+    "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+    "number": 1,
+    "squadsIndex": 14,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8c9sFZ5Z46ZLnhywkWuJ5BhJK4Wrj19AN4gzQicyBKjK",
+    "instructions": [
+      {
+        "program": "futarchy",
+        "label": "futarchy.updateDao",
+        "disc": "83484b1970d26d02",
+        "accounts": 4,
+        "dataLen": 78
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "03005cb2ec220000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "SOLO",
+    "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+    "number": 2,
+    "squadsIndex": 15,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "wwRoJYcur3EjnQCLodUhLqCs6H9NQ97RvP6JNV4b9F6",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0282130200",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "SOLO",
+    "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+    "number": 3,
+    "squadsIndex": 17,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "GA7hp3RzLNzQe5qnsfiyELhh7CsMN6ja1JrfgCWQNpZA",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "SOLO",
+    "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+    "number": 4,
+    "squadsIndex": 18,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "55Sdas9PeRW3tdLn885WWCgRKTsPiYMug1EbJNFSERTj",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby ratify the DP-00003 and its contents.",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 47
+      },
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300c8e6bc170400",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "OMFG",
+    "daoAddress": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "8WcHZ6U5PPa98xwXwKJxNKAhgKNdYMrwoUSpEyMdSww9",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300c817a8040000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "OMFG",
+    "daoAddress": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+    "number": 2,
+    "squadsIndex": 2,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "Eanh1JT4G1qcRskQVo9TBksgH9ruWZLcJGP5F6TzXP5N",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "OMFG",
+    "daoAddress": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+    "number": 3,
+    "squadsIndex": 3,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "B8LxDoqY4irmCLYxYskPdF24vGfETsX56NBoMYtXfu9c",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "0700505c18a30100",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "P2P",
+    "daoAddress": "CFYmVUEYikV8DaKDNs6WSHC5uAxG6T7KqFBCsAebACFu",
+    "number": 1,
+    "squadsIndex": 5,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "AerjTFvEUDDfgpCCeMfgR1v9FtH4UiEgHCehBhV8CExF",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "0238db0100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "P2P",
+    "daoAddress": "CFYmVUEYikV8DaKDNs6WSHC5uAxG6T7KqFBCsAebACFu",
+    "number": 2,
+    "squadsIndex": 6,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CoPVVvTQXtghNzDPej3Sk3Yenrp3sgADRfZ1G8Fhe9Sb",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "P2P",
+    "daoAddress": "CFYmVUEYikV8DaKDNs6WSHC5uAxG6T7KqFBCsAebACFu",
+    "number": 3,
+    "squadsIndex": 8,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "CU2bZp1Bop1FW62Ec1hsZmTbGXoLjRrNDDYmDxTA3nCA",
+    "instructions": [
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "024aab0100",
+        "accounts": 0,
+        "dataLen": 5
+      },
+      {
+        "program": "ComputeBudget",
+        "label": "ComputeBudget",
+        "disc": "03400d0300000000",
+        "accounts": 0,
+        "dataLen": 9
+      },
+      {
+        "program": "Associated Token",
+        "label": "Associated Token",
+        "disc": "01",
+        "accounts": 6,
+        "dataLen": 1
+      },
+      {
+        "program": "Jupiter DCA",
+        "label": "Jupiter DCA",
+        "disc": "8e772b6da2340bb1",
+        "accounts": 13,
+        "dataLen": 51
+      }
+    ]
+  },
+  {
+    "dao": "AVICI",
+    "daoAddress": "3D854kknnQhu9xVaRNV154oZ9oN2WF3tXsq3LDu7fFMn",
+    "number": 1,
+    "squadsIndex": 69,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "6UimhcMfgLM3fH3rxqXgLxs6cJwmfGLCLQEZG9jjA3Ry",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "We hereby authorize the creation of the performance package and authorize the changes to the dao parameters",
+        "disc": "5765206865726562",
+        "accounts": 0,
+        "dataLen": 107
+      }
+    ]
+  },
+  {
+    "dao": "AVICI",
+    "daoAddress": "3D854kknnQhu9xVaRNV154oZ9oN2WF3tXsq3LDu7fFMn",
+    "number": 2,
+    "squadsIndex": 70,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8WupZPDoUKMQ1TKCMkwoEkNxgX4tE76jdFPWD1ycQ3Cq",
+    "instructions": [
+      {
+        "program": "Squads",
+        "label": "Squads.multisig_add_spending_limit",
+        "disc": "0bf29f2a56c55973",
+        "accounts": 5,
+        "dataLen": 123
+      }
+    ]
+  },
+  {
+    "dao": "CRIME",
+    "daoAddress": "EbcsPbXZa81xUunDSmzYrcAWGURxcZB6BTkgzqvNJBZH",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "draft",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "1GqTFMVfgqDjnAvJBb5LcnF38Ar6mDtwg2vQ5Ajz6bq",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "this here be a memo",
+        "disc": "7468697320686572",
+        "accounts": 0,
+        "dataLen": 19
+      }
+    ]
+  },
+  {
+    "dao": "FAF",
+    "daoAddress": "Gxvt2wKNiDZcnEK8GQ6Cyb8x1Kvm4nm2kT2itDmYdEFa",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "DuVWckJPQ2z7v3Xm95ZXA9QzUDicJof8TnSrENYBQDYd",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.mintTo",
+        "disc": "070080f420e6b500",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "KIDUNA_COP",
+    "daoAddress": "BsbxFCvLqKQkUjeb6QoHnS8Fqjkx2U8FsV5Pyoev6V1x",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "passed",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "38kCguFAoPDkB4MbNaR9Yi2tmk86qRa6QpKwgXZyp74R",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0364000000000000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "RAWR",
+    "daoAddress": "6wmteHRgbJRSVPg8jaieZziKf7n1itADmWjJWQjCHcG1",
+    "number": 1,
+    "squadsIndex": 18,
+    "state": "passed",
+    "teamSponsored": false,
+    "durationDays": 3,
+    "proposal": "8M93PPtyJFthyy8MyiQ5ayxrg2KG7LwemoTEYo7ikc5j",
+    "instructions": [
+      {
+        "program": "SPL Token",
+        "label": "SPL Token.transfer",
+        "disc": "0300fe7c6c040000",
+        "accounts": 3,
+        "dataLen": 9
+      }
+    ]
+  },
+  {
+    "dao": "TEST",
+    "daoAddress": "7WnY1TZLfpxxTEbi1LN5JwKohuu49mE2sJpgZTSdmneH",
+    "number": 1,
+    "squadsIndex": 1,
+    "state": "draft",
+    "teamSponsored": true,
+    "durationDays": 3,
+    "proposal": "EPZ94yBTW4zgs6ZrduwwtsVwJvoS3swoo8GrkiBTZgTb",
+    "instructions": [
+      {
+        "program": "SPL Memo",
+        "label": "SPL Memo",
+        "memo": "Test proposal sponsor",
+        "disc": "546573742070726f",
+        "accounts": 0,
+        "dataLen": 21
+      }
+    ]
+  }
+]
