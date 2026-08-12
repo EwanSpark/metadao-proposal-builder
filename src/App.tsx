@@ -2,8 +2,8 @@ import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapte
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import BN from "bn.js";
-import { useCallback, useMemo, useState } from "react";
-import { NETWORKS, RPC_HINT, type NetworkId } from "./config";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { GENESIS, RPC_ENDPOINT, RPC_HINT } from "./config";
 import {
   authorizationMemo,
   decreaseLiquidity,
@@ -46,13 +46,7 @@ import {
 type Mode = "create" | "stake" | "finalize";
 type ActionKind = "spend" | "buyback" | "addLiq" | "removeLiq" | "liquidate" | "raw";
 
-type Props = {
-  network: NetworkId;
-  setNetwork: (n: NetworkId) => void;
-  customRpc: string;
-  setCustomRpc: (s: string) => void;
-  endpoint: string;
-};
+type Props = Record<string, never>;
 
 const STATE_LABEL: Record<string, string> = {
   draft: "Draft",
@@ -62,18 +56,19 @@ const STATE_LABEL: Record<string, string> = {
   removed: "Removed",
 };
 
-export default function App({ network, setNetwork, customRpc, setCustomRpc, endpoint }: Props) {
+export default function App(_: Props) {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
   const { sendTransaction } = useWallet();
 
+  const [cluster, setCluster] = useState<string | null>(null);
   const [log, setLog] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [mode, setMode] = useState<Mode>("create");
 
   const [daoAddress, setDaoAddress] = useState("");
   const [dao, setDao] = useState<DaoView | null>(null);
-  const [daoList, setDaoList] = useState<DaoSummary[]>(() => readCache(endpoint) ?? snapshotDaos());
+  const [daoList, setDaoList] = useState<DaoSummary[]>(() => snapshotDaos());
   const [daoListSource, setDaoListSource] = useState<"rpc" | "snapshot">("snapshot");
   const [daoFilter, setDaoFilter] = useState("");
 
@@ -98,6 +93,24 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
   const [stakeAmount, setStakeAmount] = useState("");
 
   const client = useMemo(() => makeClient(connection, (wallet as any) ?? null), [connection, wallet]);
+
+  useEffect(() => {
+    if (cluster) {
+      const cached = readCache(cluster);
+      if (cached) setDaoList(cached);
+    }
+  }, [cluster]);
+
+  useEffect(() => {
+    let alive = true;
+    connection
+      .getGenesisHash()
+      .then((h) => alive && setCluster((GENESIS as Record<string, string>)[h] ?? "unknown cluster"))
+      .catch(() => alive && setCluster("unreachable"));
+    return () => {
+      alive = false;
+    };
+  }, [connection]);
 
   const say = useCallback((line: string) => {
     setLog((l) => [`${new Date().toLocaleTimeString()}  ${line}`, ...l].slice(0, 200));
@@ -126,7 +139,7 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
       setDaoList(daos);
       setDaoListSource(source);
       if (source === "rpc") {
-        writeCache(endpoint, daos);
+        writeCache(cluster ?? RPC_ENDPOINT, daos);
         say(`📚 ${daos.length} DAOs listed live (${daos.filter((d) => d.symbol).length} named).`);
       } else {
         say(`📚 Bundled snapshot: ${daos.length} DAOs. This RPC refuses getProgramAccounts.`);
@@ -511,27 +524,22 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
           <div className="brand">
             MetaDAO <span>· Proposal Builder</span>
           </div>
-          <select value={network} onChange={(e) => setNetwork(e.target.value as NetworkId)}>
-            <option value="proxy">{NETWORKS.proxy.label}</option>
-            <option value="mainnet">{NETWORKS.mainnet.label}</option>
-            <option value="devnet">{NETWORKS.devnet.label}</option>
-            <option value="custom">Custom RPC</option>
-          </select>
-          {network === "custom" && (
-            <input
-              style={{ width: 210 }}
-              placeholder="https://…"
-              value={customRpc}
-              onChange={(e) => setCustomRpc(e.target.value)}
-            />
-          )}
+          <span className={cluster === "mainnet-beta" ? "cluster live" : "cluster"}>
+            {cluster ?? "connecting…"}
+          </span>
           <WalletMultiButton />
         </div>
       </div>
 
       <div className="app">
-        {network === "mainnet" && (
+        {cluster === "mainnet-beta" && (
           <div className="banner">Mainnet — every button sends a real, irreversible transaction.</div>
+        )}
+        {cluster === "unreachable" && (
+          <div className="banner">
+            No RPC reachable. Set <span className="mono">RPC_URL</span> in{" "}
+            <span className="mono">.env.local</span> and restart, or add it as a Cloudflare secret.
+          </div>
         )}
 
         <div className="panel">
@@ -991,7 +999,7 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
 
         <div className="panel">
           <h2>Activity</h2>
-          <p className="sub">{endpoint}</p>
+          <p className="sub">{RPC_HINT}</p>
           {log.length === 0 ? (
             <div className="empty">Nothing yet.</div>
           ) : (

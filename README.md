@@ -98,35 +98,29 @@ Meteora DAMM withdrawals, liquidation setup, mint governor, Omnipair.
 
 ## RPC, and keeping the endpoint secret
 
-Public Solana endpoints return **403 to browser requests**, so you need your own. There
-are three ways to supply one, and only one of them keeps it secret.
+There is no network picker. The app always calls `/api/rpc`, and a proxy on the server
+side holds the real endpoint — so the URL, and any API key in it, never reaches the
+browser. The cluster is detected from the genesis hash and shown in the top bar, so you
+never declare it yourself.
 
-**Private proxy — the only real secret.** `functions/api/rpc.ts` is a Cloudflare Pages
-Function that forwards JSON-RPC calls to an endpoint held server-side. The browser only
-ever talks to `/api/rpc`; the key never enters the bundle. Select "Private proxy" in the
-network dropdown.
+Two implementations sit behind that one path:
 
-```bash
-npx wrangler pages secret put RPC_URL      # deployed
-cp .dev.vars.example .dev.vars             # local, gitignored
-npx wrangler pages dev dist                # serves the function locally
-```
+| | reads | set it with |
+|---|---|---|
+| `npm run dev` | `RPC_URL` from `.env.local`, proxied by `vite.config.ts` | `cp .env.example .env.local` |
+| Cloudflare Pages | the `RPC_URL` secret, proxied by `functions/api/rpc.ts` | `npx wrangler pages secret put RPC_URL` |
 
-The proxy refuses cross-origin requests and only forwards the RPC methods the app
-actually uses, so a public deployment doesn't become an open relay burning your quota.
+**`RPC_URL` deliberately has no `VITE_` prefix.** Prefixed variables are inlined into
+the JavaScript bundle and readable by anyone; unprefixed ones stay in the dev server.
+And **never put the key in `wrangler.toml`** — that file is committed.
 
-**`VITE_RPC_URL` in `.env.local` — convenient, not secret.** Vite inlines it into the
-JavaScript at build time, so anyone can read it in devtools. Fine for local work, wrong
-for anything paid on a public deployment.
+The Cloudflare function refuses cross-origin requests and only forwards the RPC methods
+the app actually uses, so a public deployment cannot become an open relay burning your
+quota.
 
-```bash
-cp .env.example .env.local
-```
-
-**The "custom RPC" field** — typed in by whoever is using the app, stored nowhere.
-
-For quick testing without a key, `https://solana-rpc.publicnode.com` allows CORS but
-blocks `getProgramAccounts` and `getMultipleAccounts`.
+If `RPC_URL` is missing, the app says so in a banner instead of failing silently. For
+quick testing without a key, `https://solana-rpc.publicnode.com` works but blocks
+`getProgramAccounts` and `getMultipleAccounts`.
 
 ## Deploying to Cloudflare Pages
 
@@ -138,7 +132,7 @@ The app is a static Vite SPA, plus one Pages Function that proxies RPC calls.
 | Build output directory | `dist` |
 | Root directory | this folder, if the repo has other projects |
 | Node version | 20 or later |
-| Secret | `RPC_URL` — set it, then pick "Private proxy" in the app |
+| Secret | `RPC_URL` |
 
 `functions/` is picked up automatically by Pages; no extra configuration is needed.
 
