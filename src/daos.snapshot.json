@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-08-06T08:17:18.064Z",
+  "capturedAt": "2026-08-12T08:16:56.167Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -8,7 +8,10 @@
       "name": "Test30",
       "symbol": "TST30M",
       "proposalCount": 39,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
@@ -16,7 +19,10 @@
       "name": "Crimera",
       "symbol": "CRIME",
       "proposalCount": 12,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
@@ -24,7 +30,10 @@
       "name": "TSTAVI",
       "symbol": "TSTAVI",
       "proposalCount": 8,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
@@ -32,7 +41,10 @@
       "name": "ZKFG",
       "symbol": "ZKFG",
       "proposalCount": 8,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
@@ -40,7 +52,10 @@
       "name": "PreProd",
       "symbol": "PPRD",
       "proposalCount": 7,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
@@ -48,7 +63,10 @@
       "name": "Superclaw",
       "symbol": "SUPER",
       "proposalCount": 7,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 50000,
+      "treasury": 10000,
+      "official": true
     },
     {
       "address": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
@@ -56,7 +74,10 @@
       "name": "Futardio cult",
       "symbol": "FUTARDIO",
       "proposalCount": 6,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 50000,
+      "treasury": 22224,
+      "official": true
     },
     {
       "address": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
@@ -64,7 +85,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 5,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
@@ -72,7 +96,10 @@
       "name": "Umbra",
       "symbol": "UMBRA",
       "proposalCount": 5,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 1668978,
+      "official": true
     },
     {
       "address": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
@@ -80,7 +107,10 @@
       "name": "Loyal",
       "symbol": "LOYAL",
       "proposalCount": 4,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
@@ -88,7 +118,10 @@
       "name": "MetaDAO",
       "symbol": "META",
       "proposalCount": 4,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 5943551,
+      "official": true
     },
     {
       "address": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
@@ -96,7 +129,10 @@
       "name": "Paystream",
       "symbol": "PAYS",
       "proposalCount": 4,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 16696,
+      "official": true
     },
     {
       "address": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
@@ -104,7 +140,10 @@
       "name": "Ranger",
       "symbol": "RNGR",
       "proposalCount": 4,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 8000000,
+      "treasury": 0,
+      "official": true
     },
     {
       "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
@@ -112,7 +151,10 @@
       "name": "Solomon",
       "symbol": "SOLO",
       "proposalCount": 4,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
@@ -120,7 +162,10 @@
       "name": "Omnipair",
       "symbol": "OMFG",
       "proposalCount": 3,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 709001,
+      "official": true
     },
     {
       "address": "CFYmVUEYikV8DaKDNs6WSHC5uAxG6T7KqFBCsAebACFu",
@@ -128,7 +173,10 @@
       "name": "P2P Protocol",
       "symbol": "P2P",
       "proposalCount": 3,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 6000000,
+      "treasury": 3475627,
+      "official": true
     },
     {
       "address": "3D854kknnQhu9xVaRNV154oZ9oN2WF3tXsq3LDu7fFMn",
@@ -136,7 +184,21 @@
       "name": "Avici",
       "symbol": "AVICI",
       "proposalCount": 2,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 1800001,
+      "official": true
+    },
+    {
+      "address": "GEZF81Us2ZMD9cozjEra6NXxi1tC2AdjvZXxKWcdVEgm",
+      "baseMint": "2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta",
+      "name": "Basket",
+      "symbol": "BASKET",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 8000,
+      "official": true
     },
     {
       "address": "EbcsPbXZa81xUunDSmzYrcAWGURxcZB6BTkgzqvNJBZH",
@@ -144,7 +206,10 @@
       "name": "Crimera",
       "symbol": "CRIME",
       "proposalCount": 1,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "Gxvt2wKNiDZcnEK8GQ6Cyb8x1Kvm4nm2kT2itDmYdEFa",
@@ -152,7 +217,10 @@
       "name": "Flash.Trade",
       "symbol": "FAF",
       "proposalCount": 1,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "BsbxFCvLqKQkUjeb6QoHnS8Fqjkx2U8FsV5Pyoev6V1x",
@@ -160,7 +228,10 @@
       "name": "Kiduna_copy",
       "symbol": "KIDUNA_COP",
       "proposalCount": 1,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 6,
+      "treasury": 4,
+      "official": false
     },
     {
       "address": "6wmteHRgbJRSVPg8jaieZziKf7n1itADmWjJWQjCHcG1",
@@ -168,7 +239,10 @@
       "name": "Jurassic",
       "symbol": "RAWR",
       "proposalCount": 1,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 200000,
+      "treasury": 117000,
+      "official": true
     },
     {
       "address": "7WnY1TZLfpxxTEbi1LN5JwKohuu49mE2sJpgZTSdmneH",
@@ -176,7 +250,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 1,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 20,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
@@ -184,15 +261,10 @@
       "name": "Areal Finance",
       "symbol": "ARL",
       "proposalCount": 0,
-      "poolPhase": "spot"
-    },
-    {
-      "address": "GEZF81Us2ZMD9cozjEra6NXxi1tC2AdjvZXxKWcdVEgm",
-      "baseMint": "2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta",
-      "name": "Basket",
-      "symbol": "BASKET",
-      "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 4700,
+      "official": true
     },
     {
       "address": "3szfyfczcGxe6zpTQQBfnkF24SMakWChxp3aU68HNYij",
@@ -200,7 +272,10 @@
       "name": "Rip Cars",
       "symbol": "CARS",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 250000,
+      "treasury": 0,
+      "official": true
     },
     {
       "address": "BpHjC6EK2TuFt1SwHa2HbxMv4rvUbdr4wkNJ8XJCQTzK",
@@ -208,7 +283,10 @@
       "name": "coal",
       "symbol": "coal",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "6yv1EcBitVUdf3YS4GTHdLmwrGGiPYT2jrh2xDjCxYQQ",
@@ -216,7 +294,10 @@
       "name": "Credible Finance",
       "symbol": "CRED",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 4000000,
+      "treasury": 3200000,
+      "official": true
     },
     {
       "address": "9u61DTe6UX9XEUNyNxD8z4vtCBNXTo4MnzVvuDz62VY",
@@ -224,7 +305,10 @@
       "name": "Crimera",
       "symbol": "CRIME",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "8dxtDjgRiFFSbYY81kBi1HDNNaVo7LjxMptqPjUFW9g5",
@@ -232,7 +316,10 @@
       "name": "Crimera",
       "symbol": "CRIME",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "39nV4Yz76XQrduyyhFoFnLbtqzsQNVSQMnZMbjKZW19A",
@@ -240,7 +327,10 @@
       "name": "db73",
       "symbol": "DB73",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "4rW6iVKUq1RWYQ1VBTrjvP9FL4G3Sn7mBj7Yg12kuckv",
@@ -248,7 +338,10 @@
       "name": "Example",
       "symbol": "EXMPL",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "9NEgXTunQVxfz9SgADwaBERc9umRREQuYkvRGQxFNP49",
@@ -256,7 +349,10 @@
       "name": "Example Token",
       "symbol": "EXMPL",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "BgNq2V6vea2C7Z3cZhDUJTbmN4Y9bKG6dfEPhH19J7Fb",
@@ -264,7 +360,10 @@
       "name": "Example Token",
       "symbol": "EXMPL",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CTYxPujxrXiiqwG3gSBVNKuBk8u7mPG9qVMUc4aT1L8u",
@@ -272,7 +371,10 @@
       "name": "FTD",
       "symbol": "FTD",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CWxhqXkav3cum8nqjprZCr24qTacskDMRcSrFSQD6TeM",
@@ -280,7 +382,10 @@
       "name": "GeSIM",
       "symbol": "GSIM",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 28000,
+      "treasury": 18600,
+      "official": true
     },
     {
       "address": "A9HAiPRsBdXXM66o99PTuHHmgSqgzfvwgKqRdEBt8W4G",
@@ -288,7 +393,10 @@
       "name": "HappyBD",
       "symbol": "HBD",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "HPL5gw1Yoc9d2QGJydrij9Gh7dibnPRHvZJ1R4t82iCY",
@@ -296,7 +404,10 @@
       "name": "HpBD",
       "symbol": "HPBD",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "6L9Gu3XErwxjNxNC3f8RxL21CtJRzAidHPP2kqqzua1P",
@@ -304,7 +415,10 @@
       "name": "Jupiter",
       "symbol": "JUP",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "EYhmutGvi9XFmtbqaCwMLJ4cqaHaL97ru8KEwn4utiAf",
@@ -312,7 +426,10 @@
       "name": "Jupiter",
       "symbol": "JUP",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "6sQHygsfhAYrkQiGnyFHQ6s1s8ycJoajnNaVVuS3duzv",
@@ -320,7 +437,10 @@
       "name": "Kimia",
       "symbol": "KIMIA",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 60000,
+      "treasury": 38400,
+      "official": true
     },
     {
       "address": "Ffi7Ba7w2fhiCZ9H4ZRixuoi1peCVsL3YBc1Ay2JnD4A",
@@ -328,7 +448,10 @@
       "name": "Laso Finance",
       "symbol": "LASO",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1000000,
+      "treasury": 740748,
+      "official": true
     },
     {
       "address": "3uQ1F8ZWS4yRHAxSNiYo1K8Dpb4q7WZFCCGVykdpAkm4",
@@ -336,7 +459,10 @@
       "name": "MetaDAO",
       "symbol": "META",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "9ikE7Yrwy5Q6hfr7LdiPyNnenmcN9BzgrdjZyjLoiTQV",
@@ -344,7 +470,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "AXkQJCX18pQQXaC5g25s5wZvU1socDYg3cfGAuBfZkqb",
@@ -352,7 +481,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "AmtT5VcGW36QvU8w68TauvRNz6NuW8mHfz9LUPjEjxFq",
@@ -360,7 +492,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "BoH5panDWJYNnPfW3RMymKWV5LL944mHar15XnPmmyrS",
@@ -368,7 +503,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "DphmxxkVRiNRnezDjVQUHokzgiZUgHNViCxuYxZBqspa",
@@ -376,7 +514,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "GdhFuiDBmwaEAYcEhKVZyZP7ELKsSYzmtsTpsDUBmzyw",
@@ -384,7 +525,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 4,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "J9LT5TJ32BfLKWGBn3zSpfuFgmeWz7Cgvo8GYUWj7wos",
@@ -392,7 +536,10 @@
       "name": "MyToken",
       "symbol": "MTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "UHThZd3AeVpS2mKREGyVWmCLRyk6qmgWwJFAwjenwYW",
@@ -400,7 +547,10 @@
       "name": "NewTOKEN",
       "symbol": "NTKN",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 2,
+      "treasury": 1,
+      "official": false
     },
     {
       "address": "8MzXyimv29ivabhdzLN3Xa39jMrgteahWE3rNPKcEKpA",
@@ -408,7 +558,10 @@
       "name": "ORDR",
       "symbol": "ORDR",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 150000,
+      "treasury": 105000,
+      "official": true
     },
     {
       "address": "F3APFzjG4ekCohguP7emX2pEwE3CoVQR9s8zwNYfZq4R",
@@ -416,7 +569,10 @@
       "name": "PFT",
       "symbol": "PFT",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 6,
+      "official": false
     },
     {
       "address": "82XqLX4wEuiCcCWMx6mzhrkLuCEPVqaHKdUGqBWaWS7z",
@@ -424,7 +580,10 @@
       "name": "Reid Is cool",
       "symbol": "R2D2",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 10,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "FU7mKs4cyAV9pCha1map4K5xTtkWN7uAjeM2dsGVBnGy",
@@ -432,7 +591,10 @@
       "name": "Rabid Racers",
       "symbol": "RABD",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 100,
+      "treasury": 80,
+      "official": false
     },
     {
       "address": "8uKoo9UATno8xsrjfQqi5aBYE12AS5QoWNyD2x85GauA",
@@ -440,7 +602,10 @@
       "name": "Rock Game",
       "symbol": "ROCK",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 10,
+      "treasury": 7,
+      "official": false
     },
     {
       "address": "6jQt41FAvrBhz9hErkHaDuQbKd9bKCLAn4sdED3MRg8y",
@@ -448,7 +613,10 @@
       "name": "Rustfully",
       "symbol": "RSTFUL",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "Cn2wML7SWX2x5mroSKp5eSd9QEkBRjccAXqQ9YWiwZNx",
@@ -456,7 +624,10 @@
       "name": "Rustfully",
       "symbol": "RSTFUL",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "F3wydxpfqhcbKYGoFTcBmLuUrHR5ZR5RFiLyP1HA8G8",
@@ -464,7 +635,10 @@
       "name": "Sandbox ICO",
       "symbol": "SBX",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "5ucxPJCqGVNmb4Fdpe9E3Mhop6DoaSuMvm2JEooVJB42",
@@ -472,7 +646,10 @@
       "name": "Sandbox ICO",
       "symbol": "SBX",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "7D54xFo5ZSdXzVW62qu8SS2EPy6Focz8nVt2ekppKCRx",
@@ -480,7 +657,10 @@
       "name": "Sandbox ICO",
       "symbol": "SBX",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "BNrXs9dX2FrbrJwTY5ufktDZX58TSYSbgpp3CWwH2xD6",
@@ -488,7 +668,10 @@
       "name": "Sandbox ICO",
       "symbol": "SBX",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "7joQzWYN5Cm1sMBMRh3JufEdDEP1KHCWaa9vFwvdeYNJ",
@@ -496,7 +679,10 @@
       "name": "Sniper Sandbox",
       "symbol": "SNPX",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 1,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CTvMjLvG4GcLHUiGA9nwX7p9EpthNfCXM9DDkVyWiZUu",
@@ -504,7 +690,10 @@
       "name": "Test",
       "symbol": "test",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "3CQ6wE1eSqmYT3SpkrNqj9FSzzMDU33GeBiF7imAt33S",
@@ -512,7 +701,10 @@
       "name": "Test Token",
       "symbol": "TEST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 7,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CJCgDqiDtkQvwXT2iiyY7QVajKLH3VRVbcsNQgtttrHn",
@@ -520,7 +712,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CLoqV77NtkbrsvtCRDP1vdYxgPZua3nnh7gCNPLzDQQ8",
@@ -528,7 +723,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CnPz48JYS2x5XLRXdPFLip84GGbrrLeF2D2mPojZb6fz",
@@ -536,7 +734,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 10,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "CnUUCGbSrAoaJniPifRU8zHRZ6e5uGRVSpCEj2WMeeSv",
@@ -544,7 +745,10 @@
       "name": "Test",
       "symbol": "TEST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "BK1eLdYQuvMNf1F66yDhWXeacysSRMwJVZvi1NTk2TYA",
@@ -552,7 +756,10 @@
       "name": "Test",
       "symbol": "TST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 6,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "GZiuCnc4fXG9hB4oYCtTe5VjPXc46vNaZHTdw9cLrqzo",
@@ -560,7 +767,10 @@
       "name": "Test",
       "symbol": "TST",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 6,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "651uV1hcd7SprwwkumFfkWtx5WrnD53awpjduGtGsHzS",
@@ -568,7 +778,10 @@
       "name": "Test half hour",
       "symbol": "TST30",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "Eo1BLMVRLJspjP5dDnwzK1m6FxMUcQDG6kDA8CjWPzRW",
@@ -576,7 +789,10 @@
       "name": "TestJUP",
       "symbol": "TSTJUP",
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "3NN5SeMAKUUUdsFgzdsiBLqQUzZcYfVG8Hge9nWmugVz",
@@ -584,7 +800,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "7DM2uZ1giZqPXAqXUxT2i31cA6w2kXgW4FDm76jtGNvQ",
@@ -592,7 +811,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "7Q3uUaQnEYapMAVwvFNm8ASVZ7C5kVW3fB5CcpeHuZPM",
@@ -600,7 +822,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "8BxaK7U41CBKE4ZDUFEKzwtbmVs4kc9xVne8voGeMU3N",
@@ -608,7 +833,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "8iT1m8Skmvj8jUYuNfxy3KPp1Ho8YiHp2cuxVttagbBK",
@@ -616,7 +844,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "93NMzt2He8MdbcvfFwhQYZnhRXx1m1y29U37cChWSkrR",
@@ -624,7 +855,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "9Cd9WLkRodW8k9pAKSvHBGuyU4NYyg3K9qWGnJYPGZGU",
@@ -632,7 +866,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "D2zEbswG5XDRnTZu4pnrg3C2wtFVFZNCZdqhwy6aWDUf",
@@ -640,7 +877,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "E3BjsvLSFqUqVtDP76qMw4QbETkxvqvg8RTSbRZxWCK4",
@@ -648,7 +888,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "Ec1KCKjNHKNWQwPknKaurfaDHYFs8PLQ8PFfGyRbZHm8",
@@ -656,7 +899,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "EvoSmqayqCoY2vgqWro8zf3MLodUvU8G7N9VpsQ2Sdbb",
@@ -664,7 +910,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "GpRvxBTiWPsuLCeKQv8GGShFAeXLu1BhhMMv4wBodN5i",
@@ -672,7 +921,10 @@
       "name": null,
       "symbol": null,
       "proposalCount": 0,
-      "poolPhase": "spot"
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     }
   ]
 }

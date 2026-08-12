@@ -71,6 +71,7 @@ export default function App(_: Props) {
   const [daoList, setDaoList] = useState<DaoSummary[]>(() => snapshotDaos());
   const [daoListSource, setDaoListSource] = useState<"rpc" | "snapshot">("snapshot");
   const [daoFilter, setDaoFilter] = useState("");
+  const [showAllDaos, setShowAllDaos] = useState(false);
 
   const [kind, setKind] = useState<ActionKind>("spend");
   const [pending, setPending] = useState<TransactionInstruction[]>([]);
@@ -373,13 +374,16 @@ export default function App(_: Props) {
     }
   }, [kind, dao, bbTotal, bbOrders, bbInterval, bbMaxPrice]);
 
+  /** Only real projects: test DAOs outnumber them four to one. */
+  const officialDaos = useMemo(() => daoList.filter((d) => d.official), [daoList]);
+
   const visibleDaos = useMemo(() => {
     const q = daoFilter.trim().toLowerCase();
-    if (!q) return daoList;
-    return daoList.filter((d) =>
+    if (!q) return officialDaos;
+    return officialDaos.filter((d) =>
       [d.name, d.symbol, d.address.toBase58()].some((s) => s?.toLowerCase().includes(q)),
     );
-  }, [daoList, daoFilter]);
+  }, [officialDaos, daoFilter]);
 
   const goal = dao?.baseToStake ?? new BN(0);
   const staked = selected?.amountStaked ?? new BN(0);
@@ -532,9 +536,6 @@ export default function App(_: Props) {
       </div>
 
       <div className="app">
-        {cluster === "mainnet-beta" && (
-          <div className="banner">Mainnet — every button sends a real, irreversible transaction.</div>
-        )}
         {cluster === "unreachable" && (
           <div className="banner">
             No RPC reachable. Set <span className="mono">RPC_URL</span> in{" "}
@@ -646,7 +647,7 @@ export default function App(_: Props) {
 
           {visibleDaos.length > 0 ? (
             <div className="dao-list">
-              {visibleDaos.slice(0, 60).map((d) => (
+              {(daoFilter.trim() || showAllDaos ? visibleDaos : visibleDaos.slice(0, 4)).map((d) => (
                 <button
                   key={d.address.toBase58()}
                   className={dao?.address.equals(d.address) ? "dao-row on" : "dao-row"}
@@ -663,26 +664,16 @@ export default function App(_: Props) {
             </div>
           ) : (
             <div className="empty" style={{ marginTop: 12 }}>
-              No DAO matches “{daoFilter}”.
+              No project matches “{daoFilter}”.
             </div>
           )}
 
-          <div className="row" style={{ marginTop: 10 }}>
-            <input
-              className="grow mono"
-              placeholder="…or paste a Dao account address"
-              value={daoAddress}
-              onChange={(e) => setDaoAddress(e.target.value)}
-            />
-            <button className="ghost" onClick={() => doLoadDao()} disabled={busy}>
-              Load
+          {!daoFilter.trim() && visibleDaos.length > 4 && (
+            <button className="ghost tiny" onClick={() => setShowAllDaos((v) => !v)}>
+              {showAllDaos ? "Show fewer" : `Show all ${visibleDaos.length} projects`}
             </button>
-          </div>
-          <p className="hint">
-            {daoListSource === "rpc"
-              ? "Live list from the program."
-              : `Bundled snapshot from ${new Date(SNAPSHOT_CAPTURED_AT).toLocaleDateString()} — refresh with an RPC that allows getProgramAccounts.`}
-          </p>
+          )}
+
         </div>
 
         <div className="stepper">

@@ -15,6 +15,16 @@ export type DaoSummary = {
   symbol: string | null;
   proposalCount: number;
   poolPhase: "spot" | "futarchy";
+  /** Raised through a launchpad, USDC. 0 when the DAO wasn't created by one. */
+  raised: number;
+  /** Current treasury balance, USDC. */
+  treasury: number;
+  /**
+   * A real project rather than a test DAO. Objective rule: raised >= $5k through a
+   * launchpad, or holds >= $1k of treasury. On mainnet the gap is wide — real
+   * projects raised $10k to $8M, every sandbox launch raised $100 or less.
+   */
+  official: boolean;
 };
 
 export function daoLabel(d: DaoSummary): string {
@@ -72,6 +82,9 @@ export async function listDaos(
         symbol: null,
         proposalCount: dao.proposalCount,
         poolPhase: "futarchy" in dao.amm.state ? "futarchy" : "spot",
+        raised: 0,
+        treasury: 0,
+        official: false,
       });
     } catch {
       // Older DAO layouts (OldDao) share the program; skip what this IDL can't read.
@@ -98,6 +111,17 @@ export async function listDaos(
     // Names are cosmetic — a restricted RPC shouldn't break the list.
   }
 
+  // The live list can't see launchpad raises; carry the snapshot's verdict across.
+  const known = new Map(snapshotDaos().map((d) => [d.address.toBase58(), d]));
+  for (const s of summaries) {
+    const prev = known.get(s.address.toBase58());
+    if (prev) {
+      s.raised = prev.raised;
+      s.treasury = prev.treasury;
+      s.official = prev.official;
+    }
+  }
+
   return summaries.sort((a, b) => {
     if (b.proposalCount !== a.proposalCount) return b.proposalCount - a.proposalCount;
     return (a.symbol ?? "zz").localeCompare(b.symbol ?? "zz");
@@ -113,6 +137,9 @@ export function snapshotDaos(): DaoSummary[] {
     symbol: d.symbol,
     proposalCount: d.proposalCount,
     poolPhase: d.poolPhase === "futarchy" ? "futarchy" : "spot",
+    raised: (d as any).raised ?? 0,
+    treasury: (d as any).treasury ?? 0,
+    official: (d as any).official ?? false,
   }));
 }
 
@@ -142,7 +169,7 @@ export async function loadDaoList(
 
 /* ------------------------------------------------------------------ cache */
 
-type Cached = { at: number; daos: { address: string; baseMint: string; name: string | null; symbol: string | null; proposalCount: number; poolPhase: "spot" | "futarchy" }[] };
+type Cached = { at: number; daos: any[] };
 
 const KEY = (endpoint: string) => `metadao-daos:${endpoint}`;
 
@@ -158,6 +185,9 @@ export function readCache(endpoint: string): DaoSummary[] | null {
       symbol: d.symbol,
       proposalCount: d.proposalCount,
       poolPhase: d.poolPhase,
+      raised: d.raised ?? 0,
+      treasury: d.treasury ?? 0,
+      official: d.official ?? false,
     }));
   } catch {
     return null;
@@ -175,6 +205,9 @@ export function writeCache(endpoint: string, daos: DaoSummary[]): void {
         symbol: d.symbol,
         proposalCount: d.proposalCount,
         poolPhase: d.poolPhase,
+        raised: d.raised,
+        treasury: d.treasury,
+        official: d.official,
       })),
     };
     localStorage.setItem(KEY(endpoint), JSON.stringify(payload));
