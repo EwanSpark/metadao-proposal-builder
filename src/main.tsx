@@ -3,13 +3,13 @@ import { WalletModalProvider } from "@solana/wallet-adapter-react-ui";
 import React, { useMemo, useState } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
-import { DEFAULT_NETWORK, NETWORKS, type NetworkId } from "./config";
+import { DEFAULT_NETWORK, ENV_RPC_URL, NETWORKS, type NetworkId } from "./config";
 import "@solana/wallet-adapter-react-ui/styles.css";
 import "./styles.css";
 
 function Root() {
   const [network, setNetwork] = useState<NetworkId>(DEFAULT_NETWORK);
-  const [customRpc, setCustomRpc] = useState("");
+  const [customRpc, setCustomRpc] = useState(ENV_RPC_URL);
 
   const endpoint = useMemo(() => {
     if (network === "custom") return customRpc || NETWORKS.devnet.endpoint;

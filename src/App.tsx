@@ -17,7 +17,6 @@ import {
   spendFromTreasury,
 } from "./lib/actions";
 import {
-  daoLabel,
   loadDaoList,
   readCache,
   snapshotDaos,
@@ -477,18 +476,50 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
     </>
   );
 
+  const ACTION_INFO: Record<ActionKind, { title: string; sub: string }> = {
+    spend: { title: "Spend from treasury", sub: "Send quote tokens from the DAO treasury to any address." },
+    buyback: { title: "Buyback via Jupiter DCA", sub: "Open a recurring order that buys the DAO's own token over time." },
+    addLiq: { title: "Add liquidity", sub: "Deposit treasury funds into the futarchy AMM, deepening decision markets." },
+    removeLiq: { title: "Remove liquidity", sub: "Pull part of the treasury's LP position back into the treasury." },
+    liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
+    raw: { title: "Raw instruction", sub: "Paste JSON for anything the forms don't cover." },
+  };
+  const info = ACTION_INFO[kind];
+  const removeAt = (i: number) => setPending((p) => p.filter((_, j) => j !== i));
+
+  const linkify = (text: string) =>
+    text.split(/(\b[1-9A-HJ-NP-Za-km-z]{86,90}\b)/g).map((part, i) =>
+      /^[1-9A-HJ-NP-Za-km-z]{86,90}$/.test(part) ? (
+        <a key={i} href={`https://solscan.io/tx/${part}`} target="_blank" rel="noreferrer">
+          {part.slice(0, 14)}…
+        </a>
+      ) : (
+        <span key={i}>{part}</span>
+      ),
+    );
+
+  const steps: [Mode, string, string][] = [
+    ["create", "Create", "Compose and submit"],
+    ["stake", "Stake & launch", "Reach the threshold"],
+    ["finalize", "Finalize & execute", "After the vote"],
+  ];
+
   return (
-    <div className="app">
-      <header>
-        <h1>MetaDAO · Proposal Builder</h1>
-        <div className="row">
+    <>
+      <div className="topbar">
+        <div className="topbar-in">
+          <div className="brand">
+            MetaDAO <span>· Proposal Builder</span>
+          </div>
           <select value={network} onChange={(e) => setNetwork(e.target.value as NetworkId)}>
-            <option value="devnet">{NETWORKS.devnet.label}</option>
+            <option value="proxy">{NETWORKS.proxy.label}</option>
             <option value="mainnet">{NETWORKS.mainnet.label}</option>
-            <option value="custom">RPC custom</option>
+            <option value="devnet">{NETWORKS.devnet.label}</option>
+            <option value="custom">Custom RPC</option>
           </select>
           {network === "custom" && (
             <input
+              style={{ width: 210 }}
               placeholder="https://…"
               value={customRpc}
               onChange={(e) => setCustomRpc(e.target.value)}
@@ -496,445 +527,488 @@ export default function App({ network, setNetwork, customRpc, setCustomRpc, endp
           )}
           <WalletMultiButton />
         </div>
-      </header>
-
-      {network === "mainnet" && (
-        <div className="warn">
-          ⚠️ Mainnet — every button sends a real, irreversible transaction.
-        </div>
-      )}
-      <p className="hint">{RPC_HINT}</p>
-
-      <section>
-        <h2>DAO</h2>
-
-        <div className="row wrap">
-          <button onClick={doListDaos} disabled={busy}>
-            Refresh list
-          </button>
-          {daoList.length > 0 && (
-            <input
-              className="grow"
-              placeholder="Filter (name, symbol, address)"
-              value={daoFilter}
-              onChange={(e) => setDaoFilter(e.target.value)}
-            />
-          )}
-        </div>
-
-        {daoList.length > 0 && (
-          <select
-            className="picker"
-            size={Math.min(10, visibleDaos.length + 1)}
-            value={daoAddress}
-            onChange={(e) => doLoadDao(e.target.value)}
-          >
-            <option value="" disabled>
-              {visibleDaos.length} DAOs — select one to load
-            </option>
-            {visibleDaos.map((d) => (
-              <option key={d.address.toBase58()} value={d.address.toBase58()}>
-                {daoLabel(d)}
-              </option>
-            ))}
-          </select>
-        )}
-
-        <p className="hint">
-          {daoListSource === "rpc"
-            ? "Live list from the program."
-            : `Bundled snapshot from ${new Date(SNAPSHOT_CAPTURED_AT).toLocaleDateString()} — refresh with an RPC that allows getProgramAccounts (Helius, Triton).`}
-        </p>
-
-        <div className="row">
-          <input
-            className="grow"
-            placeholder="…or paste a Dao account address"
-            value={daoAddress}
-            onChange={(e) => setDaoAddress(e.target.value)}
-          />
-          <button onClick={() => doLoadDao()} disabled={busy}>
-            Load
-          </button>
-        </div>
-
-        {dao && (
-          <table className="kv">
-            <tbody>
-              <tr>
-                <td>Treasury</td>
-                <td className="mono">{dao.treasury.toBase58()}</td>
-              </tr>
-              <tr>
-                <td>Spot pool</td>
-                <td>
-                  {rawToUi(dao.spot.base, dao.baseDecimals)} base ·{" "}
-                  {rawToUi(dao.spot.quote, dao.quoteDecimals)} quote
-                  {dao.spotPrice !== null && ` · price ≈ ${dao.spotPrice.toPrecision(6)}`}
-                </td>
-              </tr>
-              <tr>
-                <td>Pool available</td>
-                <td>
-                  {dao.poolPhase === "spot"
-                    ? "Yes — no proposal live, a launch is possible"
-                    : "No — a proposal is live, the pool is split into pass/fail"}
-                </td>
-              </tr>
-              <tr>
-                <td>To launch a vote</td>
-                <td>
-                  {rawToUi(dao.baseToStake, dao.baseDecimals)} tokens to stake, then{" "}
-                  {dao.secondsPerProposal / 86400} days of market — of which the first{" "}
-                  {dao.twapStartDelaySeconds / 3600} hours do not count toward the TWAP
-                </td>
-              </tr>
-              <tr>
-                <td>To pass</td>
-                <td>
-                  the “pass” price must exceed “fail” by {dao.passThresholdBps / 100} %
-                  {dao.teamSponsoredPassThresholdBps !== dao.passThresholdBps &&
-                    ` (${dao.teamSponsoredPassThresholdBps / 100} % if team-sponsored)`}
-                </td>
-              </tr>
-              <tr>
-                <td>Team address</td>
-                <td className="mono">{dao.teamAddress.toBase58()}</td>
-              </tr>
-            </tbody>
-          </table>
-        )}
-      </section>
-
-      <div className="tabs modes">
-        {(
-          [
-            ["create", "1 · Create"],
-            ["stake", "2 · Stake & Launch"],
-            ["finalize", "3 · Finalize & Execute"],
-          ] as [Mode, string][]
-        ).map(([m, label]) => (
-          <button key={m} className={mode === m ? "tab on" : "tab"} onClick={() => setMode(m)}>
-            {label}
-          </button>
-        ))}
       </div>
 
-      <div className="next">→ {nextStep}</div>
+      <div className="app">
+        {network === "mainnet" && (
+          <div className="banner">Mainnet — every button sends a real, irreversible transaction.</div>
+        )}
 
-      {mode === "create" && (
-        <section>
-          <h2>What the proposal will execute</h2>
-          <p className="hint">
-            These instructions run as the treasury, not as your wallet.
+        <div className="panel">
+          <h2>DAO</h2>
+          <p className="sub">
+            {dao
+              ? "Loaded. Pick another below to switch."
+              : "Choose the DAO you want to act on. Reading works without a wallet."}
           </p>
-          <div className="tabs">
-            {(
-              [
-                ["spend", "Spend USDC"],
-                ["buyback", "Buyback (Jupiter DCA)"],
-                ["addLiq", "Add liquidity"],
-                ["removeLiq", "Remove liquidity"],
-                ["liquidate", "Liquidate project"],
-                ["raw", "Raw instruction"],
-              ] as [ActionKind, string][]
-            ).map(([k, label]) => (
-              <button key={k} className={kind === k ? "tab on" : "tab"} onClick={() => setKind(k)}>
-                {label}
-              </button>
-            ))}
-          </div>
 
-          {kind === "spend" && (
-            <div className="form">
-              <input
-                placeholder="Recipient (wallet)"
-                value={spendTo}
-                onChange={(e) => setSpendTo(e.target.value)}
-              />
-              <input
-                placeholder="Amount (UI units)"
-                value={spendAmount}
-                onChange={(e) => setSpendAmount(e.target.value)}
-              />
-              <label>
-                <input
-                  type="checkbox"
-                  checked={spendCreateAta}
-                  onChange={(e) => setSpendCreateAta(e.target.checked)}
-                />
-                Create the recipient ATA (rent paid by the treasury)
-              </label>
-            </div>
-          )}
-
-          {kind === "buyback" && (
-            <div className="form">
-              <input
-                placeholder="Total to spend (quote)"
-                value={bbTotal}
-                onChange={(e) => setBbTotal(e.target.value)}
-              />
-              <div className="row wrap">
-                <input
-                  placeholder="Number of orders"
-                  value={bbOrders}
-                  onChange={(e) => setBbOrders(e.target.value)}
-                />
-                <input
-                  placeholder="Interval (s)"
-                  value={bbInterval}
-                  onChange={(e) => setBbInterval(e.target.value)}
-                />
-                <input
-                  placeholder="Max price (empty = none)"
-                  value={bbMaxPrice}
-                  onChange={(e) => setBbMaxPrice(e.target.value)}
-                />
+          {dao && (
+            <>
+              <div className="stats">
+                <div className="stat">
+                  <div className="k">Spot price</div>
+                  <div className="v">{dao.spotPrice !== null ? dao.spotPrice.toPrecision(4) : "—"}</div>
+                </div>
+                <div className="stat">
+                  <div className="k">Pool depth</div>
+                  <div className="v">
+                    {rawToUi(dao.spot.quote, dao.quoteDecimals, 0)} <small>quote</small>
+                  </div>
+                </div>
+                <div className="stat">
+                  <div className="k">Stake to launch</div>
+                  <div className="v">{rawToUi(dao.baseToStake, dao.baseDecimals, 0)}</div>
+                </div>
+                <div className="stat">
+                  <div className="k">Vote length</div>
+                  <div className="v">
+                    {dao.secondsPerProposal / 86400} <small>days</small>
+                  </div>
+                </div>
               </div>
+              <p className="hint">
+                {dao.poolPhase === "spot" ? (
+                  <>No proposal is live — a launch is possible.</>
+                ) : (
+                  <>
+                    <strong>A proposal is live.</strong> The pool is split into pass/fail; no other
+                    launch will succeed until it is finalized.
+                  </>
+                )}
+              </p>
 
-              {buybackPreview && (
+              <details className="more">
+                <summary>DAO details</summary>
                 <table className="kv">
                   <tbody>
                     <tr>
-                      <td>Per order</td>
-                      <td>{buybackPreview.perCycle}</td>
-                    </tr>
-                    <tr>
-                      <td>Min received / order</td>
-                      <td>{buybackPreview.minOut ?? "— (no max price)"}</td>
-                    </tr>
-                    <tr>
-                      <td>Actual cycles</td>
-                      <td>
-                        {buybackPreview.cycles}
-                        {buybackPreview.dust &&
-                          ` — including a final one of ${buybackPreview.dust} (division remainder)`}
+                      <td>Treasury</td>
+                      <td className="mono">
+                        <a
+                          href={`https://solscan.io/account/${dao.treasury.toBase58()}`}
+                          target="_blank"
+                          rel="noreferrer"
+                        >
+                          {dao.treasury.toBase58()}
+                        </a>
                       </td>
                     </tr>
                     <tr>
-                      <td>Total duration</td>
-                      <td>{buybackPreview.duration}</td>
+                      <td>Spot reserves</td>
+                      <td>
+                        {rawToUi(dao.spot.base, dao.baseDecimals)} base ·{" "}
+                        {rawToUi(dao.spot.quote, dao.quoteDecimals)} quote
+                      </td>
                     </tr>
                     <tr>
-                      <td>DCA account</td>
-                      <td className="mono">{buybackPreview.dca}</td>
+                      <td>To pass</td>
+                      <td>
+                        pass price must exceed fail by {dao.passThresholdBps / 100}%
+                        {dao.teamSponsoredPassThresholdBps !== dao.passThresholdBps &&
+                          ` (${dao.teamSponsoredPassThresholdBps / 100}% if team-sponsored)`}
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>TWAP delay</td>
+                      <td>
+                        first {dao.twapStartDelaySeconds / 3600} hours don't count toward the TWAP
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>Team address</td>
+                      <td className="mono">{dao.teamAddress.toBase58()}</td>
                     </tr>
                   </tbody>
                 </table>
-              )}
-              {buybackError && <p className="hint">⚠️ {buybackError}</p>}
-
-              <p className="hint">
-                Recurring Jupiter DCA order paid by the treasury. The “max price” is encoded
-                as <span className="mono">minOutAmount</span> per cycle — that is how Ranger
-                capped at $0.78. Reproduced byte for byte from Ranger&nbsp;#2
-                (2M USDC → RNGR, 8640 orders of 231.481481 every 300s), executed on mainnet.
-              </p>
-              <p className="hint">
-                Bought tokens land in the DCA account. Unspent funds stay there
-                until a cancellation proposal — plan for it in the text.
-              </p>
-            </div>
-          )}
-
-          {kind === "addLiq" && (
-            <div className="form">
-              <input
-                placeholder="Quote to deposit"
-                value={liqQuote}
-                onChange={(e) => setLiqQuote(e.target.value)}
-              />
-              <input
-                placeholder="Max base to deposit"
-                value={liqMaxBase}
-                onChange={(e) => setLiqMaxBase(e.target.value)}
-              />
-            </div>
-          )}
-
-          {kind === "removeLiq" && (
-            <div className="form">
-              <input
-                placeholder="Liquidity units (empty = all)"
-                value={liqToRemove}
-                onChange={(e) => setLiqToRemove(e.target.value)}
-              />
-              <p className="hint">
-                Going below 2× min_futarchic_liquidity leaves the DAO unable to launch any
-                proposal — and governance cannot undo it.
-              </p>
-            </div>
-          )}
-
-          {kind === "liquidate" && (
-            <div className="form">
-              <div className="row wrap">
-                {LIQUIDATION_TEMPLATES.map((t) => (
-                  <button key={t.label} className="tab" onClick={() => setMemoText(t.text)}>
-                    {t.label}
-                  </button>
-                ))}
-              </div>
-              <textarea rows={4} value={memoText} onChange={(e) => setMemoText(e.target.value)} />
-              <p className="hint">
-                A liquidation proposal transfers nothing. It is <strong>a single SPL memo,
-                zero accounts</strong> — a mandate the market approves or rejects. If it passes,
-                MetaDAO runs the distribution through <span className="mono">LiQnow…</span> with its
-                own authorities, outside governance. Verified on Ranger (#4, passed) and Superclaw
-                (#3, rejected).
-              </p>
-            </div>
-          )}
-
-          {kind === "raw" && (
-            <div className="form">
-              <textarea
-                rows={8}
-                placeholder='[{"programId":"…","keys":[{"pubkey":"…","isSigner":false,"isWritable":true}],"data":"base64"}]'
-                value={rawJson}
-                onChange={(e) => setRawJson(e.target.value)}
-              />
-              <p className="hint">
-                Metaplex metadata, Meteora DAMM withdrawal, liquidation setup, mint
-                governor.
-              </p>
-            </div>
-          )}
-
-          <button onClick={addAction} disabled={busy || !dao}>
-            Add to proposal
-          </button>
-
-          {pending.length > 0 && (
-            <>
-              <ol className="ixs">
-                {pending.map((ix, i) => (
-                  <li key={i} className="mono">
-                    {describeInstruction(ix)}
-                  </li>
-                ))}
-              </ol>
-              <div className="row wrap">
-                <button onClick={doCreate} disabled={busy || !dao || !wallet}>
-                  Create proposal
-                </button>
-                <button className="ghost" onClick={() => setPending([])} disabled={busy}>
-                  Vider
-                </button>
-              </div>
+              </details>
             </>
           )}
-        </section>
-      )}
 
-      {mode === "stake" && (
-        <section>
-          <h2>Stake &amp; Launch</h2>
-          {picker}
+          <div className="row wrap" style={{ marginTop: dao ? 16 : 0 }}>
+            <input
+              className="grow"
+              placeholder="Filter by name, symbol or address"
+              value={daoFilter}
+              onChange={(e) => setDaoFilter(e.target.value)}
+            />
+            <button className="ghost" onClick={doListDaos} disabled={busy}>
+              Refresh
+            </button>
+          </div>
 
-          {selected && dao && (
-            <>
-              {selected.stateName !== "draft" ? (
+          {visibleDaos.length > 0 ? (
+            <div className="dao-list">
+              {visibleDaos.slice(0, 60).map((d) => (
+                <button
+                  key={d.address.toBase58()}
+                  className={dao?.address.equals(d.address) ? "dao-row on" : "dao-row"}
+                  onClick={() => doLoadDao(d.address.toBase58())}
+                  disabled={busy}
+                >
+                  <span className="sym">{d.symbol ?? "—"}</span>
+                  <span className="nm trunc">{d.name ?? d.address.toBase58()}</span>
+                  <span className="ct">
+                    {d.proposalCount} {d.proposalCount === 1 ? "proposal" : "proposals"}
+                  </span>
+                </button>
+              ))}
+            </div>
+          ) : (
+            <div className="empty" style={{ marginTop: 12 }}>
+              No DAO matches “{daoFilter}”.
+            </div>
+          )}
+
+          <div className="row" style={{ marginTop: 10 }}>
+            <input
+              className="grow mono"
+              placeholder="…or paste a Dao account address"
+              value={daoAddress}
+              onChange={(e) => setDaoAddress(e.target.value)}
+            />
+            <button className="ghost" onClick={() => doLoadDao()} disabled={busy}>
+              Load
+            </button>
+          </div>
+          <p className="hint">
+            {daoListSource === "rpc"
+              ? "Live list from the program."
+              : `Bundled snapshot from ${new Date(SNAPSHOT_CAPTURED_AT).toLocaleDateString()} — refresh with an RPC that allows getProgramAccounts.`}
+          </p>
+        </div>
+
+        <div className="stepper">
+          {steps.map(([m, t, d], i) => (
+            <button
+              key={m}
+              className={`step${mode === m ? " on" : ""}${
+                (m === "create" && selected) || (m === "stake" && selected?.stateName === "passed")
+                  ? " done"
+                  : ""
+              }`}
+              onClick={() => setMode(m)}
+            >
+              <div className="t">
+                <span className="n">{i + 1}</span>
+                {t}
+              </div>
+              <div className="d">{d}</div>
+            </button>
+          ))}
+        </div>
+
+        <div className="next">
+          <b>Next</b>
+          <span>{nextStep}</span>
+        </div>
+
+        {mode === "create" && (
+          <div className="panel">
+            <h2>{info.title}</h2>
+            <p className="sub">{info.sub}</p>
+
+            <div className="tabs">
+              {(
+                [
+                  ["spend", "Spend"],
+                  ["buyback", "Buyback"],
+                  ["addLiq", "Add liquidity"],
+                  ["removeLiq", "Remove liquidity"],
+                  ["liquidate", "Liquidation"],
+                  ["raw", "Raw"],
+                ] as [ActionKind, string][]
+              ).map(([k, label]) => (
+                <button key={k} className={kind === k ? "tab on" : "tab"} onClick={() => setKind(k)}>
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {kind === "spend" && (
+              <div className="form">
+                <label className="field">
+                  <span>Recipient wallet</span>
+                  <input value={spendTo} onChange={(e) => setSpendTo(e.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Amount (quote tokens)</span>
+                  <input value={spendAmount} onChange={(e) => setSpendAmount(e.target.value)} />
+                </label>
+                <label className="check">
+                  <input
+                    type="checkbox"
+                    checked={spendCreateAta}
+                    onChange={(e) => setSpendCreateAta(e.target.checked)}
+                  />
+                  Create the recipient's token account (rent paid by the treasury)
+                </label>
+              </div>
+            )}
+
+            {kind === "buyback" && (
+              <div className="form">
+                <label className="field">
+                  <span>Total to spend (quote tokens)</span>
+                  <input value={bbTotal} onChange={(e) => setBbTotal(e.target.value)} />
+                </label>
+                <div className="row wrap">
+                  <label className="field">
+                    <span>Orders</span>
+                    <input value={bbOrders} onChange={(e) => setBbOrders(e.target.value)} />
+                  </label>
+                  <label className="field">
+                    <span>Interval (seconds)</span>
+                    <input value={bbInterval} onChange={(e) => setBbInterval(e.target.value)} />
+                  </label>
+                  <label className="field">
+                    <span>Max price (optional)</span>
+                    <input value={bbMaxPrice} onChange={(e) => setBbMaxPrice(e.target.value)} />
+                  </label>
+                </div>
+
+                {buybackPreview && (
+                  <div className="stats">
+                    <div className="stat">
+                      <div className="k">Per order</div>
+                      <div className="v">{buybackPreview.perCycle}</div>
+                    </div>
+                    <div className="stat">
+                      <div className="k">Min received / order</div>
+                      <div className="v">{buybackPreview.minOut ?? "—"}</div>
+                    </div>
+                    <div className="stat">
+                      <div className="k">Cycles</div>
+                      <div className="v">{buybackPreview.cycles}</div>
+                    </div>
+                    <div className="stat">
+                      <div className="k">Duration</div>
+                      <div className="v">{buybackPreview.duration}</div>
+                    </div>
+                  </div>
+                )}
+                {buybackError && <p className="hint">⚠️ {buybackError}</p>}
                 <p className="hint">
-                  This proposal is no longer in Draft ({STATE_LABEL[selected.stateName]}). Staking
-                  and launching only apply to Draft proposals.
+                  The “max price” is encoded as <span className="mono">minOutAmount</span> per cycle.
+                  Bought tokens land in the DCA account and stay there until a cancellation proposal.
                 </p>
-              ) : (
-                <>
-                  <div className={stakeMet ? "bar done" : "bar"}>
-                    <div style={{ width: `${stakePct}%` }} />
-                  </div>
-                  <p className="hint">
-                    <strong>{rawToUi(staked, dao.baseDecimals)}</strong> staked of{" "}
-                    {rawToUi(goal, dao.baseDecimals)} required
-                    {stakeMet
-                      ? " — threshold reached, the vote can be launched"
-                      : ` — ${rawToUi(stakeMissing!, dao.baseDecimals)} short`}
-                  </p>
-                  <p className="hint">
-                    The stake is only locked until launch: it becomes withdrawable 5 seconds
-                    after, with no penalty. Any holder can top it up, not just you.
-                  </p>
-
-                  <div className="row wrap">
-                    <input
-                      placeholder="Amount"
-                      value={stakeAmount}
-                      onChange={(e) => setStakeAmount(e.target.value)}
-                    />
-                    <button onClick={doStake} disabled={busy || !wallet}>
-                      Staker
-                    </button>
-                    <button className="ghost" onClick={doUnstake} disabled={busy || !wallet}>
-                      Unstaker
-                    </button>
-                    <button className="ghost" onClick={doSponsor} disabled={busy || !wallet}>
-                      Sponsor (team)
-                    </button>
-                  </div>
-
-                  <div className="row wrap">
-                    <button onClick={doLaunch} disabled={busy || !wallet || !stakeMet}>
-                      Launch vote
-                    </button>
-                    <button className="ghost" onClick={doRefreshSelected} disabled={busy}>
-                      Refresh
-                    </button>
-                  </div>
-                  {!stakeMet && (
-                    <p className="hint">
-                      Launching stays blocked until the threshold is met (or the proposal is
-                      sponsored by team_address). Staking is permissionless — other holders
-                      can top it up.
-                    </p>
-                  )}
-                </>
-              )}
-            </>
-          )}
-        </section>
-      )}
-
-      {mode === "finalize" && (
-        <section>
-          <h2>Finalize &amp; Execute</h2>
-          {picker}
-
-          {selected && (
-            <>
-              <div className="row wrap">
-                <button
-                  onClick={doFinalize}
-                  disabled={busy || !wallet || selected.stateName !== "pending"}
-                >
-                  Finaliser
-                </button>
-                <button
-                  onClick={doExecute}
-                  disabled={busy || !wallet || selected.stateName !== "passed"}
-                >
-                  Execute vault tx
-                </button>
-                <button className="ghost" onClick={doRefreshSelected} disabled={busy}>
-                  Refresh
-                </button>
               </div>
-              <p className="hint">
-                Finalizing is only possible in the <em>Live</em> state once the duration has elapsed.
-                Execution is a separate transaction — the Solana runtime forbids
-                futarchy&nbsp;→&nbsp;squads&nbsp;→&nbsp;futarchy in one stack.
-              </p>
-            </>
-          )}
-        </section>
-      )}
+            )}
 
-      <section>
-        <h2>Log</h2>
-        <pre className="log">{log.join("\n") || "—"}</pre>
-        <p className="hint mono">RPC : {endpoint}</p>
-      </section>
-    </div>
+            {kind === "addLiq" && (
+              <div className="form">
+                <div className="row wrap">
+                  <label className="field">
+                    <span>Quote to deposit</span>
+                    <input value={liqQuote} onChange={(e) => setLiqQuote(e.target.value)} />
+                  </label>
+                  <label className="field">
+                    <span>Max base to deposit</span>
+                    <input value={liqMaxBase} onChange={(e) => setLiqMaxBase(e.target.value)} />
+                  </label>
+                </div>
+              </div>
+            )}
+
+            {kind === "removeLiq" && (
+              <div className="form">
+                <label className="field">
+                  <span>Liquidity units — leave empty to withdraw the whole position</span>
+                  <input value={liqToRemove} onChange={(e) => setLiqToRemove(e.target.value)} />
+                </label>
+                <p className="hint">
+                  Emptying the pool leaves the DAO unable to launch any proposal, and governance
+                  cannot undo it — only a permissionless refill can.
+                </p>
+              </div>
+            )}
+
+            {kind === "liquidate" && (
+              <div className="form">
+                <div className="row wrap">
+                  {LIQUIDATION_TEMPLATES.map((t) => (
+                    <button key={t.label} className="tab" onClick={() => setMemoText(t.text)}>
+                      {t.label}
+                    </button>
+                  ))}
+                </div>
+                <textarea rows={4} value={memoText} onChange={(e) => setMemoText(e.target.value)} />
+                <p className="hint">
+                  Both real liquidations on mainnet are a single SPL memo with zero accounts — a
+                  mandate MetaDAO then executes with its own authorities, outside governance.
+                </p>
+              </div>
+            )}
+
+            {kind === "raw" && (
+              <div className="form">
+                <textarea
+                  rows={7}
+                  placeholder='[{"programId":"…","keys":[{"pubkey":"…","isSigner":false,"isWritable":true}],"data":"base64"}]'
+                  value={rawJson}
+                  onChange={(e) => setRawJson(e.target.value)}
+                />
+              </div>
+            )}
+
+            <div className="actions">
+              <button className="primary" onClick={addAction} disabled={busy || !dao}>
+                Add to proposal
+              </button>
+            </div>
+
+            {pending.length > 0 ? (
+              <>
+                <ul className="ixs">
+                  {pending.map((ix, i) => (
+                    <li key={i} className="ix-card">
+                      <span className="n">{i + 1}</span>
+                      <div className="body">
+                        <div className="t">{describeInstruction(ix)}</div>
+                        <div className="m mono">{ix.programId.toBase58()}</div>
+                      </div>
+                      <button className="ghost tiny" onClick={() => removeAt(i)} disabled={busy}>
+                        Remove
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+                <div className="actions">
+                  <button className="primary" onClick={doCreate} disabled={busy || !dao || !wallet}>
+                    Create proposal ({pending.length})
+                  </button>
+                  <button className="ghost" onClick={() => setPending([])} disabled={busy}>
+                    Clear
+                  </button>
+                </div>
+              </>
+            ) : (
+              <div className="empty" style={{ marginTop: 16 }}>
+                Nothing queued yet. Build an action above and add it.
+              </div>
+            )}
+          </div>
+        )}
+
+        {mode === "stake" && (
+          <div className="panel">
+            <h2>Stake &amp; launch</h2>
+            <p className="sub">
+              A proposal only goes to market once enough tokens back it. The stake is returned 5
+              seconds after launch.
+            </p>
+            {picker}
+
+            {selected && dao && selected.stateName === "draft" && (
+              <>
+                <div className={stakeMet ? "bar done" : "bar"} style={{ marginTop: 18 }}>
+                  <div style={{ width: `${stakePct}%` }} />
+                </div>
+                <p className="hint">
+                  <strong>{rawToUi(staked, dao.baseDecimals)}</strong> staked of{" "}
+                  {rawToUi(goal, dao.baseDecimals)} required
+                  {stakeMet
+                    ? " — threshold reached"
+                    : ` — ${rawToUi(stakeMissing!, dao.baseDecimals)} short`}
+                </p>
+
+                <div className="actions">
+                  <input
+                    placeholder="Amount"
+                    value={stakeAmount}
+                    onChange={(e) => setStakeAmount(e.target.value)}
+                    style={{ width: 150 }}
+                  />
+                  <button className="primary" onClick={doStake} disabled={busy || !wallet}>
+                    Stake
+                  </button>
+                  <button className="ghost" onClick={doUnstake} disabled={busy || !wallet}>
+                    Unstake
+                  </button>
+                  <button className="ghost" onClick={doSponsor} disabled={busy || !wallet}>
+                    Sponsor as team
+                  </button>
+                </div>
+
+                <div className="actions">
+                  <button className="primary" onClick={doLaunch} disabled={busy || !wallet || !stakeMet}>
+                    Launch vote
+                  </button>
+                  <button className="ghost" onClick={doRefreshSelected} disabled={busy}>
+                    Refresh
+                  </button>
+                </div>
+              </>
+            )}
+
+            {selected && selected.stateName !== "draft" && (
+              <p className="hint">
+                This proposal is {STATE_LABEL[selected.stateName]?.toLowerCase()}. Staking and
+                launching only apply to drafts.
+              </p>
+            )}
+          </div>
+        )}
+
+        {mode === "finalize" && (
+          <div className="panel">
+            <h2>Finalize &amp; execute</h2>
+            <p className="sub">
+              Two separate transactions: finalizing resolves the market, executing applies the
+              instructions.
+            </p>
+            {picker}
+
+            {selected && (
+              <>
+                <div className="actions">
+                  <button
+                    className="primary"
+                    onClick={doFinalize}
+                    disabled={busy || !wallet || selected.stateName !== "pending"}
+                  >
+                    Finalize
+                  </button>
+                  <button
+                    className="primary"
+                    onClick={doExecute}
+                    disabled={busy || !wallet || selected.stateName !== "passed"}
+                  >
+                    Execute vault transaction
+                  </button>
+                  <button className="ghost" onClick={doRefreshSelected} disabled={busy}>
+                    Refresh
+                  </button>
+                </div>
+                <p className="hint">
+                  Finalizing only works once the vote duration has elapsed. Execution is a separate
+                  transaction because the Solana runtime forbids futarchy&nbsp;→&nbsp;squads&nbsp;→&nbsp;futarchy
+                  in one stack.
+                </p>
+              </>
+            )}
+          </div>
+        )}
+
+        <div className="panel">
+          <h2>Activity</h2>
+          <p className="sub">{endpoint}</p>
+          {log.length === 0 ? (
+            <div className="empty">Nothing yet.</div>
+          ) : (
+            <ul className="feed">
+              {log.map((line, i) => {
+                const sep = line.indexOf("  ");
+                return (
+                  <li key={i}>
+                    <span className="ts">{line.slice(0, sep)}</span>
+                    <span className="msg">{linkify(line.slice(sep + 2))}</span>
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </div>
+    </>
   );
 }

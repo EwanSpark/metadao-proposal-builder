@@ -96,16 +96,41 @@ instead of surfacing a raw web3.js error.
 **The raw-instruction tab** covers everything the forms do not: Metaplex metadata,
 Meteora DAMM withdrawals, liquidation setup, mint governor, Omnipair.
 
-## RPC
+## RPC, and keeping the endpoint secret
 
-Public Solana endpoints return **403 to browser requests**. Use the "custom RPC" field
-with your own Helius / Triton / QuickNode endpoint. For quick testing,
-`https://solana-rpc.publicnode.com` allows CORS but blocks `getProgramAccounts` and
-`getMultipleAccounts`.
+Public Solana endpoints return **403 to browser requests**, so you need your own. There
+are three ways to supply one, and only one of them keeps it secret.
+
+**Private proxy — the only real secret.** `functions/api/rpc.ts` is a Cloudflare Pages
+Function that forwards JSON-RPC calls to an endpoint held server-side. The browser only
+ever talks to `/api/rpc`; the key never enters the bundle. Select "Private proxy" in the
+network dropdown.
+
+```bash
+npx wrangler pages secret put RPC_URL      # deployed
+cp .dev.vars.example .dev.vars             # local, gitignored
+npx wrangler pages dev dist                # serves the function locally
+```
+
+The proxy refuses cross-origin requests and only forwards the RPC methods the app
+actually uses, so a public deployment doesn't become an open relay burning your quota.
+
+**`VITE_RPC_URL` in `.env.local` — convenient, not secret.** Vite inlines it into the
+JavaScript at build time, so anyone can read it in devtools. Fine for local work, wrong
+for anything paid on a public deployment.
+
+```bash
+cp .env.example .env.local
+```
+
+**The "custom RPC" field** — typed in by whoever is using the app, stored nowhere.
+
+For quick testing without a key, `https://solana-rpc.publicnode.com` allows CORS but
+blocks `getProgramAccounts` and `getMultipleAccounts`.
 
 ## Deploying to Cloudflare Pages
 
-The app is a static Vite SPA — no server, no environment variables, no secrets.
+The app is a static Vite SPA, plus one Pages Function that proxies RPC calls.
 
 | Setting | Value |
 |---|---|
@@ -113,6 +138,9 @@ The app is a static Vite SPA — no server, no environment variables, no secrets
 | Build output directory | `dist` |
 | Root directory | this folder, if the repo has other projects |
 | Node version | 20 or later |
+| Secret | `RPC_URL` — set it, then pick "Private proxy" in the app |
+
+`functions/` is picked up automatically by Pages; no extra configuration is needed.
 
 Or from the CLI:
 
@@ -123,9 +151,7 @@ npx wrangler pages deploy dist
 
 There is no client-side router, so no `_redirects` file is needed.
 
-Two things to know before you publish it. The app talks to whatever RPC the user enters,
-so a public deployment needs users to bring their own endpoint — the bundled default
-will rate-limit. And the bundle includes `PERMISSIONLESS_ACCOUNT` from the MetaDAO SDK,
+One thing to know before you publish it: the bundle includes `PERMISSIONLESS_ACCOUNT` from the MetaDAO SDK,
 a keypair whose private key is public by design (it is what makes proposal creation
 permissionless); that is expected, but it does mean a real keypair ships in the
 JavaScript.
