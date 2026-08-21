@@ -159,9 +159,9 @@ The app is a static Vite SPA, plus one Pages Function that proxies RPC calls.
 |---|---|
 | Build command | `npm run build` |
 | Build output directory | `dist` |
-| Root directory | this folder, if the repo has other projects |
-| Node version | 20 or later |
-| Secret | `RPC_URL` |
+| Root directory | leave empty — this folder is the repository root |
+| Node version | set `NODE_VERSION` to `20` or later; the default is older than Vite 6 accepts |
+| Secret | `RPC_URL`, on Production *and* Preview |
 
 `functions/` is picked up automatically by Pages; no extra configuration is needed.
 
