@@ -1,0 +1,473 @@
+{
+  "capturedAt": "2026-08-20T08:45:56.773Z",
+  "rows": [
+    {
+      "dao": "RNGR",
+      "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+      "index": 12,
+      "proposal": "6MGyFXnTKTWNEc5FYvADPKW7LJ7YvaqFT6AykbchrPxr",
+      "number": 3,
+      "state": "removed",
+      "signatures": 2
+    },
+    {
+      "dao": "META",
+      "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "index": 7,
+      "proposal": "CbtEC2YdNyh1kE7HmgyCfZLtecs414aEBUtfjM8nYgp6",
+      "number": 5,
+      "state": "pending",
+      "signatures": 5
+    },
+    {
+      "dao": "FUTARDIO",
+      "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "index": 28,
+      "proposal": "HJWbYbt7v5gDmg8AmgcyCgf5F4S4MU2xrx2V2Ku4sBCA",
+      "number": 3,
+      "state": "failed",
+      "signatures": 6
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 13,
+      "proposal": "88BZwgGux4mm1anUcYzbQFZpcbPfbFzzZUyMb2JqgM1M",
+      "number": 7,
+      "state": "passed",
+      "signatures": 7
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 14,
+      "proposal": "B618aWVhhVW5cEaLAggPo9MNaN7iCBMXP9M8zU11Yqqv",
+      "number": 8,
+      "state": "passed",
+      "signatures": 7
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 12,
+      "proposal": "NCYdLgJ1vd8JuMDTGDPUCWtUiLmiC1NTLSKjuE8pzL7",
+      "number": 6,
+      "state": "passed",
+      "signatures": 8
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 18,
+      "proposal": "ALWLPUuSjMbimLXiitMD5QDB35BYCPNjbw6KBjD9vrhb",
+      "number": 12,
+      "state": "passed",
+      "signatures": 8
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 10,
+      "proposal": "JBsHtThHapegcD6T8WfCg13f2yP4fZvLfPLmaWLbEMVQ",
+      "number": 4,
+      "state": "failed",
+      "signatures": 9
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 7,
+      "proposal": "GcdHiq8jzmYUHLg4inBagUTdjDmU8Z4zWeeX5ghTCAkd",
+      "number": 1,
+      "state": "failed",
+      "signatures": 11
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 11,
+      "proposal": "DKWB5onK3S6awkgm7VwnkrNpuAnPbsYAWbcTBD15Vroo",
+      "number": 5,
+      "state": "passed",
+      "signatures": 13
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 9,
+      "proposal": "54eAuD8NKHvJy7WurCwZirFEJfVvmH6cz8yYPDWpwLTc",
+      "number": 3,
+      "state": "failed",
+      "signatures": 13
+    },
+    {
+      "dao": "META",
+      "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "index": 6,
+      "proposal": "8HW2EN4eczYhdQWMERS8GwJzLq1884WRfrFAQNTxABzv",
+      "number": 4,
+      "state": "passed",
+      "signatures": 15
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 16,
+      "proposal": "DcVUBEEmKbHqYLheDFT1PGa3krUzG6v5ySHBCgLXX4it",
+      "number": 10,
+      "state": "passed",
+      "signatures": 17
+    },
+    {
+      "dao": "FUTARDIO",
+      "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "index": 33,
+      "proposal": "E5AEP2hCTfYVq4Rnc1TKZjTauSSEYFFBr8g49ktoN3pU",
+      "number": 4,
+      "state": "passed",
+      "signatures": 20
+    },
+    {
+      "dao": "PAYS",
+      "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+      "index": 10,
+      "proposal": "2VmEeSdSfwDBWUYHH61iJCz8TwdmEqhTSmXWBgpHrWzN",
+      "number": 4,
+      "state": "passed",
+      "signatures": 24
+    },
+    {
+      "dao": "BASKET",
+      "daoAddress": "GEZF81Us2ZMD9cozjEra6NXxi1tC2AdjvZXxKWcdVEgm",
+      "index": 2,
+      "proposal": "5K42ZzoS5VfSBmcr27XqQmd9DF7c6q3WiqGpPsjfQq1a",
+      "number": 1,
+      "state": "passed",
+      "signatures": 26
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 8,
+      "proposal": "EfXs6QvSAm7pdw6suGP7RhnHpJLhroEUo4s8oqxp6FAc",
+      "number": 2,
+      "state": "passed",
+      "signatures": 27
+    },
+    {
+      "dao": "META",
+      "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "index": 1,
+      "proposal": "8PHuBBwqsL9EzNT1PXSs5ZEnTVDCQ6UcvUC4iCgCMynx",
+      "number": 1,
+      "state": "passed",
+      "signatures": 33
+    },
+    {
+      "dao": "CRIME",
+      "daoAddress": "DMB74TZgN7Rqfwtqqm3VQBgKBb2WYPdBqVtHbvB4LLeV",
+      "index": 15,
+      "proposal": "CZZnYfoVKG2Xmcnwga4y748wiGft7YRdxBMP2Lexjhcy",
+      "number": 9,
+      "state": "passed",
+      "signatures": 37
+    },
+    {
+      "dao": "SUPER",
+      "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+      "index": 15,
+      "proposal": "2kKjgU1s3u1ADGyX5Yiv5aJ11biL9W1jTwHmbCUC926a",
+      "number": 4,
+      "state": "passed",
+      "signatures": 45
+    },
+    {
+      "dao": "SOLO",
+      "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+      "index": 15,
+      "proposal": "wwRoJYcur3EjnQCLodUhLqCs6H9NQ97RvP6JNV4b9F6",
+      "number": 2,
+      "state": "passed",
+      "signatures": 47
+    },
+    {
+      "dao": "FUTARDIO",
+      "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "index": 61,
+      "proposal": "BbGa5nx6owLwJ9Wt9Pr3FHccpove9uSvNX4C59Andxf3",
+      "number": 6,
+      "state": "passed",
+      "signatures": 54
+    },
+    {
+      "dao": "FUTARDIO",
+      "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "index": 20,
+      "proposal": "HiihSh8H6D1JAPpDeD8oNwqQ8AkTmYA9QS82p5NPSRhN",
+      "number": 2,
+      "state": "passed",
+      "signatures": 55
+    },
+    {
+      "dao": "LOYAL",
+      "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+      "index": 14,
+      "proposal": "98zXsz1RtvYw4zHrxaZDdGBU3BgqfsX9XJbXBLSJUBST",
+      "number": 4,
+      "state": "passed",
+      "signatures": 63
+    },
+    {
+      "dao": "OMFG",
+      "daoAddress": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+      "index": 1,
+      "proposal": "8WcHZ6U5PPa98xwXwKJxNKAhgKNdYMrwoUSpEyMdSww9",
+      "number": 1,
+      "state": "passed",
+      "signatures": 65
+    },
+    {
+      "dao": "FAF",
+      "daoAddress": "Gxvt2wKNiDZcnEK8GQ6Cyb8x1Kvm4nm2kT2itDmYdEFa",
+      "index": 1,
+      "proposal": "DuVWckJPQ2z7v3Xm95ZXA9QzUDicJof8TnSrENYBQDYd",
+      "number": 1,
+      "state": "passed",
+      "signatures": 66
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 20,
+      "proposal": "BWachMwZJZS9y6pDuYFr7xusQZU3azNGSsm2jeRj7qXb",
+      "number": 6,
+      "state": "passed",
+      "signatures": 68
+    },
+    {
+      "dao": "FUTARDIO",
+      "daoAddress": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "index": 1,
+      "proposal": "Hw4KF6uZxdu8demt2z1Z9ePSF9Bxuyqtt3nFgoLK9EHu",
+      "number": 1,
+      "state": "passed",
+      "signatures": 85
+    },
+    {
+      "dao": "RAWR",
+      "daoAddress": "6wmteHRgbJRSVPg8jaieZziKf7n1itADmWjJWQjCHcG1",
+      "index": 18,
+      "proposal": "8M93PPtyJFthyy8MyiQ5ayxrg2KG7LwemoTEYo7ikc5j",
+      "number": 1,
+      "state": "passed",
+      "signatures": 93
+    },
+    {
+      "dao": "UMBRA",
+      "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "index": 74,
+      "proposal": "2a5qE2E8pSv2EqHAfDvAuKHqMpMubBVjGPZr7bChiZKy",
+      "number": 4,
+      "state": "passed",
+      "signatures": 101
+    },
+    {
+      "dao": "PAYS",
+      "daoAddress": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+      "index": 8,
+      "proposal": "7nBSHmeTi2KXZMYmcynZVNm38KvaLP7FUuGSsU7nxG17",
+      "number": 2,
+      "state": "passed",
+      "signatures": 104
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 1,
+      "proposal": "CYr2YPr7MEUHZrdRs6ZbHMKXVBHPAwR4aocvwnUzHoj2",
+      "number": 1,
+      "state": "passed",
+      "signatures": 105
+    },
+    {
+      "dao": "SOLO",
+      "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+      "index": 14,
+      "proposal": "8c9sFZ5Z46ZLnhywkWuJ5BhJK4Wrj19AN4gzQicyBKjK",
+      "number": 1,
+      "state": "passed",
+      "signatures": 125
+    },
+    {
+      "dao": "OMFG",
+      "daoAddress": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+      "index": 3,
+      "proposal": "B8LxDoqY4irmCLYxYskPdF24vGfETsX56NBoMYtXfu9c",
+      "number": 3,
+      "state": "passed",
+      "signatures": 148
+    },
+    {
+      "dao": "LOYAL",
+      "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+      "index": 2,
+      "proposal": "GXdWao4Cy6EsvvS9atMb1kCPEAFwPXBe5kKCeLDtRJNm",
+      "number": 2,
+      "state": "passed",
+      "signatures": 207
+    },
+    {
+      "dao": "RNGR",
+      "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+      "index": 13,
+      "proposal": "DPATwR2HLcGZCBZCTffzagV4r7dp5FF2C9aJmiuCDUpS",
+      "number": 4,
+      "state": "passed",
+      "signatures": 255
+    },
+    {
+      "dao": "UMBRA",
+      "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "index": 149,
+      "proposal": "8sysa3XPrvKPmUA4qoZCn9h4vp7Mb45Ynezg542nui8Q",
+      "number": 5,
+      "state": "failed",
+      "signatures": 261
+    },
+    {
+      "dao": "AVICI",
+      "daoAddress": "3D854kknnQhu9xVaRNV154oZ9oN2WF3tXsq3LDu7fFMn",
+      "index": 69,
+      "proposal": "6UimhcMfgLM3fH3rxqXgLxs6cJwmfGLCLQEZG9jjA3Ry",
+      "number": 1,
+      "state": "passed",
+      "signatures": 272
+    },
+    {
+      "dao": "META",
+      "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "index": 5,
+      "proposal": "FG93KeoUdUmBtTcxWhJZicc6ef824qccpFdesbw2RJjM",
+      "number": 3,
+      "state": "passed",
+      "signatures": 280
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 19,
+      "proposal": "71YB7b8WdVLkCwTuoBP7wxae49PMYmoAUnd3r1ZzNEQM",
+      "number": 5,
+      "state": "passed",
+      "signatures": 289
+    },
+    {
+      "dao": "P2P",
+      "daoAddress": "CFYmVUEYikV8DaKDNs6WSHC5uAxG6T7KqFBCsAebACFu",
+      "index": 5,
+      "proposal": "AerjTFvEUDDfgpCCeMfgR1v9FtH4UiEgHCehBhV8CExF",
+      "number": 1,
+      "state": "passed",
+      "signatures": 421
+    },
+    {
+      "dao": "SUPER",
+      "daoAddress": "6WSUiKmBSM2B7QSxFAxgD9wquekzpkoRvKteFLvWWryU",
+      "index": 14,
+      "proposal": "FZNt29qdEhvnJWswpoWvvAFV5TBhnpBzUaFced3ZFx1X",
+      "number": 3,
+      "state": "failed",
+      "signatures": 564
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 12,
+      "proposal": "Gte4BCXKvQdzzN8sXMCXNwvKdrYSUHkTQWZVA8DECM2y",
+      "number": 4,
+      "state": "passed",
+      "signatures": 583
+    },
+    {
+      "dao": "LOYAL",
+      "daoAddress": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+      "index": 1,
+      "proposal": "2VjKHNQdkLfHtoH1GtPVseJv1kP3VUoLGcZLc29SttgS",
+      "number": 1,
+      "state": "passed",
+      "signatures": 614
+    },
+    {
+      "dao": "UMBRA",
+      "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "index": 6,
+      "proposal": "3seyB3i5bLQcUReaQoLkgwkNbVH7U7nnfiAFVaNawU6F",
+      "number": 2,
+      "state": "passed",
+      "signatures": 939
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 8,
+      "proposal": "4P35jGwheMhNCk1UNfeTdMYUfrSWyV41sFwWeMLAV7zx",
+      "number": 2,
+      "state": "failed",
+      "signatures": 942
+    },
+    {
+      "dao": "RNGR",
+      "daoAddress": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
+      "index": 3,
+      "proposal": "6cdhy4j6CAAJjE1z2iQDsFda2BrqJkhtHrRWT9QasSoa",
+      "number": 2,
+      "state": "passed",
+      "signatures": 1020
+    },
+    {
+      "dao": "META",
+      "daoAddress": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "index": 2,
+      "proposal": "Dt6QxTtaPz87oEK4m95ztP36wZCXA9LGLrJf1sDYAwxi",
+      "number": 2,
+      "state": "passed",
+      "signatures": 1690
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 24,
+      "proposal": "Fi9CjytnPxRjyPjCcy7AoowoY9sDHfBSWo65iR6mGXfU",
+      "number": 7,
+      "state": "failed",
+      "signatures": 1736
+    },
+    {
+      "dao": "ZKFG",
+      "daoAddress": "5FPGRzY9ArJFwY2Hp2y2eqMzVewyWCBox7esmpuZfCvE",
+      "index": 30,
+      "proposal": "APk1tpQq75LyrMmE4ryhuEjV37qggVaqrJgYpzKJ975z",
+      "number": 8,
+      "state": "passed",
+      "signatures": 1950
+    },
+    {
+      "dao": "UMBRA",
+      "daoAddress": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "index": 1,
+      "proposal": "71nYHjLpgY7evn9G4UaGCBd6cYHpGWzrzd3ESs2KUduG",
+      "number": 1,
+      "state": "passed",
+      "signatures": 2000
+    },
+    {
+      "dao": "SOLO",
+      "daoAddress": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+      "index": 18,
+      "proposal": "55Sdas9PeRW3tdLn885WWCgRKTsPiYMug1EbJNFSERTj",
+      "number": 4,
+      "state": "passed",
+      "signatures": 2000
+    }
+  ]
+}
