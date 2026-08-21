@@ -1,0 +1,5 @@
+# Pages project config. Deliberately holds no secret: this file is committed, and
+# RPC_URL lives in the encrypted store (`wrangler pages secret put RPC_URL`).
+name = "metadao-proposal-builder"
+pages_build_output_dir = "dist"
+compatibility_date = "2026-08-21"
