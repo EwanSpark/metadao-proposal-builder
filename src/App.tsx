@@ -1,4 +1,4 @@
-import { useAnchorWallet, useConnection, useWallet } from "@solana/wallet-adapter-react";
+import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import BN from "bn.js";
@@ -13,8 +13,13 @@ import {
   LIQUIDATION_TEMPLATES,
   parseRawInstructions,
   planBuyback,
+  programLabel,
   readPositionLiquidity,
   spendFromTreasury,
+  checkDaoParams,
+  minimumProposalSeconds,
+  updateDaoParams,
+  type DaoParamChanges,
 } from "./lib/actions";
 import {
   loadDaoList,
@@ -28,25 +33,41 @@ import {
   discoverProposals,
   formatDuration,
   resolveProposal,
+  discoverUnfinished,
   secondsRemaining,
   type ProposalRow,
+  type UnfinishedCreation,
 } from "./lib/discover";
 import { loadDao, makeClient, rawToUi, uiToRaw, type DaoView } from "./lib/futarchy";
 import {
   createSquadsProposal,
   executeVaultTransaction,
   finalizeProposal,
-  initializeFutarchyProposal,
+  proposalAddressFor,
+  resumeFutarchyProposal,
   launchProposal,
   sponsorProposal,
   stakeToProposal,
   unstakeFromProposal,
+  type SendFn,
 } from "./lib/flow";
 
 type Mode = "create" | "stake" | "finalize";
-type ActionKind = "spend" | "buyback" | "addLiq" | "removeLiq" | "liquidate" | "raw";
+type ActionKind = "spend" | "buyback" | "addLiq" | "removeLiq" | "liquidate" | "params" | "raw";
 
 type Props = Record<string, never>;
+
+/** Seconds are what the program stores; hours are what a human checks it against. */
+const hoursOf = (seconds: number) => `${(seconds / 3600).toFixed(2)}h`;
+
+/** Echo a typed seconds value back in hours, so a typo in the zeros is obvious. */
+function echo(raw: string): string {
+  const s = raw.trim();
+  if (!s) return "";
+  const n = Number(s);
+  if (!Number.isInteger(n) || n < 0) return "whole seconds only";
+  return `= ${hoursOf(n)}`;
+}
 
 const STATE_LABEL: Record<string, string> = {
   draft: "Draft",
@@ -59,7 +80,6 @@ const STATE_LABEL: Record<string, string> = {
 export default function App(_: Props) {
   const { connection } = useConnection();
   const wallet = useAnchorWallet();
-  const { sendTransaction } = useWallet();
 
   const [cluster, setCluster] = useState<string | null>(null);
   const [log, setLog] = useState<string[]>([]);
@@ -87,10 +107,13 @@ export default function App(_: Props) {
   const [bbMaxPrice, setBbMaxPrice] = useState("");
   const [memoText, setMemoText] = useState(LIQUIDATION_TEMPLATES[0].text);
   const [rawJson, setRawJson] = useState("");
+  const [voteSeconds, setVoteSeconds] = useState("");
+  const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
 
   const [rows, setRows] = useState<ProposalRow[]>([]);
   const [selected, setSelected] = useState<ProposalRow | null>(null);
   const [manualProposal, setManualProposal] = useState("");
+  const [unfinished, setUnfinished] = useState<UnfinishedCreation[]>([]);
   const [stakeAmount, setStakeAmount] = useState("");
 
   const client = useMemo(() => makeClient(connection, (wallet as any) ?? null), [connection, wallet]);
@@ -148,6 +171,39 @@ export default function App(_: Props) {
       }
     });
 
+  /**
+   * Broadcast over the app's own RPC instead of the wallet's.
+   *
+   * `sendTransaction` from the adapter hands the signed transaction to the wallet's
+   * own infrastructure: Jupiter posts it to wallet-api.jup.ag, which returns 500 when
+   * that service is down — killing a creation between its two steps and stranding the
+   * Squads half. Signing locally and sending over `connection` puts every step on the
+   * same endpoint, which is what the Anchor provider already does for the others.
+   */
+  const sendLocally = useCallback<SendFn>(
+    async (tx, conn, opts) => {
+      if (!wallet) throw new Error("Connect a wallet.");
+      if (!tx.feePayer) tx.feePayer = wallet.publicKey;
+      if (!tx.recentBlockhash) tx.recentBlockhash = (await conn.getLatestBlockhash()).blockhash;
+      // The extra signer goes first; the wallet countersigns the same message.
+      if (opts?.signers?.length) tx.partialSign(...opts.signers);
+      const signed = await wallet.signTransaction(tx);
+      const signature = await conn.sendRawTransaction(signed.serialize(), {
+        preflightCommitment: "confirmed",
+      });
+      // Same window as flow.ts's settle(): a late confirmation is not a failure.
+      for (let i = 0; i < 120; i++) {
+        const st = (await conn.getSignatureStatuses([signature])).value[0];
+        if (st?.err) throw new Error(`Transaction failed: ${JSON.stringify(st.err)}`);
+        if (st?.confirmationStatus === "confirmed" || st?.confirmationStatus === "finalized")
+          return signature;
+        await new Promise((r) => setTimeout(r, 1000));
+      }
+      throw new Error(`Still unconfirmed after 2 minutes — ${signature}`);
+    },
+    [wallet],
+  );
+
   const doLoadDao = (address?: string) =>
     run("loading DAO", async () => {
       const pk = new PublicKey((address ?? daoAddress).trim());
@@ -159,6 +215,17 @@ export default function App(_: Props) {
       say(`✅ DAO loaded — ${view.proposalCount} proposals, pool ${view.poolPhase}`);
       if (view.poolPhase === "futarchy")
         say("⚠️ A proposal is already live — no other launch will succeed.");
+
+      // A creation whose second step never landed leaves a Squads proposal with no
+      // futarchy proposal on top. It is invisible everywhere until step 2 is retried.
+      const stalled = await discoverUnfinished(connection, client, view);
+      setUnfinished(stalled);
+      if (stalled.length > 0)
+        say(
+          `⚠️ ${stalled.length} unfinished creation(s): Squads tx #${stalled
+            .map((u) => u.transactionIndex)
+            .join(", #")} — no futarchy proposal yet.`,
+        );
     });
 
   const doDiscover = () =>
@@ -242,6 +309,27 @@ export default function App(_: Props) {
       } else if (kind === "liquidate") {
         ixs = authorizationMemo(memoText);
         say("ℹ️ Signalling mandate — nothing moves on-chain at execution.");
+      } else if (kind === "params") {
+        const changes: DaoParamChanges = {};
+        const seconds = (raw: string, label: string) => {
+          const n = Number(raw);
+          if (!Number.isInteger(n) || n < 0) throw new Error(`${label} must be a whole number of seconds.`);
+          return n;
+        };
+        if (voteSeconds.trim())
+          changes.secondsPerProposal = seconds(voteSeconds.trim(), "Vote length");
+        if (twapDelaySeconds.trim())
+          changes.twapStartDelaySeconds = seconds(twapDelaySeconds.trim(), "TWAP start delay");
+        const problem = checkDaoParams(dao, changes);
+        if (problem) throw new Error(problem);
+        ixs = await updateDaoParams(client, dao, changes);
+        if (changes.secondsPerProposal)
+          say(
+            `ℹ️ Vote length ${dao.secondsPerProposal}s → ${changes.secondsPerProposal}s ` +
+              `(${(changes.secondsPerProposal / 3600).toFixed(2)}h). Takes effect on proposals created after execution.`,
+          );
+        if (changes.twapStartDelaySeconds)
+          say(`ℹ️ TWAP start delay ${dao.twapStartDelaySeconds}s → ${changes.twapStartDelaySeconds}s.`);
       } else {
         ixs = parseRawInstructions(rawJson);
       }
@@ -251,6 +339,33 @@ export default function App(_: Props) {
     });
 
   /* ------------------------------------------------------------- lifecycle */
+
+  /**
+   * Retry step 2 on a creation that stopped after the Squads half. The Squads
+   * proposal already exists, so this reuses it instead of opening a new index —
+   * starting over would strand it permanently.
+   */
+  const doFinishCreation = (u: UnfinishedCreation) =>
+    run("finishing creation", async () => {
+      if (!dao || !wallet) throw new Error("Wallet or DAO missing.");
+      say(`2/2 — resuming Squads tx #${u.transactionIndex}, skipping what already exists…`);
+      const p = await resumeFutarchyProposal(
+        client,
+        connection,
+        dao,
+        u.squadsProposal,
+        wallet.publicKey,
+        sendLocally,
+        say,
+      );
+      say(`✅ Futarchy proposal: ${p.toBase58()} — Draft state`);
+      const row = await resolveProposal(client, connection, p, 8);
+      setRows((r) => [row, ...r]);
+      setSelected(row);
+      setUnfinished((list) => list.filter((x) => x.transactionIndex !== u.transactionIndex));
+      setMode("stake");
+      say("➡️ Move to the Stake & Launch tab.");
+    });
 
   const doCreate = () =>
     run("creating proposal", async () => {
@@ -263,12 +378,41 @@ export default function App(_: Props) {
         dao,
         pending,
         wallet.publicKey,
-        sendTransaction as any,
+        sendLocally,
       );
       say(`✅ Squads proposal #${created.transactionIndex} — ${created.signature}`);
 
       say("2/2 — binary question + conditional vaults + futarchy proposal (3 tx)…");
-      const p = await initializeFutarchyProposal(client, dao, created.squadsProposal);
+      let p: PublicKey;
+      try {
+        p = await resumeFutarchyProposal(
+          client,
+          connection,
+          dao,
+          created.squadsProposal,
+          wallet.publicKey,
+          sendLocally,
+          say,
+        );
+      } catch (e) {
+        // Step 1 is already on-chain. Offer the resume straight away rather than
+        // leaving the user to create a second one and strand this index.
+        setUnfinished((list) => [
+          ...list,
+          {
+            transactionIndex: created.transactionIndex,
+            squadsProposal: created.squadsProposal,
+            proposal: proposalAddressFor(client, created.squadsProposal),
+            programs: [...new Set(pending.map((ix) => ix.programId.toBase58()))],
+            instructionCount: pending.length,
+            hasQuestion: false,
+            hasVaults: false,
+            remaining: 3,
+          },
+        ]);
+        say("⚠️ The Squads half is on-chain. Use \"Finish creation\" above — do not create a new one.");
+        throw e;
+      }
       say(`✅ Futarchy proposal: ${p.toBase58()} — Draft state`);
 
       // Retry: the account was just written, a lagging RPC node may not see it yet.
@@ -283,11 +427,15 @@ export default function App(_: Props) {
   const doStake = () =>
     run("stake", async () => {
       if (!dao || !selected) throw new Error("Select a proposal.");
+      if (!wallet) throw new Error("Connect a wallet.");
       const sig = await stakeToProposal(
         client,
+        connection,
         dao,
         selected.proposal,
         uiToRaw(stakeAmount, dao.baseDecimals),
+        wallet.publicKey,
+        sendLocally,
       );
       say(`✅ Staked — ${sig}`);
       await reselect(selected);
@@ -296,11 +444,15 @@ export default function App(_: Props) {
   const doUnstake = () =>
     run("unstake", async () => {
       if (!dao || !selected) throw new Error("Select a proposal.");
+      if (!wallet) throw new Error("Connect a wallet.");
       const sig = await unstakeFromProposal(
         client,
+        connection,
         dao,
         selected.proposal,
         uiToRaw(stakeAmount, dao.baseDecimals),
+        wallet.publicKey,
+        sendLocally,
       );
       say(`✅ Unstaked — ${sig}`);
       await reselect(selected);
@@ -310,7 +462,15 @@ export default function App(_: Props) {
     run("sponsor", async () => {
       if (!dao || !selected) throw new Error("Select a proposal.");
       say(`ℹ️ Requires the team_address signature (${dao.teamAddress.toBase58()}).`);
-      const sig = await sponsorProposal(client, dao, selected.proposal);
+      if (!wallet) throw new Error("Connect a wallet.");
+      const sig = await sponsorProposal(
+        client,
+        connection,
+        dao,
+        selected.proposal,
+        wallet.publicKey,
+        sendLocally,
+      );
       say(`✅ Sponsored — threshold ${dao.teamSponsoredPassThresholdBps} bps — ${sig}`);
       await reselect(selected);
     });
@@ -320,7 +480,16 @@ export default function App(_: Props) {
       if (!dao || !selected) throw new Error("Select a proposal.");
       if (dao.poolPhase === "futarchy")
         throw new Error("A proposal is already live on this DAO (PoolNotInSpotState).");
-      const sig = await launchProposal(client, dao, selected.proposal, selected.squadsProposal);
+      if (!wallet) throw new Error("Connect a wallet.");
+      const sig = await launchProposal(
+        client,
+        connection,
+        dao,
+        selected.proposal,
+        selected.squadsProposal,
+        wallet.publicKey,
+        sendLocally,
+      );
       say(`🚀 Launched — ${dao.secondsPerProposal / 86400} days of market — ${sig}`);
       await reselect(selected);
     });
@@ -328,7 +497,14 @@ export default function App(_: Props) {
   const doFinalize = () =>
     run("finalize", async () => {
       if (!selected) throw new Error("Select a proposal.");
-      const sig = await finalizeProposal(client, selected.proposal);
+      if (!wallet) throw new Error("Connect a wallet.");
+      const sig = await finalizeProposal(
+        client,
+        connection,
+        selected.proposal,
+        wallet.publicKey,
+        sendLocally,
+      );
       say(`🏁 Finalized — ${sig}`);
       await reselect(selected);
     });
@@ -341,7 +517,7 @@ export default function App(_: Props) {
         dao,
         selected.transactionIndex,
         wallet.publicKey,
-        sendTransaction as any,
+        sendLocally,
       );
       say(`✅ Vault transaction executed — ${sig}`);
     });
@@ -499,6 +675,10 @@ export default function App(_: Props) {
     addLiq: { title: "Add liquidity", sub: "Deposit treasury funds into the futarchy AMM, deepening decision markets." },
     removeLiq: { title: "Remove liquidity", sub: "Pull part of the treasury's LP position back into the treasury." },
     liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
+    params: {
+      title: "DAO parameters",
+      sub: "Change how the DAO votes — vote length and TWAP start delay.",
+    },
     raw: { title: "Raw instruction", sub: "Paste JSON for anything the forms don't cover." },
   };
   const info = ACTION_INFO[kind];
@@ -538,8 +718,18 @@ export default function App(_: Props) {
       <div className="app">
         {cluster === "unreachable" && (
           <div className="banner">
-            No RPC reachable. Set <span className="mono">RPC_URL</span> in{" "}
-            <span className="mono">.env.local</span> and restart, or add it as a Cloudflare secret.
+            No RPC reachable.{" "}
+            {location.hostname === "localhost" ? (
+              <>
+                Set <span className="mono">RPC_URL</span> in{" "}
+                <span className="mono">.env.local</span> and restart the dev server.
+              </>
+            ) : (
+              <>
+                Set the <span className="mono">RPC_URL</span> secret on this Cloudflare Pages
+                project, then redeploy.
+              </>
+            )}
           </div>
         )}
 
@@ -706,6 +896,42 @@ export default function App(_: Props) {
             <h2>{info.title}</h2>
             <p className="sub">{info.sub}</p>
 
+            {unfinished.length > 0 && (
+              <div className="banner" style={{ marginTop: 0, marginBottom: 16 }}>
+                <strong>Unfinished creations.</strong> These Squads transactions and
+                proposals exist on-chain with no futarchy proposal on top, which is why they
+                appear nowhere. Resuming one puts <em>its</em> instructions to a vote — and
+                the multisig index is shared with everyone, so check what each one calls
+                before finishing it. Only resume the one you created.
+                <ul className="ixs" style={{ marginTop: 10 }}>
+                  {unfinished.map((u) => (
+                    <li className="ix-card" key={String(u.transactionIndex)}>
+                      <div className="grow">
+                        <div className="t">
+                          Squads transaction #{String(u.transactionIndex)} —{" "}
+                          {u.instructionCount} instruction(s) calling{" "}
+                          {u.programs.map(programLabel).join(", ") || "an unreadable program"}
+                        </div>
+                        <div className="m">
+                          {u.remaining} transaction(s) left
+                          {u.hasQuestion && " · question already created"}
+                          {u.hasVaults && " · vaults already created"}
+                        </div>
+                        <div className="m mono trunc">{u.proposal.toBase58()}</div>
+                      </div>
+                      <button
+                        className="primary tiny"
+                        onClick={() => doFinishCreation(u)}
+                        disabled={busy || !wallet}
+                      >
+                        Finish creation
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+
             <div className="tabs">
               {(
                 [
@@ -714,6 +940,7 @@ export default function App(_: Props) {
                   ["addLiq", "Add liquidity"],
                   ["removeLiq", "Remove liquidity"],
                   ["liquidate", "Liquidation"],
+                  ["params", "Parameters"],
                   ["raw", "Raw"],
                 ] as [ActionKind, string][]
               ).map(([k, label]) => (
@@ -834,6 +1061,72 @@ export default function App(_: Props) {
                 <p className="hint">
                   Both real liquidations on mainnet are a single SPL memo with zero accounts — a
                   mandate MetaDAO then executes with its own authorities, outside governance.
+                </p>
+              </div>
+            )}
+
+            {kind === "params" && (
+              <div className="form">
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>
+                      Vote length (seconds) — currently{" "}
+                      {dao ? dao.secondsPerProposal.toLocaleString() : "—"}
+                      {dao && ` (${hoursOf(dao.secondsPerProposal)})`}
+                    </span>
+                    <input
+                      placeholder="86401"
+                      inputMode="numeric"
+                      value={voteSeconds}
+                      onChange={(e) => setVoteSeconds(e.target.value)}
+                    />
+                    <span className="hint">{echo(voteSeconds)}</span>
+                  </label>
+                  <label className="field grow">
+                    <span>
+                      TWAP start delay (seconds) — currently{" "}
+                      {dao ? dao.twapStartDelaySeconds.toLocaleString() : "—"}
+                      {dao && ` (${hoursOf(dao.twapStartDelaySeconds)})`}
+                    </span>
+                    <input
+                      placeholder="28800"
+                      inputMode="numeric"
+                      value={twapDelaySeconds}
+                      onChange={(e) => setTwapDelaySeconds(e.target.value)}
+                    />
+                    <span className="hint">{echo(twapDelaySeconds)}</span>
+                  </label>
+                </div>
+                {dao && (
+                  <p className="hint">
+                    <strong>The two are linked.</strong> The program rejects a vote that is not
+                    strictly longer than 1 day <em>and</em> strictly longer than twice the TWAP
+                    start delay (error 6011). At the current delay of{" "}
+                    {(dao.twapStartDelaySeconds / 3600).toFixed(2)}h the floor is{" "}
+                    {minimumProposalSeconds(dao.twapStartDelaySeconds).toLocaleString()}s — a second
+                    over {(2 * dao.twapStartDelaySeconds / 3600).toFixed(0)}h, not a round number. A
+                    24h vote therefore needs the delay dropped below 12h in the same proposal.
+                  </p>
+                )}
+                {dao &&
+                  (() => {
+                    // The bound the user is actually aiming at, from whatever is typed.
+                    const v = Number(voteSeconds.trim());
+                    if (!voteSeconds.trim() || !Number.isInteger(v) || v <= 86400) return null;
+                    const max = Math.floor((v - 1) / 2);
+                    return (
+                      <p className="hint">
+                        <strong>At {v.toLocaleString()}s ({hoursOf(v)})</strong> the delay must be
+                        at most <strong>{max.toLocaleString()}s</strong> ({hoursOf(max)}). That
+                        upper end leaves only {hoursOf(v - max)} of measured price — keeping
+                        MetaDAO's current one-third ratio would mean {Math.round(v / 3).toLocaleString()}s
+                        ({hoursOf(Math.round(v / 3))}).
+                      </p>
+                    );
+                  })()}
+                <p className="hint">
+                  Only the treasury can sign this, so it takes a proposal that passes at the{" "}
+                  <em>current</em> length. Leave a field empty to leave that parameter untouched.
                 </p>
               </div>
             )}

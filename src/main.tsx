@@ -9,7 +9,13 @@ import "./styles.css";
 
 function Root() {
   return (
-    <ConnectionProvider endpoint={RPC_ENDPOINT} config={{ commitment: "confirmed" }}>
+    <ConnectionProvider
+      endpoint={RPC_ENDPOINT}
+      // web3.js defaults to 30s, which a slow endpoint routinely overruns on a
+      // transaction that did land. flow.ts polls past a timeout anyway; this just
+      // stops most of them from happening in the first place.
+      config={{ commitment: "confirmed", confirmTransactionInitialTimeout: 120_000 }}
+    >
       {/* Empty array: modern wallet-adapter auto-detects Wallet Standard wallets. */}
       <WalletProvider wallets={[]} autoConnect>
         <WalletModalProvider>

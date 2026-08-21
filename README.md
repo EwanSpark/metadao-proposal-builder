@@ -56,7 +56,7 @@ The full lifecycle, in the order the program enforces:
    currently possible.
 2. **Compose the instructions** the treasury will execute if the proposal passes:
    spend USDC, buyback via Jupiter DCA, add or remove liquidity, liquidation mandate,
-   or a raw JSON instruction.
+   DAO parameter changes, or a raw JSON instruction.
 3. **Create** — Squads vault transaction and proposal, then the binary question, both
    conditional vaults and the futarchy proposal. Result: `Draft`.
 4. **Stake** up to `base_to_stake` (or sponsor if you hold `team_address`).
@@ -92,6 +92,35 @@ Ranger #4 (passed) and Superclaw #3 (rejected).
 **The creation transaction caps at 1232 bytes.** It carries the whole serialized inner
 message, so a long memo overflows it. The app checks the size up front and says so
 instead of surfacing a raw web3.js error.
+
+**A proposal has no title or description on-chain — the question is not the title.**
+Verified two ways. The futarchy `Proposal` account has 16 fields and not one string; the
+Squads `VaultTransaction` account does not persist the `memo` its instruction accepts.
+And the conditional-vault question stores only a 32-byte hash, whose preimage is built
+from the proposal's own address: for all **129** proposals on mainnet, without a single
+exception,
+
+```
+question_id == sha256("Will <proposalAddress> pass?/FAIL/PASS")
+```
+
+including proposals that display rich titles. The title and body live in MetaDAO's own
+database (their page payload carries `title` and `content` next to `status` and
+`totalVolume`) and are filled in through their signed-in interface. A proposal created
+on-chain from outside that interface has no row there and renders as *untitled*; only
+MetaDAO can add one. The nearest on-chain equivalent this app offers is an SPL memo
+instruction carrying a title and a link — visible under Instructions, and what the Basket
+proposal uses.
+
+**Shortening the vote is two parameters, not one.** `updateDao` is signed by the
+treasury vault, so a DAO can only change its own rules by winning a vote at the current
+length. And the program rejects a duration that is not strictly longer than 1 day *and*
+strictly longer than twice `twapStartDelaySeconds` (error 6011). Every DAO on mainnet
+ships with a 24h TWAP delay, which puts the floor at 172801s — 48h plus one second, and
+exactly where three DAOs sit today, which is what proves the bound is strict. So a 24h
+vote means lowering the delay under 12h in the same instruction. The Parameters tab takes both values in seconds — the unit the program stores, and the
+unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
+both bounds before the instruction is queued.
 
 **The raw-instruction tab** covers everything the forms do not: Metaplex metadata,
 Meteora DAMM withdrawals, liquidation setup, mint governor, Omnipair.
@@ -158,7 +187,15 @@ Generic tools, usable on any DAO or proposal:
 node scripts/decode-proposal.mjs <proposalAddress>   # decode a proposal's vault transaction
 node scripts/snapshot-daos.mjs                       # regenerate the bundled DAO list
 node scripts/survey-proposals.mjs                    # decode every proposal on every DAO
+node scripts/rank-activity.mjs count                 # transactions per proposal, real projects only
+node scripts/rank-activity.mjs detail 12             # exact conditional_swap count for the quietest
 ```
+
+`scripts/activity.json` and `activity-detail.json` rank proposals by market activity.
+Trades are counted on-chain (`conditional_swap` instructions, which carry the proposal in
+their accounts); volume is better taken from MetaDAO's own `performanceStats.totalVolume`,
+since reconstructing it from token-balance deltas does not reproduce their definition.
+Test DAOs are excluded by name, and Crimera by the fact that metadao.fi 404s on it.
 
 `scripts/survey.json` is the output of the last survey: 130 proposals across 22 DAOs,
 with each one's instructions classified by program. Useful as a reference for what

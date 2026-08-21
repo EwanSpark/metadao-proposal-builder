@@ -280,6 +280,81 @@ export function jupiterDcaBuyback(
 }
 
 /** SPL Memo v2. */
+/* ------------------------------------------------------- DAO parameters */
+
+export type DaoParamChanges = {
+  /** New vote length, seconds. Omit to leave it alone. */
+  secondsPerProposal?: number;
+  /** New TWAP start delay, seconds. Omit to leave it alone. */
+  twapStartDelaySeconds?: number;
+};
+
+/**
+ * Shortest vote the program accepts, given a TWAP start delay.
+ *
+ * Error 6011 reads "Proposal duration must be longer 1 day and longer than 2 times
+ * the TWAP start delay" — both bounds strict. The chain proves the second one is
+ * strict: three DAOs sit at exactly 172801s with a 86400s delay, one second above
+ * 2 × 86400, which is where you land when you push a round number down until the
+ * program stops accepting it.
+ */
+export function minimumProposalSeconds(twapStartDelaySeconds: number): number {
+  return Math.max(86400, 2 * twapStartDelaySeconds) + 1;
+}
+
+/**
+ * Whether a duration/delay pair would be accepted, and why not if it wouldn't.
+ * Checked here so the failure shows up while composing rather than three days
+ * later when the vote executes.
+ */
+export function checkDaoParams(dao: DaoView, c: DaoParamChanges): string | null {
+  const delay = c.twapStartDelaySeconds ?? dao.twapStartDelaySeconds;
+  const duration = c.secondsPerProposal ?? dao.secondsPerProposal;
+  if (c.secondsPerProposal === undefined && c.twapStartDelaySeconds === undefined) {
+    return "Nothing to change.";
+  }
+  if (duration <= 86400) {
+    return `Duration must be strictly longer than 1 day: ${duration}s ≤ 86400s (error 6011).`;
+  }
+  if (duration <= 2 * delay) {
+    return (
+      `Duration must exceed 2 × TWAP start delay: ${duration}s ≤ ${2 * delay}s (error 6011). ` +
+      `Lower the delay to at most ${Math.floor((duration - 1) / 2)}s in the same proposal.`
+    );
+  }
+  return null;
+}
+
+/**
+ * Change the DAO's own parameters. The treasury vault signs, so this only ever runs
+ * as the instruction of a proposal that passed — a DAO cannot shorten its own votes
+ * except by winning a vote at the current length.
+ */
+export async function updateDaoParams(
+  client: FutarchyClient,
+  dao: DaoView,
+  changes: DaoParamChanges,
+): Promise<TransactionInstruction[]> {
+  const ix = await (client.futarchy as any).methods
+    .updateDao({
+      passThresholdBps: null,
+      secondsPerProposal: changes.secondsPerProposal ?? null,
+      twapInitialObservation: null,
+      twapMaxObservationChangePerUpdate: null,
+      twapStartDelaySeconds: changes.twapStartDelaySeconds ?? null,
+      minQuoteFutarchicLiquidity: null,
+      minBaseFutarchicLiquidity: null,
+      baseToStake: null,
+      teamSponsoredPassThresholdBps: null,
+      teamAddress: null,
+      isOptimisticGovernanceEnabled: null,
+    })
+    .accounts({ dao: dao.address, squadsMultisigVault: dao.treasury })
+    .instruction();
+
+  return [ix];
+}
+
 export const MEMO_PROGRAM_ID = new PublicKey("MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr");
 
 /**
@@ -342,9 +417,33 @@ export function parseRawInstructions(json: string): TransactionInstruction[] {
   });
 }
 
+/** Names for the programs a proposal realistically calls — used to label instructions. */
+const PROGRAM_NAMES: Record<string, string> = {
+  MemoSq4gqABAXKb96qnH8TysNcWxMyWCqXgDLGmfcHr: "SPL Memo",
+  cpamdpZCGKUy5JxQXB4dcpGPiikHawvSWAd6mEn1sGG: "Meteora DAMM v2",
+  DCA265Vj8a9CEuX1eb1LWRnDT7uK6q1xMipnNyatn23M: "Jupiter DCA",
+  FUTARELBfJfQ8RDGhg1wdhddq1odMAJUePHFuBYfUxKq: "MetaDAO futarchy",
+  LiQnowFbFQdYyZhF4pUbpsrZCjxRTQ1upKJxZ2VXjde: "MetaDAO liquidation",
+  omnixgS8fnqHfCcTGKWj6JtKjzpJZ1Y5y9pyFkQDkYE: "Omnipair",
+  SQDS4ep65T869zMMBKyuUq6aD6EgTu8psMjkvj52pCf: "Squads v4",
+  TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: "SPL Token",
+  "11111111111111111111111111111111": "System",
+  metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s: "Metaplex metadata",
+};
+
+export function programLabel(id: string): string {
+  return PROGRAM_NAMES[id] ?? `${id.slice(0, 8)}…`;
+}
+
+/** sha256("global:update_dao")[0..8] — so a queued parameter change reads as one. */
+const UPDATE_DAO_DISC = "83484b1970d26d02";
+
 export function describeInstruction(ix: TransactionInstruction): string {
   if (ix.programId.equals(MEMO_PROGRAM_ID)) {
     return `Memo · ${JSON.stringify(ix.data.toString("utf8"))}`;
+  }
+  if (ix.data.subarray(0, 8).toString("hex") === UPDATE_DAO_DISC) {
+    return "Update DAO parameters";
   }
   const signers = ix.keys.filter((k) => k.isSigner).length;
   return `${ix.programId.toBase58().slice(0, 8)}… · ${ix.keys.length} accounts (${signers} signer) · ${ix.data.length}o`;

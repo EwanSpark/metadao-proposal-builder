@@ -10,6 +10,8 @@ import {
 } from "@solana/web3.js";
 import * as multisig from "@sqds/multisig";
 import BN from "bn.js";
+import { sha256 } from "@noble/hashes/sha256";
+import { InstructionUtils } from "@metadaoproject/programs";
 import { nextTransactionIndex, type DaoView } from "./futarchy";
 
 export type SendFn = (
@@ -17,6 +19,29 @@ export type SendFn = (
   connection: Connection,
   opts?: { signers?: any[] },
 ) => Promise<string>;
+
+/**
+ * Send an Anchor methods-builder through the app's own sender instead of `.rpc()`.
+ *
+ * `.rpc()` confirms with web3.js `confirmTransaction`, which waits on a `signatureSubscribe`
+ * WebSocket. This app talks to an HTTP-only proxy — there is no socket to subscribe on — so
+ * confirmation never arrives and every call dies on the timeout with "it is unknown if it
+ * succeeded or failed", even though the transaction landed in a few seconds. Sending here
+ * means we hold the signature ourselves and settle it by polling, over the same HTTP path
+ * as every other call.
+ */
+async function sendBuilder(
+  builder: any,
+  connection: Connection,
+  payer: PublicKey,
+  send: SendFn,
+): Promise<string> {
+  const instructions: TransactionInstruction[] = await InstructionUtils.getInstructions(builder);
+  const tx = new Transaction().add(...instructions);
+  tx.feePayer = payer;
+  tx.recentBlockhash = (await connection.getLatestBlockhash()).blockhash;
+  return send(tx, connection, {});
+}
 
 export type CreateResult = {
   transactionIndex: bigint;
@@ -105,6 +130,91 @@ export async function initializeFutarchyProposal(
   return client.initializeProposal(dao.address, squadsProposal);
 }
 
+/**
+ * Resume a creation that stopped part-way through step 2.
+ *
+ * `client.initializeProposal` runs three transactions back to back and none of them
+ * is idempotent: if the first already landed, replaying it makes the System Program
+ * reject the account creation with `AccountAlreadyInUse` (custom program error 0x0),
+ * and the whole resume dies on a step that was already done. Ledger prompts, a wallet
+ * broadcast outage, or a dropped transaction all leave exactly this state.
+ *
+ * So check each account first and only send what is genuinely missing. The two vaults
+ * still have to go together — the program requires them in one atomic transaction.
+ */
+export async function resumeFutarchyProposal(
+  client: FutarchyClient,
+  connection: Connection,
+  dao: DaoView,
+  squadsProposal: PublicKey,
+  payer: PublicKey,
+  send: SendFn,
+  say: (line: string) => void = () => {},
+): Promise<PublicKey> {
+  const [proposal] = getProposalAddr(client.getProgramId(), squadsProposal);
+
+  if (await connection.getAccountInfo(proposal)) {
+    say("Proposal already exists — nothing to resume.");
+    return proposal;
+  }
+
+  const { question, baseVault, quoteVault } = (client as any).getProposalPdas(
+    proposal,
+    dao.baseMint,
+    dao.quoteMint,
+    dao.address,
+  );
+
+  if (await connection.getAccountInfo(question)) {
+    say(`↷ question already created (${question.toBase58().slice(0, 8)}…) — skipped.`);
+  } else {
+    say("· creating the binary question…");
+    await sendBuilder(
+      (client.vaultClient as any).initializeQuestionIx(
+        sha256(`Will ${proposal} pass?/FAIL/PASS`),
+        proposal,
+        2,
+      ),
+      connection,
+      payer,
+      send,
+    );
+  }
+
+  const [baseInfo, quoteInfo] = await Promise.all([
+    connection.getAccountInfo(baseVault),
+    connection.getAccountInfo(quoteVault),
+  ]);
+  if (baseInfo && quoteInfo) {
+    say("↷ both conditional vaults already exist — skipped.");
+  } else if (baseInfo || quoteInfo) {
+    // The pair is created atomically, so one without the other cannot happen through
+    // this path. Refuse rather than send a transaction that will fail on-chain.
+    throw new Error(
+      "Only one of the two conditional vaults exists. This cannot be repaired here — " +
+        "the program creates them atomically.",
+    );
+  } else {
+    say("· creating both conditional vaults (one transaction)…");
+    const both = client.vaultClient
+      .initializeVaultIx(question, dao.baseMint, 2)
+      .postInstructions(
+        await InstructionUtils.getInstructions(
+          client.vaultClient.initializeVaultIx(question, dao.quoteMint, 2),
+        ),
+      );
+    await sendBuilder(both, connection, payer, send);
+  }
+
+  say("· creating the futarchy proposal…");
+  const create = (client as any)
+    .initializeProposalIx(squadsProposal, dao.address, dao.baseMint, dao.quoteMint, question)
+    .preInstructions([ComputeBudgetProgram.setComputeUnitLimit({ units: 300_000 })]);
+  await sendBuilder(create, connection, payer, send);
+
+  return proposal;
+}
+
 export function proposalAddressFor(client: FutarchyClient, squadsProposal: PublicKey): PublicKey {
   return getProposalAddr(client.getProgramId(), squadsProposal)[0];
 }
@@ -112,33 +222,53 @@ export function proposalAddressFor(client: FutarchyClient, squadsProposal: Publi
 /** Step 3 — stake base tokens until amount_staked >= dao.base_to_stake. */
 export async function stakeToProposal(
   client: FutarchyClient,
+  connection: Connection,
   dao: DaoView,
   proposal: PublicKey,
   amount: BN,
+  payer: PublicKey,
+  send: SendFn,
 ): Promise<string> {
-  return client
-    .stakeToProposalIx({ proposal, dao: dao.address, baseMint: dao.baseMint, amount })
-    .rpc();
+  return sendBuilder(
+    client.stakeToProposalIx({ proposal, dao: dao.address, baseMint: dao.baseMint, amount }),
+    connection,
+    payer,
+    send,
+  );
 }
 
 export async function unstakeFromProposal(
   client: FutarchyClient,
+  connection: Connection,
   dao: DaoView,
   proposal: PublicKey,
   amount: BN,
+  payer: PublicKey,
+  send: SendFn,
 ): Promise<string> {
-  return client
-    .unstakeFromProposalIx({ proposal, dao: dao.address, baseMint: dao.baseMint, amount })
-    .rpc();
+  return sendBuilder(
+    client.unstakeFromProposalIx({ proposal, dao: dao.address, baseMint: dao.baseMint, amount }),
+    connection,
+    payer,
+    send,
+  );
 }
 
 /** Team-only shortcut: skips the stake requirement, switches to the team threshold. */
 export async function sponsorProposal(
   client: FutarchyClient,
+  connection: Connection,
   dao: DaoView,
   proposal: PublicKey,
+  payer: PublicKey,
+  send: SendFn,
 ): Promise<string> {
-  return client.sponsorProposalIx({ proposal, dao: dao.address }).rpc();
+  return sendBuilder(
+    client.sponsorProposalIx({ proposal, dao: dao.address }),
+    connection,
+    payer,
+    send,
+  );
 }
 
 /**
@@ -147,27 +277,48 @@ export async function sponsorProposal(
  */
 export async function launchProposal(
   client: FutarchyClient,
+  connection: Connection,
   dao: DaoView,
   proposal: PublicKey,
   squadsProposal: PublicKey,
+  payer: PublicKey,
+  send: SendFn,
 ): Promise<string> {
-  return client
-    .launchProposalIx({
+  return sendBuilder(
+    client.launchProposalIx({
       proposal,
       dao: dao.address,
       baseMint: dao.baseMint,
       quoteMint: dao.quoteMint,
       squadsProposal,
-    })
-    .rpc();
+    }),
+    connection,
+    payer,
+    send,
+  );
 }
 
 /** Step 5 — after duration_in_seconds. Merges the winning market back into spot. */
 export async function finalizeProposal(
   client: FutarchyClient,
+  connection: Connection,
   proposal: PublicKey,
+  payer: PublicKey,
+  send: SendFn,
 ): Promise<string> {
-  return client.finalizeProposal(proposal);
+  const stored: any = await client.getProposal(proposal);
+  const dao: any = await client.getDao(stored.dao);
+  return sendBuilder(
+    (client as any).finalizeProposalIxV2({
+      squadsProposal: stored.squadsProposal,
+      dao: stored.dao,
+      baseMint: dao.baseMint,
+      quoteMint: dao.quoteMint,
+    }),
+    connection,
+    payer,
+    send,
+  );
 }
 
 /** Step 6 — execution is a separate top-level tx (Solana reentrancy guard). */

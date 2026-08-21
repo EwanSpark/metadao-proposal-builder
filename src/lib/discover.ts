@@ -88,6 +88,154 @@ export async function discoverProposals(
   return rows.sort((a, b) => b.number - a.number);
 }
 
+/** Batched read with a per-account fallback — some public RPCs refuse getMultipleAccounts. */
+async function readMany(connection: Connection, keys: PublicKey[]) {
+  try {
+    return await connection.getMultipleAccountsInfo(keys);
+  } catch {
+    const out = [];
+    for (const k of keys) out.push(await connection.getAccountInfo(k));
+    return out;
+  }
+}
+
+export type UnfinishedCreation = {
+  transactionIndex: bigint;
+  squadsProposal: PublicKey;
+  /** The address the futarchy proposal will have once step 2 completes. */
+  proposal: PublicKey;
+  /** Programs the wrapped instructions call — the only way to tell whose creation this is. */
+  programs: string[];
+  instructionCount: number;
+  /** How much of step 2 already landed, so you can see what resuming will sign. */
+  hasQuestion: boolean;
+  hasVaults: boolean;
+  /** Transactions still needed to finish. */
+  remaining: number;
+};
+
+/**
+ * Creations that stopped half-way: the Squads vault transaction and proposal exist,
+ * but no futarchy proposal sits on top of them.
+ *
+ * Creating a proposal takes two steps that cannot be one transaction. If the second
+ * one never lands — a rejected signature, a Ledger timeout, an RPC error — the Squads
+ * half stays on-chain and the proposal is invisible everywhere, because every UI
+ * (this one included) lists futarchy proposals, not Squads transactions. Starting
+ * over would strand it for good at its index and open a new one.
+ *
+ * Step 2 only needs the Squads proposal address, which already exists, so these are
+ * all resumable.
+ */
+export async function discoverUnfinished(
+  connection: Connection,
+  client: FutarchyClient,
+  dao: DaoView,
+): Promise<UnfinishedCreation[]> {
+  const ms = await multisig.accounts.Multisig.fromAccountAddress(
+    connection as any,
+    dao.multisig,
+  );
+  const last = BigInt(ms.transactionIndex.toString());
+  if (last === 0n) return [];
+
+  const candidates: UnfinishedCreation[] = [];
+  for (let i = 1n; i <= last; i++) {
+    const [squadsProposal] = multisig.getProposalPda({
+      multisigPda: dao.multisig,
+      transactionIndex: i,
+    });
+    const [proposal] = getProposalAddr(client.getProgramId(), squadsProposal);
+    candidates.push({
+      transactionIndex: i,
+      squadsProposal,
+      proposal,
+      programs: [],
+      instructionCount: 0,
+      hasQuestion: false,
+      hasVaults: false,
+      remaining: 3,
+    });
+  }
+
+  // Missing futarchy proposal…
+  const missing: UnfinishedCreation[] = [];
+  for (let i = 0; i < candidates.length; i += 50) {
+    const slice = candidates.slice(i, i + 50);
+    const infos = await readMany(connection, slice.map((c) => c.proposal));
+    slice.forEach((c, j) => {
+      if (!infos[j]) missing.push(c);
+    });
+  }
+  if (missing.length === 0) return [];
+
+  // …but an existing Squads proposal. Anything else is just an unused index.
+  const unfinished: UnfinishedCreation[] = [];
+  for (let i = 0; i < missing.length; i += 50) {
+    const slice = missing.slice(i, i + 50);
+    const infos = await readMany(connection, slice.map((c) => c.squadsProposal));
+    slice.forEach((c, j) => {
+      if (infos[j]) unfinished.push(c);
+    });
+  }
+
+  // What each one would propose. A DAO's multisig index is shared, so a stalled entry
+  // may belong to somebody else entirely — finishing it would put *their* instructions
+  // to a vote under your name. The programs are what let you tell them apart.
+  for (let i = 0; i < unfinished.length; i += 50) {
+    const slice = unfinished.slice(i, i + 50);
+    const infos = await readMany(
+      connection,
+      slice.map(
+        (c) =>
+          multisig.getTransactionPda({
+            multisigPda: dao.multisig,
+            index: c.transactionIndex,
+          })[0],
+      ),
+    );
+    slice.forEach((c, j) => {
+      const info = infos[j];
+      if (!info) return;
+      try {
+        const [vt] = multisig.accounts.VaultTransaction.fromAccountInfo(info as any);
+        c.instructionCount = vt.message.instructions.length;
+        c.programs = [
+          ...new Set(
+            vt.message.instructions.map((ix: any) =>
+              vt.message.accountKeys[ix.programIdIndex].toBase58(),
+            ),
+          ),
+        ];
+      } catch {
+        // Unknown layout — leave it unlabelled rather than guessing.
+      }
+    });
+  }
+
+  // How far step 2 got. It runs as three transactions and none is idempotent, so
+  // knowing which already landed is what makes a resume safe — and it tells apart two
+  // attempts at the same proposal, one of which may be a single transaction from done.
+  for (const u of unfinished) {
+    try {
+      const pdas = (client as any).getProposalPdas(
+        u.proposal,
+        dao.baseMint,
+        dao.quoteMint,
+        dao.address,
+      );
+      const [q, bv, qv] = await readMany(connection, [pdas.question, pdas.baseVault, pdas.quoteVault]);
+      u.hasQuestion = !!q;
+      u.hasVaults = !!bv && !!qv;
+      u.remaining = (u.hasQuestion ? 0 : 1) + (u.hasVaults ? 0 : 1) + 1;
+    } catch {
+      // Leave the default: assume nothing landed rather than claim progress.
+    }
+  }
+
+  return unfinished.sort((a, b) => Number(a.transactionIndex - b.transactionIndex));
+}
+
 /**
  * Resolve a proposal back to its Squads transaction index.
  *
