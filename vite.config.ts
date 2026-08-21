@@ -12,7 +12,8 @@ export default defineConfig(({ mode }) => {
     // Anchor and the MetaDAO SDK expect Buffer/process as globals.
     plugins: [react(), nodePolyfills({ globals: { Buffer: true, process: true } })],
     server: {
-      port: 5173,
+      // Let the harness assign a port (PORT) so two dev servers can coexist.
+      port: Number(process.env.PORT) || 5173,
       proxy: upstream
         ? {
             // Mirrors functions/api/rpc.ts so the client code is identical in dev

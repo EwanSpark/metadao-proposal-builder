@@ -11,6 +11,13 @@
 
 /** Methods the app actually needs. Keeps a public deployment from becoming an open relay. */
 const ALLOWED = new Set([
+  // cluster detection + connection housekeeping web3.js does on its own
+  "getGenesisHash",
+  "getHealth",
+  "getBlockHeight",
+  "getRecentPrioritizationFees",
+  "getRecentBlockhash",
+  "getTokenLargestAccounts",
   "getAccountInfo",
   "getMultipleAccounts",
   "getProgramAccounts",
