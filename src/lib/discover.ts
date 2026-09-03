@@ -169,13 +169,27 @@ export async function discoverUnfinished(
   }
   if (missing.length === 0) return [];
 
-  // …but an existing Squads proposal. Anything else is just an unused index.
+  // …but a Squads proposal that is still Active.
+  //
+  // Existence alone is not enough. The futarchy program's own `collect_meteora_damm_fees`
+  // crank opens a Squads transaction, executes it, and never puts a futarchy proposal on
+  // top — by design, several times a week on any DAO with a Meteora position. Those land
+  // in Executed and are finished business, not stalled work. Only a proposal still Active
+  // is a creation that stopped half-way.
   const unfinished: UnfinishedCreation[] = [];
   for (let i = 0; i < missing.length; i += 50) {
     const slice = missing.slice(i, i + 50);
     const infos = await readMany(connection, slice.map((c) => c.squadsProposal));
     slice.forEach((c, j) => {
-      if (infos[j]) unfinished.push(c);
+      const info = infos[j];
+      if (!info) return;
+      try {
+        const [proposal] = multisig.accounts.Proposal.fromAccountInfo(info as any);
+        if ((proposal.status as any).__kind !== "Active") return;
+      } catch {
+        return; // Unreadable layout — do not offer to resume something we cannot read.
+      }
+      unfinished.push(c);
     });
   }
 
