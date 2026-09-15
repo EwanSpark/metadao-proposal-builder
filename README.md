@@ -55,8 +55,8 @@ The full lifecycle, in the order the program enforces:
 1. **Load a DAO** — parameters, spot pool reserves, price, and whether a launch is
    currently possible.
 2. **Compose the instructions** the treasury will execute if the proposal passes:
-   spend USDC, buyback via Jupiter DCA, add or remove liquidity, liquidation mandate,
-   DAO parameter changes, or a raw JSON instruction.
+   spend USDC, buyback via Jupiter DCA, add or remove liquidity, withdraw the launchpad's
+   Meteora LP, liquidation mandate, DAO parameter changes, or a raw JSON instruction.
 3. **Create** — Squads vault transaction and proposal, then the binary question, both
    conditional vaults and the futarchy proposal. Result: `Draft`.
 4. **Stake** up to `base_to_stake` (or sponsor if you hold `team_address`).
@@ -121,6 +121,19 @@ exactly where three DAOs sit today, which is what proves the bound is strict. So
 vote means lowering the delay under 12h in the same instruction. The Parameters tab takes both values in seconds — the unit the program stores, and the
 unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
 both bounds before the instruction is queued.
+
+**The Meteora LP is withdrawable by proposal.** Every launchpad DAO's treasury holds a
+Meteora DAMM v2 position NFT (Token-2022, in an account Meteora creates — *not* the
+treasury's ATA, which is why the instruction cannot simply derive it). `remove_all_liquidity`
+carries no instructions-sysvar guard, so the treasury signs it through Squads just as
+MetaDAO's own fee crank does. The tab scans the treasury for position NFTs, or takes the
+NFT's token account pasted by hand for RPCs that refuse indexed queries (publicnode
+rejects `getTokenAccountsByOwner`, `getTokenLargestAccounts`, `getTokenAccountBalance`
+and `getTokenSupply`; everything on the manual path is plain `getAccountInfo` decoded
+locally). Forwarded amounts are prefilled at 90% of today's expectation because reserves
+move until execution and a failing transfer takes the whole proposal down. Account layouts
+are read at fixed offsets measured against live accounts; each read is cross-checked
+against the DAO's mints so a layout change fails loudly.
 
 **The raw-instruction tab** covers everything the forms do not: Metaplex metadata,
 Meteora DAMM withdrawals, liquidation setup, mint governor, Omnipair.

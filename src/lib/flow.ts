@@ -13,6 +13,11 @@ import BN from "bn.js";
 import { sha256 } from "@noble/hashes/sha256";
 import { InstructionUtils } from "@metadaoproject/programs";
 import { nextTransactionIndex, type DaoView } from "./futarchy";
+import {
+  executeSpendingLimitChange,
+  fetchVaultTransaction,
+  isSpendingLimitProposal,
+} from "./spendingLimit";
 
 export type SendFn = (
   tx: Transaction,
@@ -379,4 +384,42 @@ export async function readProposal(
     durationSeconds: p.durationInSeconds,
     secondsRemaining,
   };
+}
+
+export type ExecutionPath = "A" | "B";
+
+/** Which executor a passed proposal needs, from its vault transaction's instructions. */
+export async function executionPathOf(
+  connection: Connection,
+  dao: DaoView,
+  transactionIndex: bigint,
+): Promise<ExecutionPath> {
+  const { vaultTx } = await fetchVaultTransaction(connection, dao, transactionIndex);
+  return isSpendingLimitProposal(vaultTx) ? "B" : "A";
+}
+
+/**
+ * Step 6, path-aware. Path A: `vaultTransactionExecute` by the permissionless
+ * member. Path B: the futarchy program's `executeSpendingLimitChange`, which
+ * makes the DAO account sign as config authority.
+ */
+export async function executeProposal(
+  client: FutarchyClient,
+  connection: Connection,
+  dao: DaoView,
+  proposal: PublicKey,
+  squadsProposal: PublicKey,
+  transactionIndex: bigint,
+  payer: PublicKey,
+  send: SendFn,
+): Promise<{ path: ExecutionPath; signature: string }> {
+  const path = await executionPathOf(connection, dao, transactionIndex);
+  if (path === "B") {
+    const signature = await executeSpendingLimitChange(
+      client, connection, dao, proposal, squadsProposal, transactionIndex, payer, send,
+    );
+    return { path, signature };
+  }
+  const signature = await executeVaultTransaction(connection, dao, transactionIndex, payer, send);
+  return { path, signature };
 }

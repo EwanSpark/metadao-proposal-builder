@@ -14,6 +14,9 @@ import {
 } from "@solana/web3.js";
 import BN from "bn.js";
 import type { DaoView } from "./futarchy";
+import { COFFRE_PROGRAM_ID, IDL as COFFRE_IDL } from "./coffre";
+import { describeSpendingLimitIx } from "./spendingLimit";
+import { describeMeteoraIx } from "./meteora";
 
 /**
  * Every instruction below is executed later BY THE TREASURY (the Squads vault PDA),
@@ -429,7 +432,13 @@ const PROGRAM_NAMES: Record<string, string> = {
   TokenkegQfeZyiNwAJbNbGKPFXCWuBvf9Ss623VQ5DA: "SPL Token",
   "11111111111111111111111111111111": "System",
   metaqbxxUerdq28cj1RbAWkYQm3ybzjb6a8bt518x1s: "Metaplex metadata",
+  CcmRKTuZCGJBWQwMHvDYApBRvSZNHqGJXkznqpDTSQUr: "Collector Crypt",
+  [COFFRE_PROGRAM_ID.toBase58()]: "Coffre",
 };
+
+const COFFRE_IX_NAMES: Record<string, string> = Object.fromEntries(
+  (COFFRE_IDL as any).instructions.map((ix: any) => [Buffer.from(ix.discriminator).toString("hex"), ix.name]),
+);
 
 export function programLabel(id: string): string {
   return PROGRAM_NAMES[id] ?? `${id.slice(0, 8)}…`;
@@ -445,6 +454,14 @@ export function describeInstruction(ix: TransactionInstruction): string {
   if (ix.data.subarray(0, 8).toString("hex") === UPDATE_DAO_DISC) {
     return "Update DAO parameters";
   }
+  if (ix.programId.equals(COFFRE_PROGRAM_ID)) {
+    const name = COFFRE_IX_NAMES[ix.data.subarray(0, 8).toString("hex")];
+    return name ? `Coffre · ${name}` : "Coffre · unknown instruction";
+  }
+  const met = describeMeteoraIx(ix);
+  if (met) return met;
+  const limit = describeSpendingLimitIx(ix);
+  if (limit) return limit;
   const signers = ix.keys.filter((k) => k.isSigner).length;
   return `${ix.programId.toBase58().slice(0, 8)}… · ${ix.keys.length} accounts (${signers} signer) · ${ix.data.length}o`;
 }

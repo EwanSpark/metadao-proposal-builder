@@ -39,9 +39,13 @@ import {
   type UnfinishedCreation,
 } from "./lib/discover";
 import { loadDao, makeClient, rawToUi, uiToRaw, type DaoView } from "./lib/futarchy";
+import CoffreAction from "./CoffreAction";
+import ManagerConsole from "./ManagerConsole";
+import SpendingLimitAction from "./SpendingLimitAction";
+import { checkQueueMix } from "./lib/spendingLimit";
 import {
   createSquadsProposal,
-  executeVaultTransaction,
+  executeProposal,
   finalizeProposal,
   proposalAddressFor,
   resumeFutarchyProposal,
@@ -51,9 +55,20 @@ import {
   unstakeFromProposal,
   type SendFn,
 } from "./lib/flow";
+import { findMeteoraPositions, withdrawMeteoraPosition, type MeteoraPosition } from "./lib/meteora";
 
-type Mode = "create" | "stake" | "finalize";
-type ActionKind = "spend" | "buyback" | "addLiq" | "removeLiq" | "liquidate" | "params" | "raw";
+type Mode = "create" | "stake" | "finalize" | "manager";
+type ActionKind =
+  | "spend"
+  | "buyback"
+  | "addLiq"
+  | "removeLiq"
+  | "meteora"
+  | "liquidate"
+  | "params"
+  | "limit"
+  | "coffre"
+  | "raw";
 
 type Props = Record<string, never>;
 
@@ -101,6 +116,12 @@ export default function App(_: Props) {
   const [liqQuote, setLiqQuote] = useState("");
   const [liqMaxBase, setLiqMaxBase] = useState("");
   const [liqToRemove, setLiqToRemove] = useState("");
+  const [meteoraPositions, setMeteoraPositions] = useState<MeteoraPosition[]>([]);
+  const [meteoraManual, setMeteoraManual] = useState("");
+  const [meteoraSel, setMeteoraSel] = useState<number>(-1);
+  const [meteoraTo, setMeteoraTo] = useState("");
+  const [meteoraA, setMeteoraA] = useState("");
+  const [meteoraB, setMeteoraB] = useState("");
   const [bbTotal, setBbTotal] = useState("");
   const [bbOrders, setBbOrders] = useState("8640");
   const [bbInterval, setBbInterval] = useState("300");
@@ -264,9 +285,21 @@ export default function App(_: Props) {
 
   /* -------------------------------------------------------------- actions */
 
+  /** Append to the queue, refusing to mix Path-A and Path-B instructions. */
+  const queue = (ixs: TransactionInstruction[]) => {
+    const problem = checkQueueMix(pending, ixs);
+    if (problem) {
+      say(`⛔ ${problem}`);
+      return;
+    }
+    setPending((p) => [...p, ...ixs]);
+    say(`➕ ${ixs.length} instruction(s) added.`);
+  };
+
   const addAction = () =>
     run("building action", async () => {
       if (!dao) throw new Error("Load a DAO first.");
+      if (kind === "limit" || kind === "coffre") return; // these forms queue themselves
       let ixs: TransactionInstruction[] = [];
 
       if (kind === "spend") {
@@ -306,6 +339,21 @@ export default function App(_: Props) {
           throw new Error(`Position available: ${held.toString()} liquidity units.`);
         ixs = await decreaseLiquidity(client, dao, amount, new BN(0), new BN(0));
         say(`ℹ️ Withdrawing ${amount.toString()} / ${held.toString()} liquidity units.`);
+      } else if (kind === "meteora") {
+        const p = meteoraPositions[meteoraSel];
+        if (!p) throw new Error("Scan the treasury and pick a position first.");
+        const to = new PublicKey(meteoraTo.trim());
+        const a = Number(meteoraA), b = Number(meteoraB);
+        if (!(a >= 0) || !(b >= 0)) throw new Error("Amounts must be numbers.");
+        if (a > p.expectedA || b > p.expectedB)
+          throw new Error(
+            `Forwarding more than the withdrawal is expected to return (${p.expectedA.toFixed(2)} ${p.labelA} / ${p.expectedB.toFixed(2)} ${p.labelB}) would fail at execution.`,
+          );
+        ixs = withdrawMeteoraPosition(dao, p, to, a, b);
+        say(
+          `ℹ️ Withdrawing ${(p.share * 100).toFixed(2)}% of pool ${p.pool.toBase58().slice(0, 8)}… ` +
+            `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
+        );
       } else if (kind === "liquidate") {
         ixs = authorizationMemo(memoText);
         say("ℹ️ Signalling mandate — nothing moves on-chain at execution.");
@@ -334,8 +382,7 @@ export default function App(_: Props) {
         ixs = parseRawInstructions(rawJson);
       }
 
-      setPending((p) => [...p, ...ixs]);
-      say(`➕ ${ixs.length} instruction(s) added.`);
+      queue(ixs);
     });
 
   /* ------------------------------------------------------------- lifecycle */
@@ -512,14 +559,21 @@ export default function App(_: Props) {
   const doExecute = () =>
     run("execution", async () => {
       if (!dao || !wallet || !selected) throw new Error("Select a proposal.");
-      const sig = await executeVaultTransaction(
+      const { path, signature } = await executeProposal(
+        client,
         connection,
         dao,
+        selected.proposal,
+        selected.squadsProposal,
         selected.transactionIndex,
         wallet.publicKey,
         sendLocally,
       );
-      say(`✅ Vault transaction executed — ${sig}`);
+      say(
+        path === "B"
+          ? `✅ Spending-limit change executed by the futarchy program (Path B) — ${signature}`
+          : `✅ Vault transaction executed (Path A) — ${signature}`,
+      );
     });
 
   /* ------------------------------------------------------------------ view */
@@ -575,6 +629,8 @@ export default function App(_: Props) {
   const nextStep = (() => {
     if (!wallet) return "Connect a wallet to act. Reading works without one.";
     if (!dao) return "Load a DAO: pick one from the list or paste its address.";
+    if (mode === "manager")
+      return "Manager console: trades need no vote. The connected wallet must be the coffre's manager.";
     if (mode === "create")
       return pending.length === 0
         ? "Compose what the proposal will execute, then add it to the list."
@@ -674,10 +730,22 @@ export default function App(_: Props) {
     buyback: { title: "Buyback via Jupiter DCA", sub: "Open a recurring order that buys the DAO's own token over time." },
     addLiq: { title: "Add liquidity", sub: "Deposit treasury funds into the futarchy AMM, deepening decision markets." },
     removeLiq: { title: "Remove liquidity", sub: "Pull part of the treasury's LP position back into the treasury." },
+    meteora: {
+      title: "Withdraw Meteora LP",
+      sub: "Pull the launchpad's Meteora DAMM v2 position into the treasury and forward it to a wallet.",
+    },
     liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
     params: {
       title: "DAO parameters",
       sub: "Change how the DAO votes — vote length and TWAP start delay.",
+    },
+    limit: {
+      title: "Spending limit",
+      sub: "Add or remove a Squads spending limit — the Coffre's monthly buying budget.",
+    },
+    coffre: {
+      title: "Coffre",
+      sub: "Name the manager, set the caps, point at the budget, or recall cards and USDC.",
     },
     raw: { title: "Raw instruction", sub: "Paste JSON for anything the forms don't cover." },
   };
@@ -699,6 +767,7 @@ export default function App(_: Props) {
     ["create", "Create", "Compose and submit"],
     ["stake", "Stake & launch", "Reach the threshold"],
     ["finalize", "Finalize & execute", "After the vote"],
+    ["manager", "Coffre", "Manager console"],
   ];
 
   return (
@@ -939,8 +1008,11 @@ export default function App(_: Props) {
                   ["buyback", "Buyback"],
                   ["addLiq", "Add liquidity"],
                   ["removeLiq", "Remove liquidity"],
+                  ["meteora", "Meteora LP"],
                   ["liquidate", "Liquidation"],
                   ["params", "Parameters"],
+                  ["limit", "Spending limit"],
+                  ["coffre", "Coffre"],
                   ["raw", "Raw"],
                 ] as [ActionKind, string][]
               ).map(([k, label]) => (
@@ -1048,6 +1120,80 @@ export default function App(_: Props) {
               </div>
             )}
 
+            {kind === "meteora" && (
+              <div className="form">
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao}
+                    onClick={() =>
+                      run("scanning Meteora positions", async () => {
+                        if (!dao) throw new Error("Load a DAO first.");
+                        const manual = meteoraManual.trim();
+                        const found = await findMeteoraPositions(
+                          connection,
+                          dao,
+                          manual ? [new PublicKey(manual)] : undefined,
+                        );
+                        setMeteoraPositions(found);
+                        setMeteoraSel(found.length ? 0 : -1);
+                        if (found[0]) {
+                          // Reserves move until execution: start at 90% so the forward cannot fail.
+                          setMeteoraA((found[0].expectedA * 0.9).toFixed(found[0].tokenADecimals > 2 ? 2 : found[0].tokenADecimals));
+                          setMeteoraB((found[0].expectedB * 0.9).toFixed(found[0].tokenBDecimals > 2 ? 2 : found[0].tokenBDecimals));
+                        }
+                        say(found.length ? `🔎 ${found.length} Meteora position(s) in the treasury.` : "No Meteora position NFT in the treasury.");
+                      })
+                    }
+                  >
+                    Scan treasury
+                  </button>
+                  <input
+                    className="grow"
+                    placeholder="…or paste the NFT token account, NFT mint, or position address"
+                    value={meteoraManual}
+                    onChange={(e) => setMeteoraManual(e.target.value)}
+                  />
+                  {meteoraPositions.length > 1 && (
+                    <select value={meteoraSel} onChange={(e) => setMeteoraSel(Number(e.target.value))}>
+                      {meteoraPositions.map((p, i) => (
+                        <option key={p.position.toBase58()} value={i}>
+                          pool {p.pool.toBase58().slice(0, 8)}… · {(p.share * 100).toFixed(1)}%
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </div>
+                {meteoraPositions[meteoraSel] && (
+                  <div className="stats">
+                    <div className="stat"><div className="k">Share of pool</div><div className="v">{(meteoraPositions[meteoraSel].share * 100).toFixed(2)}<small>%</small></div></div>
+                    <div className="stat"><div className="k">Expected {meteoraPositions[meteoraSel].labelA}</div><div className="v">{meteoraPositions[meteoraSel].expectedA.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div></div>
+                    <div className="stat"><div className="k">Expected {meteoraPositions[meteoraSel].labelB}</div><div className="v">{meteoraPositions[meteoraSel].expectedB.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div></div>
+                  </div>
+                )}
+                <label className="field">
+                  <span>Destination wallet</span>
+                  <input placeholder="wallet that receives the tokens" value={meteoraTo} onChange={(e) => setMeteoraTo(e.target.value)} />
+                </label>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Forward {meteoraPositions[meteoraSel]?.labelA ?? "token A"}</span>
+                    <input value={meteoraA} onChange={(e) => setMeteoraA(e.target.value)} />
+                  </label>
+                  <label className="field grow">
+                    <span>Forward {meteoraPositions[meteoraSel]?.labelB ?? "token B"}</span>
+                    <input value={meteoraB} onChange={(e) => setMeteoraB(e.target.value)} />
+                  </label>
+                </div>
+                <p className="hint">
+                  The whole position is withdrawn into the treasury (thresholds 0, like the futarchy
+                  withdrawal). The forwarded amounts are exact and reserves keep moving until
+                  execution — prefilled at 90% of today's expectation so the transfer cannot fail
+                  and take the proposal down with it. Whatever is not forwarded stays in the treasury.
+                </p>
+              </div>
+            )}
+
             {kind === "liquidate" && (
               <div className="form">
                 <div className="row wrap">
@@ -1131,6 +1277,23 @@ export default function App(_: Props) {
               </div>
             )}
 
+            {kind === "limit" && dao && (
+              <SpendingLimitAction dao={dao} connection={connection} busy={busy} onAdd={queue} say={say} />
+            )}
+
+            {kind === "coffre" && dao && (
+              <CoffreAction
+                dao={dao}
+                connection={connection}
+                wallet={wallet ?? null}
+                busy={busy}
+                onAdd={queue}
+                say={say}
+                send={sendLocally}
+                run={run}
+              />
+            )}
+
             {kind === "raw" && (
               <div className="form">
                 <textarea
@@ -1142,11 +1305,13 @@ export default function App(_: Props) {
               </div>
             )}
 
-            <div className="actions">
-              <button className="primary" onClick={addAction} disabled={busy || !dao}>
-                Add to proposal
-              </button>
-            </div>
+            {kind !== "limit" && kind !== "coffre" && (
+              <div className="actions">
+                <button className="primary" onClick={addAction} disabled={busy || !dao}>
+                  Add to proposal
+                </button>
+              </div>
+            )}
 
             {pending.length > 0 ? (
               <>
@@ -1241,6 +1406,24 @@ export default function App(_: Props) {
           </div>
         )}
 
+        {mode === "manager" &&
+          (dao ? (
+            <ManagerConsole
+              dao={dao}
+              connection={connection}
+              wallet={wallet ?? null}
+              busy={busy}
+              send={sendLocally}
+              say={say}
+              run={run}
+            />
+          ) : (
+            <div className="panel">
+              <h2>Coffre — manager console</h2>
+              <div className="empty">Load a DAO first.</div>
+            </div>
+          ))}
+
         {mode === "finalize" && (
           <div className="panel">
             <h2>Finalize &amp; execute</h2>
@@ -1265,7 +1448,7 @@ export default function App(_: Props) {
                     onClick={doExecute}
                     disabled={busy || !wallet || selected.stateName !== "passed"}
                   >
-                    Execute vault transaction
+                    Execute
                   </button>
                   <button className="ghost" onClick={doRefreshSelected} disabled={busy}>
                     Refresh
@@ -1274,7 +1457,9 @@ export default function App(_: Props) {
                 <p className="hint">
                   Finalizing only works once the vote duration has elapsed. Execution is a separate
                   transaction because the Solana runtime forbids futarchy&nbsp;→&nbsp;squads&nbsp;→&nbsp;futarchy
-                  in one stack.
+                  in one stack. A spending-limit proposal is executed through the futarchy program
+                  (the DAO signs as config authority); everything else through the vault directly.
+                  The executor picks the right path from the proposal's instructions.
                 </p>
               </>
             )}

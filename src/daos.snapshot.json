@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-08-12T08:16:56.167Z",
+  "capturedAt": "2026-09-15T13:44:29.870Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -65,7 +65,18 @@
       "proposalCount": 7,
       "poolPhase": "spot",
       "raised": 50000,
-      "treasury": 10000,
+      "treasury": 5000,
+      "official": true
+    },
+    {
+      "address": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
+      "name": "Umbra",
+      "symbol": "UMBRA",
+      "proposalCount": 7,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 1318978,
       "official": true
     },
     {
@@ -76,7 +87,40 @@
       "proposalCount": 6,
       "poolPhase": "spot",
       "raised": 50000,
-      "treasury": 22224,
+      "treasury": 22174,
+      "official": true
+    },
+    {
+      "address": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "baseMint": "METAwkXcqyXKy1AtsSgJ8JiUHwGCafnZL38n3vYmeta",
+      "name": "MetaDAO",
+      "symbol": "META",
+      "proposalCount": 6,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 3703551,
+      "official": true
+    },
+    {
+      "address": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
+      "baseMint": "PAYZP1W3UmdEsNLJwmH61TNqACYJTvhXy8SCN4Tmeta",
+      "name": "Paystream",
+      "symbol": "PAYS",
+      "proposalCount": 5,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
+    },
+    {
+      "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+      "baseMint": "SoLo9oxzLDpcq1dpqAgMwgce5WqkRDtNXK7EPnbmeta",
+      "name": "Solomon",
+      "symbol": "SOLO",
+      "proposalCount": 5,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 100000,
       "official": true
     },
     {
@@ -91,17 +135,6 @@
       "official": false
     },
     {
-      "address": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
-      "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
-      "name": "Umbra",
-      "symbol": "UMBRA",
-      "proposalCount": 5,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 1668978,
-      "official": true
-    },
-    {
       "address": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
       "baseMint": "LYLikzBQtpa9ZgVrJsqYGQpR3cC1WMJrBHaXGrQmeta",
       "name": "Loyal",
@@ -111,28 +144,6 @@
       "raised": 0,
       "treasury": 1,
       "official": false
-    },
-    {
-      "address": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
-      "baseMint": "METAwkXcqyXKy1AtsSgJ8JiUHwGCafnZL38n3vYmeta",
-      "name": "MetaDAO",
-      "symbol": "META",
-      "proposalCount": 4,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 5943551,
-      "official": true
-    },
-    {
-      "address": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
-      "baseMint": "PAYZP1W3UmdEsNLJwmH61TNqACYJTvhXy8SCN4Tmeta",
-      "name": "Paystream",
-      "symbol": "PAYS",
-      "proposalCount": 4,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 16696,
-      "official": true
     },
     {
       "address": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
@@ -146,17 +157,6 @@
       "official": true
     },
     {
-      "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
-      "baseMint": "SoLo9oxzLDpcq1dpqAgMwgce5WqkRDtNXK7EPnbmeta",
-      "name": "Solomon",
-      "symbol": "SOLO",
-      "proposalCount": 4,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 0,
-      "official": false
-    },
-    {
       "address": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
       "baseMint": "omfgRBnxHsNJh6YeGbGAmWenNkenzsXyBXm3WDhmeta",
       "name": "Omnipair",
@@ -164,7 +164,7 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 709001,
+      "treasury": 640832,
       "official": true
     },
     {
@@ -175,7 +175,7 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 6000000,
-      "treasury": 3475627,
+      "treasury": 3308997,
       "official": true
     },
     {
@@ -186,7 +186,7 @@
       "proposalCount": 2,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 1800001,
+      "treasury": 1700001,
       "official": true
     },
     {
@@ -194,7 +194,29 @@
       "baseMint": "2rNBaMg5VAr1aMNCwAPdDZVgzzdTaNDebUnNqPFNmeta",
       "name": "Basket",
       "symbol": "BASKET",
-      "proposalCount": 1,
+      "proposalCount": 2,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 6076,
+      "official": true
+    },
+    {
+      "address": "3szfyfczcGxe6zpTQQBfnkF24SMakWChxp3aU68HNYij",
+      "baseMint": "CARSsxWPkpQWvfyRBwfGMGvysJBHdHGfE46X5MNgmeta",
+      "name": "Rip Cars",
+      "symbol": "CARS",
+      "proposalCount": 2,
+      "poolPhase": "spot",
+      "raised": 250000,
+      "treasury": 90000,
+      "official": true
+    },
+    {
+      "address": "5bRGZaeQoZaXziwaL9fwiybHCTAU8geYqd9sQf9RTTVR",
+      "baseMint": "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta",
+      "name": "LFOWN",
+      "symbol": "LFOWN",
+      "proposalCount": 2,
       "poolPhase": "spot",
       "raised": 10000,
       "treasury": 8000,
@@ -234,6 +256,17 @@
       "official": false
     },
     {
+      "address": "6sQHygsfhAYrkQiGnyFHQ6s1s8ycJoajnNaVVuS3duzv",
+      "baseMint": "BGLJaGukwopAFUaVC9iJNqMYEeKwRf3LK65NttPVmeta",
+      "name": "Kimia",
+      "symbol": "KIMIA",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 60000,
+      "treasury": 28800,
+      "official": true
+    },
+    {
       "address": "6wmteHRgbJRSVPg8jaieZziKf7n1itADmWjJWQjCHcG1",
       "baseMint": "4K1m7gAMDKzrxQn68yuZAd767w57Fw7Ykw69dG3umeta",
       "name": "Jurassic",
@@ -241,7 +274,7 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 200000,
-      "treasury": 117000,
+      "treasury": 101000,
       "official": true
     },
     {
@@ -263,19 +296,19 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 4700,
+      "treasury": 3050,
       "official": true
     },
     {
-      "address": "3szfyfczcGxe6zpTQQBfnkF24SMakWChxp3aU68HNYij",
-      "baseMint": "CARSsxWPkpQWvfyRBwfGMGvysJBHdHGfE46X5MNgmeta",
-      "name": "Rip Cars",
-      "symbol": "CARS",
+      "address": "CYyoxDKnQm4RgYdFS9JDt6aQxZUKmoJe8QU5Mdgxw9kM",
+      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+      "name": "Cloud",
+      "symbol": "CLOUD",
       "proposalCount": 0,
       "poolPhase": "spot",
-      "raised": 250000,
+      "raised": 0,
       "treasury": 0,
-      "official": true
+      "official": false
     },
     {
       "address": "BpHjC6EK2TuFt1SwHa2HbxMv4rvUbdr4wkNJ8XJCQTzK",
@@ -296,7 +329,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 4000000,
-      "treasury": 3200000,
+      "treasury": 2950000,
       "official": true
     },
     {
@@ -384,7 +417,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 28000,
-      "treasury": 18600,
+      "treasury": 14000,
       "official": true
     },
     {
@@ -432,17 +465,6 @@
       "official": false
     },
     {
-      "address": "6sQHygsfhAYrkQiGnyFHQ6s1s8ycJoajnNaVVuS3duzv",
-      "baseMint": "BGLJaGukwopAFUaVC9iJNqMYEeKwRf3LK65NttPVmeta",
-      "name": "Kimia",
-      "symbol": "KIMIA",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 60000,
-      "treasury": 38400,
-      "official": true
-    },
-    {
       "address": "Ffi7Ba7w2fhiCZ9H4ZRixuoi1peCVsL3YBc1Ay2JnD4A",
       "baseMint": "LASocYgQAo8GfypSjedNQgLft8y8DVGg1kSqR3smeta",
       "name": "Laso Finance",
@@ -450,7 +472,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 1000000,
-      "treasury": 740748,
+      "treasury": 723735,
       "official": true
     },
     {
@@ -542,6 +564,17 @@
       "official": false
     },
     {
+      "address": "3s6wbZfYT9zBh94uahMm17VJpKdNs1RNRhnw6hSta2y2",
+      "baseMint": "CMFmrTNfNEYNnauug1mi2LMkghaVT3Sx6CxJ8xLcmeta",
+      "name": "HiveBits",
+      "symbol": "NECTAR",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 140000,
+      "treasury": 0,
+      "official": true
+    },
+    {
       "address": "UHThZd3AeVpS2mKREGyVWmCLRyk6qmgWwJFAwjenwYW",
       "baseMint": "EmJXFEg22CsXt7gZcBTME2shA6gJ3BJyYZ5SGp1QNkm8",
       "name": "NewTOKEN",
@@ -560,7 +593,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 150000,
-      "treasury": 105000,
+      "treasury": 90000,
       "official": true
     },
     {
