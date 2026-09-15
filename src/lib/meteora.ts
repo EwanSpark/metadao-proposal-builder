@@ -74,6 +74,25 @@ export type MeteoraPosition = {
   labelB: string;
 };
 
+/**
+ * Public RPCs answer 429 and the odd 500 under a burst of reads; the scan issues
+ * several at once. Three tries with a short backoff turn a flaky endpoint into a
+ * slow one, which is the only failure mode worth surfacing to the user.
+ */
+async function getInfo(connection: Connection, key: PublicKey) {
+  let last: unknown;
+  for (let i = 0; i < 3; i++) {
+    try {
+      return await connection.getAccountInfo(key);
+    } catch (e: any) {
+      last = e;
+      if (!/429|5\d\d|Too Many|Internal Server/i.test(String(e?.message))) throw e;
+      await new Promise((r) => setTimeout(r, 400 * 2 ** i));
+    }
+  }
+  throw last;
+}
+
 const pk = (buf: Buffer, off: number) => new PublicKey(buf.subarray(off, off + 32));
 const u128 = (buf: Buffer, off: number) => new BN(buf.subarray(off, off + 16), "le");
 
@@ -99,7 +118,7 @@ export async function findMeteoraPositions(
     for (const key of explicit) {
       // Raw bytes only: `jsonParsed` is itself an "indexed request" on some public RPCs
       // (publicnode returns 403 for it), so nothing here may depend on server-side parsing.
-      const v = await connection.getAccountInfo(key);
+      const v = await getInfo(connection, key);
       const raw = v?.data as Buffer | undefined;
 
       // 1 · The NFT's token account itself — the path that works on every RPC. Both SPL
@@ -141,7 +160,7 @@ export async function findMeteoraPositions(
         }
         throw e;
       }
-      const holderInfo = await connection.getAccountInfo(holder);
+      const holderInfo = await getInfo(connection, holder);
       const holderAcc = AccountLayout.decode((holderInfo!.data as Buffer).subarray(0, AccountLayout.span));
       if (!holderAcc.owner.equals(dao.treasury)) {
         throw new Error(`The treasury does not hold the position NFT ${nftMint.toBase58().slice(0, 8)}… (held by ${holderAcc.owner.toBase58().slice(0, 8)}…).`);
@@ -163,7 +182,7 @@ export async function findMeteoraPositions(
       [Buffer.from("position"), nftMint.toBuffer()],
       DAMM_V2_PROGRAM_ID,
     );
-    const posInfo = await connection.getAccountInfo(position);
+    const posInfo = await getInfo(connection, position);
     if (!posInfo || !posInfo.owner.equals(DAMM_V2_PROGRAM_ID)) continue;
     const pos = posInfo.data as Buffer;
     if (pos.subarray(0, 8).toString("hex") !== POSITION_DISC) continue;
@@ -172,7 +191,7 @@ export async function findMeteoraPositions(
     }
 
     const pool = pk(pos, POS_POOL);
-    const poolInfo = await connection.getAccountInfo(pool);
+    const poolInfo = await getInfo(connection, pool);
     if (!poolInfo) continue;
     const pd = poolInfo.data as Buffer;
     if (pd.subarray(0, 8).toString("hex") !== POOL_DISC) {
@@ -196,10 +215,10 @@ export async function findMeteoraPositions(
     // the mint owners (layout-independent); balances and decimals from the raw SPL
     // layouts — no getTokenAccountBalance / getMint, which some public RPCs gate.
     const [mintA, mintB, vaultA, vaultB] = await Promise.all([
-      connection.getAccountInfo(tokenAMint),
-      connection.getAccountInfo(tokenBMint),
-      connection.getAccountInfo(tokenAVault),
-      connection.getAccountInfo(tokenBVault),
+      getInfo(connection, tokenAMint),
+      getInfo(connection, tokenBMint),
+      getInfo(connection, tokenAVault),
+      getInfo(connection, tokenBVault),
     ]);
     if (!mintA || !mintB || !vaultA || !vaultB) continue;
     const tokenAProgram = mintA.owner;

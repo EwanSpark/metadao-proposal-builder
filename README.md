@@ -122,6 +122,11 @@ vote means lowering the delay under 12h in the same instruction. The Parameters 
 unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
 both bounds before the instruction is queued.
 
+**Spark setup queues the whole onboarding proposal in one click**: transfer of the
+Meteora position NFT to a wallet, `update_dao` to a 24h vote with an 8h TWAP delay, and a
+memo naming the change — four instructions, ~1 000 bytes. Each piece is the same code as
+the individual tabs; the preset only saves the clicking.
+
 **The Meteora LP can be handed over, or unwound, by proposal.** The tab's default is to
 transfer the position NFT itself — two instructions, ~730 bytes, nothing to unwind and no
 amount to guess: whoever holds the NFT owns the position and can withdraw top-level as a

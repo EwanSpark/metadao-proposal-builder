@@ -71,6 +71,7 @@ type ActionKind =
   | "meteora"
   | "liquidate"
   | "memo"
+  | "spark"
   | "params"
   | "limit"
   | "coffre"
@@ -135,6 +136,11 @@ export default function App(_: Props) {
   const [bbMaxPrice, setBbMaxPrice] = useState("");
   const [memoText, setMemoText] = useState(LIQUIDATION_TEMPLATES[0].text);
   const [titleMemo, setTitleMemo] = useState("");
+  const [sparkTo, setSparkTo] = useState("2KAGMaNTi3qo5zxZWNghNpMzhdmVeCFrWFeLDJUJrYcR");
+  const [sparkNft, setSparkNft] = useState("");
+  const [sparkVote, setSparkVote] = useState("86401");
+  const [sparkDelay, setSparkDelay] = useState("28800");
+  const [sparkLink, setSparkLink] = useState("");
   const [rawJson, setRawJson] = useState("");
   const [voteSeconds, setVoteSeconds] = useState("");
   const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
@@ -371,6 +377,33 @@ export default function App(_: Props) {
             `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
         );
         }
+      } else if (kind === "spark") {
+        const to = new PublicKey(sparkTo.trim());
+        const vote = Number(sparkVote), delay = Number(sparkDelay);
+        if (!Number.isInteger(vote) || !Number.isInteger(delay)) throw new Error("Vote length and TWAP delay must be whole seconds.");
+        const changes: DaoParamChanges = { secondsPerProposal: vote, twapStartDelaySeconds: delay };
+        const problem = checkDaoParams(dao, changes);
+        if (problem) throw new Error(problem);
+
+        const manual = sparkNft.trim();
+        say(manual ? "1/3 — resolving the Meteora position from the pasted account…" : "1/3 — scanning the treasury for the Meteora position…");
+        const found = await findMeteoraPositions(connection, dao, manual ? [new PublicKey(manual)] : undefined);
+        if (found.length === 0) throw new Error("No Meteora position in this treasury. Paste the NFT's token account if your RPC blocks scans.");
+        if (found.length > 1) throw new Error(`${found.length} Meteora positions found — use the Meteora LP tab to pick one.`);
+        const p = found[0];
+        say(`   position ${p.position.toBase58().slice(0, 8)}… · ${(p.share * 100).toFixed(2)}% of pool · ~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB}`);
+
+        say("2/3 — DAO parameters…");
+        const paramIxs = await updateDaoParams(client, dao, changes);
+
+        say("3/3 — memo…");
+        const symbol = daoList.find((d) => d.address.equals(dao.address))?.symbol ?? "DAO";
+        const link = sparkLink.trim();
+        const memo =
+          `${symbol}: Move the Meteora LP position to Spark and shorten decision markets to ${(vote / 3600).toFixed(0)}h.` +
+          (link ? ` Full text: ${link}` : "");
+        ixs = [...transferMeteoraPosition(dao, p, to), ...paramIxs, ...authorizationMemo(memo)];
+        say(`ℹ️ ${ixs.length} instructions: NFT → ${to.toBase58().slice(0, 8)}…, ${dao.secondsPerProposal}s → ${vote}s, delay ${dao.twapStartDelaySeconds}s → ${delay}s, memo ${Buffer.byteLength(memo, "utf8")} bytes.`);
       } else if (kind === "memo") {
         const text = titleMemo.trim();
         if (!text) throw new Error("Write the memo first.");
@@ -759,6 +792,10 @@ export default function App(_: Props) {
       sub: "Pull the launchpad's Meteora DAMM v2 position into the treasury and forward it to a wallet.",
     },
     liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
+    spark: {
+      title: "Spark setup",
+      sub: "One proposal: hand the Meteora LP position to Spark, shorten decision markets to 24h, and sign it with a memo.",
+    },
     memo: {
       title: "Memo",
       sub: "A title and a link, written into the transaction. The only on-chain text a proposal can carry.",
@@ -1039,6 +1076,7 @@ export default function App(_: Props) {
                   ["meteora", "Meteora LP"],
                   ["liquidate", "Liquidation"],
                   ["memo", "Memo"],
+                  ["spark", "Spark setup"],
                   ["params", "Parameters"],
                   ["limit", "Spending limit"],
                   ["coffre", "Coffre"],
@@ -1240,6 +1278,42 @@ export default function App(_: Props) {
                     and take the proposal down with it. Whatever is not forwarded stays in the treasury.
                   </p>
                 )}
+              </div>
+            )}
+
+            {kind === "spark" && (
+              <div className="form">
+                <label className="field">
+                  <span>Spark wallet — receives the Meteora position NFT</span>
+                  <input value={sparkTo} onChange={(e) => setSparkTo(e.target.value)} />
+                </label>
+                <label className="field">
+                  <span>Position NFT token account — only if your RPC blocks the treasury scan</span>
+                  <input placeholder="leave empty to scan" value={sparkNft} onChange={(e) => setSparkNft(e.target.value)} />
+                </label>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Vote length (seconds) — currently {dao ? dao.secondsPerProposal.toLocaleString() : "—"}</span>
+                    <input inputMode="numeric" value={sparkVote} onChange={(e) => setSparkVote(e.target.value)} />
+                    <span className="hint">{echo(sparkVote)}</span>
+                  </label>
+                  <label className="field grow">
+                    <span>TWAP start delay (seconds) — currently {dao ? dao.twapStartDelaySeconds.toLocaleString() : "—"}</span>
+                    <input inputMode="numeric" value={sparkDelay} onChange={(e) => setSparkDelay(e.target.value)} />
+                    <span className="hint">{echo(sparkDelay)}</span>
+                  </label>
+                </div>
+                <label className="field">
+                  <span>Link to the full proposal text (optional, goes in the memo)</span>
+                  <input placeholder="https://…" value={sparkLink} onChange={(e) => setSparkLink(e.target.value)} />
+                </label>
+                <p className="hint">
+                  <strong>Queues four instructions in one go</strong>: transfer of the position NFT (2),
+                  <code>update_dao</code> (1), memo (1) — about 1 000 bytes, under the 1 232-byte cap.
+                  Whoever holds the NFT owns the position and can withdraw top-level as a keypair.
+                  The 24h length only applies to proposals created after this one executes; this
+                  one votes at the current length.
+                </p>
               </div>
             )}
 
