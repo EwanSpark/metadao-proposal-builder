@@ -70,6 +70,7 @@ type ActionKind =
   | "removeLiq"
   | "meteora"
   | "liquidate"
+  | "memo"
   | "params"
   | "limit"
   | "coffre"
@@ -133,6 +134,7 @@ export default function App(_: Props) {
   const [bbInterval, setBbInterval] = useState("300");
   const [bbMaxPrice, setBbMaxPrice] = useState("");
   const [memoText, setMemoText] = useState(LIQUIDATION_TEMPLATES[0].text);
+  const [titleMemo, setTitleMemo] = useState("");
   const [rawJson, setRawJson] = useState("");
   const [voteSeconds, setVoteSeconds] = useState("");
   const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
@@ -369,6 +371,11 @@ export default function App(_: Props) {
             `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
         );
         }
+      } else if (kind === "memo") {
+        const text = titleMemo.trim();
+        if (!text) throw new Error("Write the memo first.");
+        ixs = authorizationMemo(text);
+        say(`ℹ️ Memo of ${Buffer.byteLength(text, "utf8")} bytes. It shows under Instructions on metadao.fi; it is not a title there.`);
       } else if (kind === "liquidate") {
         ixs = authorizationMemo(memoText);
         say("ℹ️ Signalling mandate — nothing moves on-chain at execution.");
@@ -625,10 +632,12 @@ export default function App(_: Props) {
   const visibleDaos = useMemo(() => {
     const q = daoFilter.trim().toLowerCase();
     if (!q) return officialDaos;
-    return officialDaos.filter((d) =>
+    // A typed query searches every DAO on the cluster, not just the curated ones — a
+    // project that raised nothing yet, or a fresh test, is still reachable by name.
+    return daoList.filter((d) =>
       [d.name, d.symbol, d.address.toBase58()].some((s) => s?.toLowerCase().includes(q)),
     );
-  }, [officialDaos, daoFilter]);
+  }, [daoList, officialDaos, daoFilter]);
 
   const goal = dao?.baseToStake ?? new BN(0);
   const staked = selected?.amountStaked ?? new BN(0);
@@ -750,6 +759,10 @@ export default function App(_: Props) {
       sub: "Pull the launchpad's Meteora DAMM v2 position into the treasury and forward it to a wallet.",
     },
     liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
+    memo: {
+      title: "Memo",
+      sub: "A title and a link, written into the transaction. The only on-chain text a proposal can carry.",
+    },
     params: {
       title: "DAO parameters",
       sub: "Change how the DAO votes — vote length and TWAP start delay.",
@@ -1025,6 +1038,7 @@ export default function App(_: Props) {
                   ["removeLiq", "Remove liquidity"],
                   ["meteora", "Meteora LP"],
                   ["liquidate", "Liquidation"],
+                  ["memo", "Memo"],
                   ["params", "Parameters"],
                   ["limit", "Spending limit"],
                   ["coffre", "Coffre"],
@@ -1226,6 +1240,23 @@ export default function App(_: Props) {
                     and take the proposal down with it. Whatever is not forwarded stays in the treasury.
                   </p>
                 )}
+              </div>
+            )}
+
+            {kind === "memo" && (
+              <div className="form">
+                <textarea
+                  rows={3}
+                  placeholder="LFOWN-003: Move the Meteora LP position to Spark and shorten decision markets to 24h. Full text: https://…"
+                  value={titleMemo}
+                  onChange={(e) => setTitleMemo(e.target.value)}
+                />
+                <p className="hint">
+                  Keep it short — the creation transaction caps at 1232 bytes and the memo counts in
+                  full. A title plus a link (~120 bytes) is the sweet spot. Proposals have no title
+                  field on-chain; metadao.fi shows this text under <em>Instructions</em>, and a proposal
+                  created outside their site stays "untitled" in their listing regardless.
+                </p>
               </div>
             )}
 

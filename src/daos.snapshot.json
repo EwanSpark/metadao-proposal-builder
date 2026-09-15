@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-09-15T13:44:29.870Z",
+  "capturedAt": "2026-09-15T16:37:35.021Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -287,6 +287,17 @@
       "raised": 20,
       "treasury": 0,
       "official": false
+    },
+    {
+      "address": "7zexEnEDcdo93nyXbcR6syLfFpnFpLRukQUuAW32XxC1",
+      "baseMint": "31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta",
+      "name": "ACCRUE",
+      "symbol": "ACCRUE",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 8000,
+      "official": true
     },
     {
       "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
