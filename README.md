@@ -122,6 +122,13 @@ vote means lowering the delay under 12h in the same instruction. The Parameters 
 unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
 both bounds before the instruction is queued.
 
+**The Meteora LP can be handed over, or unwound, by proposal.** The tab's default is to
+transfer the position NFT itself — two instructions, ~730 bytes, nothing to unwind and no
+amount to guess: whoever holds the NFT owns the position and can withdraw top-level as a
+plain keypair, so it is the right move when the destination is a wallet. It leaves room
+for a parameter change and a memo in the same proposal (1015 bytes measured with all
+three). The alternative unwinds on-chain and forwards tokens; see below.
+
 **The Meteora LP is withdrawable by proposal.** Every launchpad DAO's treasury holds a
 Meteora DAMM v2 position NFT (Token-2022, in an account Meteora creates — *not* the
 treasury's ATA, which is why the instruction cannot simply derive it). `remove_all_liquidity`

@@ -311,3 +311,28 @@ export function describeMeteoraIx(ix: TransactionInstruction): string | null {
   }
   return "Meteora DAMM v2 · unknown instruction";
 }
+
+/**
+ * Hand the position itself to `destination` instead of unwinding it: one Token-2022
+ * transfer of the position NFT. Whoever holds the NFT owns the position, so the
+ * recipient — a real keypair — can then call `remove_all_liquidity` top-level, claim
+ * fees, or keep earning. Two instructions, ~730 bytes at creation, which leaves room for
+ * an `update_dao` and a memo in the same proposal.
+ *
+ * Verified transferable on LFOWN's NFT (no NonTransferable / PermanentDelegate /
+ * TransferHook extension, account not frozen). The mint's freeze authority is the pool
+ * itself, so a position Meteora has frozen (locked/vesting) would fail here — check
+ * `permanent_locked_liquidity` / `vested_liquidity` are 0 first.
+ */
+export function transferMeteoraPosition(
+  dao: DaoView,
+  p: MeteoraPosition,
+  destination: PublicKey,
+): TransactionInstruction[] {
+  const to = getAssociatedTokenAddressSync(p.nftMint, destination, false, TOKEN_2022_PROGRAM_ID);
+  return [
+    createAssociatedTokenAccountIdempotentInstruction(dao.treasury, to, destination, p.nftMint, TOKEN_2022_PROGRAM_ID),
+    createTransferCheckedInstruction(p.nftAccount, p.nftMint, to, dao.treasury, 1n, 0, [], TOKEN_2022_PROGRAM_ID),
+  ];
+}
+

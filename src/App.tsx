@@ -55,7 +55,12 @@ import {
   unstakeFromProposal,
   type SendFn,
 } from "./lib/flow";
-import { findMeteoraPositions, withdrawMeteoraPosition, type MeteoraPosition } from "./lib/meteora";
+import {
+  findMeteoraPositions,
+  transferMeteoraPosition,
+  withdrawMeteoraPosition,
+  type MeteoraPosition,
+} from "./lib/meteora";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
 type ActionKind =
@@ -118,6 +123,7 @@ export default function App(_: Props) {
   const [liqToRemove, setLiqToRemove] = useState("");
   const [meteoraPositions, setMeteoraPositions] = useState<MeteoraPosition[]>([]);
   const [meteoraManual, setMeteoraManual] = useState("");
+  const [meteoraMode, setMeteoraMode] = useState<"transfer" | "withdraw">("transfer");
   const [meteoraSel, setMeteoraSel] = useState<number>(-1);
   const [meteoraTo, setMeteoraTo] = useState("");
   const [meteoraA, setMeteoraA] = useState("");
@@ -343,6 +349,14 @@ export default function App(_: Props) {
         const p = meteoraPositions[meteoraSel];
         if (!p) throw new Error("Scan the treasury and pick a position first.");
         const to = new PublicKey(meteoraTo.trim());
+        if (meteoraMode === "transfer") {
+          ixs = transferMeteoraPosition(dao, p, to);
+          say(
+            `ℹ️ Transferring position NFT ${p.nftMint.toBase58().slice(0, 8)}… (${(p.share * 100).toFixed(2)}% of pool ` +
+              `${p.pool.toBase58().slice(0, 8)}…, ~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today) to ${to.toBase58().slice(0, 8)}…. ` +
+              `The recipient withdraws or keeps earning as they see fit.`,
+          );
+        } else {
         const a = Number(meteoraA), b = Number(meteoraB);
         if (!(a >= 0) || !(b >= 0)) throw new Error("Amounts must be numbers.");
         if (a > p.expectedA || b > p.expectedB)
@@ -354,6 +368,7 @@ export default function App(_: Props) {
           `ℹ️ Withdrawing ${(p.share * 100).toFixed(2)}% of pool ${p.pool.toBase58().slice(0, 8)}… ` +
             `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
         );
+        }
       } else if (kind === "liquidate") {
         ixs = authorizationMemo(memoText);
         say("ℹ️ Signalling mandate — nothing moves on-chain at execution.");
@@ -1171,26 +1186,46 @@ export default function App(_: Props) {
                     <div className="stat"><div className="k">Expected {meteoraPositions[meteoraSel].labelB}</div><div className="v">{meteoraPositions[meteoraSel].expectedB.toLocaleString(undefined, { maximumFractionDigits: 2 })}</div></div>
                   </div>
                 )}
+                <div className="row wrap">
+                  <button className={meteoraMode === "transfer" ? "tab on" : "tab"} onClick={() => setMeteoraMode("transfer")}>
+                    Transfer the position NFT
+                  </button>
+                  <button className={meteoraMode === "withdraw" ? "tab on" : "tab"} onClick={() => setMeteoraMode("withdraw")}>
+                    Withdraw liquidity, then forward tokens
+                  </button>
+                </div>
                 <label className="field">
                   <span>Destination wallet</span>
                   <input placeholder="wallet that receives the tokens" value={meteoraTo} onChange={(e) => setMeteoraTo(e.target.value)} />
                 </label>
-                <div className="row wrap">
-                  <label className="field grow">
-                    <span>Forward {meteoraPositions[meteoraSel]?.labelA ?? "token A"}</span>
-                    <input value={meteoraA} onChange={(e) => setMeteoraA(e.target.value)} />
-                  </label>
-                  <label className="field grow">
-                    <span>Forward {meteoraPositions[meteoraSel]?.labelB ?? "token B"}</span>
-                    <input value={meteoraB} onChange={(e) => setMeteoraB(e.target.value)} />
-                  </label>
-                </div>
-                <p className="hint">
-                  The whole position is withdrawn into the treasury (thresholds 0, like the futarchy
-                  withdrawal). The forwarded amounts are exact and reserves keep moving until
-                  execution — prefilled at 90% of today's expectation so the transfer cannot fail
-                  and take the proposal down with it. Whatever is not forwarded stays in the treasury.
-                </p>
+                {meteoraMode === "withdraw" && (
+                  <div className="row wrap">
+                    <label className="field grow">
+                      <span>Forward {meteoraPositions[meteoraSel]?.labelA ?? "token A"}</span>
+                      <input value={meteoraA} onChange={(e) => setMeteoraA(e.target.value)} />
+                    </label>
+                    <label className="field grow">
+                      <span>Forward {meteoraPositions[meteoraSel]?.labelB ?? "token B"}</span>
+                      <input value={meteoraB} onChange={(e) => setMeteoraB(e.target.value)} />
+                    </label>
+                  </div>
+                )}
+                {meteoraMode === "transfer" ? (
+                  <p className="hint">
+                    <strong>Two instructions, ~730 bytes.</strong> The position NFT moves as-is; whoever
+                    holds it owns the position and can withdraw, claim fees, or keep it. Nothing is
+                    unwound and no amount needs guessing — and it leaves room for a parameter change
+                    and a memo in the same proposal. Fails only if Meteora has frozen the position
+                    (vesting or permanent lock), which the scan reports as non-zero locked liquidity.
+                  </p>
+                ) : (
+                  <p className="hint">
+                    The whole position is withdrawn into the treasury (thresholds 0, like the futarchy
+                    withdrawal). The forwarded amounts are exact and reserves keep moving until
+                    execution — prefilled at 90% of today's expectation so the transfer cannot fail
+                    and take the proposal down with it. Whatever is not forwarded stays in the treasury.
+                  </p>
+                )}
               </div>
             )}
 
