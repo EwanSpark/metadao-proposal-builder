@@ -122,6 +122,16 @@ vote means lowering the delay under 12h in the same instruction. The Parameters 
 unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
 both bounds before the instruction is queued.
 
+**A live proposal can be traded from here.** MetaDAO's sites only list proposals created
+through them, so one made with this app has no trading interface anywhere else. The panel
+under Stake & launch reads the pass / spot / fail pools live and trades from plain tokens:
+`conditional_swap` only moves conditional tokens, so it first splits X base into X
+pass-base + X fail-base in the conditional vault, then swaps one side. "Selling the NO" —
+selling the fail-base — backs a proposal at no token cost if it passes: the pass-base
+redeems 1:1 and the fail side is void. Two transactions rather than one (the swap alone
+has ~25 accounts; combined they measure 1187 bytes of 1232). Validated by simulating
+split + sell against a live proposal. After finalization the same panel redeems.
+
 **A token's name, ticker and image can only change by proposal.** On a MetaDAO or
 Futardio launch the Metaplex update authority is the DAO treasury, so the Token metadata
 tab builds `UpdateMetadataAccountV2` for the vault to sign. Only name, symbol and uri are

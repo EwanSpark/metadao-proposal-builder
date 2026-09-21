@@ -8,6 +8,10 @@ import {
   TransactionInstruction,
   TransactionMessage,
 } from "@solana/web3.js";
+import {
+  createAssociatedTokenAccountIdempotentInstruction,
+  getAssociatedTokenAddressSync,
+} from "@solana/spl-token";
 import * as multisig from "@sqds/multisig";
 import BN from "bn.js";
 import { sha256 } from "@noble/hashes/sha256";
@@ -422,4 +426,114 @@ export async function executeProposal(
   }
   const signature = await executeVaultTransaction(connection, dao, transactionIndex, payer, send);
   return { path, signature };
+}
+
+/* ---------------------------------------------------------------- trading */
+
+export type ConditionalTrade = {
+  /** Which decision market. Selling in "fail" is "selling the NO". */
+  market: "pass" | "fail";
+  /** sell = base in, quote out. buy = quote in, base out. */
+  side: "buy" | "sell";
+  /** Raw units of the INPUT token (base for sell, quote for buy). */
+  inputAmount: BN;
+  minOutputAmount: BN;
+};
+
+/**
+ * Trade a live proposal's decision market from plain tokens.
+ *
+ * `conditional_swap` only moves conditional tokens, so a holder of plain TEST or USDC
+ * first has to split them in the conditional vault: X TEST becomes X pTEST + X fTEST.
+ * Selling the fTEST is "selling the NO" — it pushes the fail price down. If the proposal
+ * then passes, the pTEST redeems 1:1 back into TEST and the fail-side proceeds are void,
+ * so backing a proposal this way costs tokens nothing; if it fails, the fUSDC redeems and
+ * the tokens were in effect sold at the fail price.
+ *
+ * Two transactions, not one: the swap alone carries ~25 accounts, and with the split's
+ * on top the legacy-transaction size limit is too close to risk.
+ */
+export async function tradeConditional(
+  client: FutarchyClient,
+  connection: Connection,
+  dao: DaoView,
+  proposal: PublicKey,
+  trade: ConditionalTrade,
+  trader: PublicKey,
+  send: SendFn,
+  say: (line: string) => void = () => {},
+): Promise<string> {
+  const pdas = (client as any).getProposalPdas(proposal, dao.baseMint, dao.quoteMint, dao.address);
+  const selling = trade.side === "sell";
+  const vault: PublicKey = selling ? pdas.baseVault : pdas.quoteVault;
+  const underlying = selling ? dao.baseMint : dao.quoteMint;
+
+  say(`1/2 — splitting ${selling ? "base" : "quote"} into pass + fail tokens…`);
+  await sendBuilder(
+    client.vaultClient.splitTokensIx(pdas.question, vault, underlying, trade.inputAmount, 2, trader, trader),
+    connection,
+    trader,
+    send,
+  );
+
+  const outputMint: PublicKey =
+    trade.market === "pass"
+      ? selling ? pdas.passQuoteMint : pdas.passBaseMint
+      : selling ? pdas.failQuoteMint : pdas.failBaseMint;
+  say(`2/2 — ${trade.side} in the ${trade.market.toUpperCase()} market…`);
+  const swap = (client as any)
+    .conditionalSwapIx({
+      dao: dao.address,
+      trader,
+      payer: trader,
+      baseMint: dao.baseMint,
+      quoteMint: dao.quoteMint,
+      proposal,
+      market: trade.market,
+      swapType: trade.side,
+      inputAmount: trade.inputAmount,
+      minOutputAmount: trade.minOutputAmount,
+    })
+    .preInstructions([
+      ComputeBudgetProgram.setComputeUnitLimit({ units: 400_000 }),
+      createAssociatedTokenAccountIdempotentInstruction(
+        trader,
+        getAssociatedTokenAddressSync(outputMint, trader, true),
+        trader,
+        outputMint,
+      ),
+    ]);
+  return sendBuilder(swap, connection, trader, send);
+}
+
+/**
+ * After finalization: turn the winning side's conditional tokens back into plain ones,
+ * for both the base and the quote vault. The losing side's tokens are burned for nothing.
+ */
+export async function redeemConditional(
+  client: FutarchyClient,
+  connection: Connection,
+  dao: DaoView,
+  proposal: PublicKey,
+  trader: PublicKey,
+  send: SendFn,
+  say: (line: string) => void = () => {},
+): Promise<string[]> {
+  const pdas = (client as any).getProposalPdas(proposal, dao.baseMint, dao.quoteMint, dao.address);
+  const sigs: string[] = [];
+  for (const [label, vault, mint] of [
+    ["base", pdas.baseVault, dao.baseMint],
+    ["quote", pdas.quoteVault, dao.quoteMint],
+  ] as [string, PublicKey, PublicKey][]) {
+    say(`redeeming ${label} conditional tokens…`);
+    sigs.push(
+      await sendBuilder(
+        client.vaultClient.redeemTokensIx(pdas.question, vault, mint, 2, trader, trader),
+        connection,
+        trader,
+        send,
+      ),
+    );
+  }
+  return sigs;
 }

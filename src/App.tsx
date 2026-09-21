@@ -62,6 +62,7 @@ import {
   type MeteoraPosition,
 } from "./lib/meteora";
 import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./lib/tokenMetadata";
+import TradePanel from "./TradePanel";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
 type ActionKind =
@@ -1626,6 +1627,21 @@ export default function App(_: Props) {
               <div className="empty">Load a DAO first.</div>
             </div>
           ))}
+
+        {(mode === "stake" || mode === "finalize") && dao && selected && (
+          <TradePanel
+            dao={dao}
+            client={client}
+            connection={connection}
+            wallet={wallet ?? null}
+            proposal={selected}
+            busy={busy}
+            send={sendLocally}
+            say={say}
+            run={run}
+            onDone={() => { void reselect(selected); }}
+          />
+        )}
 
         {mode === "finalize" && (
           <div className="panel">
