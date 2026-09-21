@@ -139,6 +139,18 @@ on-chain; description and image live in the JSON at the uri, so host that first 
 under `public/token/` ship with the Pages deploy). The instruction is hand-encoded and was
 validated by simulating it against the live Metaplex program — 88 bytes, 635 at creation.
 
+**New supply can be minted by proposal.** On these launches the token's mint authority is
+the treasury vault itself (checked on TEST, ACCRUE, LFOWN, BASKET; the repo's
+`mint_governor` program is not in the path), so minting is a plain `MintToChecked` the
+vault signs. Validated by simulation: +2,000,000 to the recipient, supply 12.9M → 14.9M.
+
+**Destination accounts are checked, not assumed.** An instruction that creates the
+recipient's ATA makes the *treasury* pay its rent at execution, and a new DAO's vault can
+hold exactly 0 SOL — which would fail the whole transaction after a multi-day vote. The
+preset skips the create when the account exists, lets the treasury create it only when it
+holds the lamports, and otherwise refuses and offers to create the accounts from the
+proposer's wallet first. Pre-created accounts also save ~120 bytes (1022 vs 1140–1172).
+
 **Spark setup queues the whole onboarding proposal in one click**: transfer of the
 Meteora position NFT to a wallet, `update_dao` to a 24h vote with an 8h TWAP delay, and a
 memo naming the change — four instructions, ~1 000 bytes. Each piece is the same code as

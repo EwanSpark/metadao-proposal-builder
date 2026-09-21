@@ -20,6 +20,7 @@ import {
   minimumProposalSeconds,
   updateDaoParams,
   type DaoParamChanges,
+  mintBaseTokens,
 } from "./lib/actions";
 import {
   loadDaoList,
@@ -63,6 +64,8 @@ import {
 } from "./lib/meteora";
 import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./lib/tokenMetadata";
 import TradePanel from "./TradePanel";
+import { checkAtas, createAtasTx, planAtaCreates } from "./lib/ata";
+import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
 type ActionKind =
@@ -144,6 +147,8 @@ export default function App(_: Props) {
   const [sparkVote, setSparkVote] = useState("86401");
   const [sparkDelay, setSparkDelay] = useState("28800");
   const [sparkLink, setSparkLink] = useState("");
+  const [sparkMint, setSparkMint] = useState("");
+  const [sparkMintTo, setSparkMintTo] = useState("");
   const [tokenMeta, setTokenMeta] = useState<TokenMetadata | null>(null);
   const [metaName, setMetaName] = useState("");
   const [metaSymbol, setMetaSymbol] = useState("");
@@ -409,14 +414,40 @@ export default function App(_: Props) {
         say("2/3 — DAO parameters…");
         const paramIxs = await updateDaoParams(client, dao, changes);
 
+        // Optional mint of new supply, to the Spark wallet unless another is given.
+        const mintUi = sparkMint.trim();
+        const mintTo = sparkMintTo.trim() ? new PublicKey(sparkMintTo.trim()) : to;
+        const mintRaw = mintUi ? BigInt(uiToRaw(mintUi, dao.baseDecimals).toString()) : 0n;
+
+        // Destination accounts: skip creation when they exist, refuse when they do not and
+        // the treasury cannot pay their rent (a brand-new DAO's vault can hold 0 SOL).
+        const baseMintInfo = await connection.getAccountInfo(dao.baseMint);
+        const needs = [{ mint: p.nftMint, owner: to, program: TOKEN_2022_PROGRAM_ID }];
+        if (mintRaw > 0n) needs.push({ mint: dao.baseMint, owner: mintTo, program: baseMintInfo!.owner });
+        const { statuses, createByTreasury } = await planAtaCreates(connection, dao.treasury, needs);
+        const mintIxs = mintRaw > 0n ? await mintBaseTokens(connection, dao, statuses[1].ata, mintRaw) : [];
+
         say("3/3 — memo…");
         const symbol = daoList.find((d) => d.address.equals(dao.address))?.symbol ?? "DAO";
         const link = sparkLink.trim();
         const memo =
-          `${symbol}: Move the Meteora LP position to Spark and shorten decision markets to ${(vote / 3600).toFixed(0)}h.` +
+          `${symbol}: Hand the Meteora LP to Spark, shorten decision markets to ${(vote / 3600).toFixed(0)}h` +
+          (mintRaw > 0n ? `, mint ${Number(mintUi).toLocaleString("en-US")} to ${mintTo.toBase58().slice(0, 8)}…` : "") +
+          "." +
           (link ? ` Full text: ${link}` : "");
-        ixs = [...transferMeteoraPosition(dao, p, to), ...paramIxs, ...authorizationMemo(memo)];
-        say(`ℹ️ ${ixs.length} instructions: NFT → ${to.toBase58().slice(0, 8)}…, ${dao.secondsPerProposal}s → ${vote}s, delay ${dao.twapStartDelaySeconds}s → ${delay}s, memo ${Buffer.byteLength(memo, "utf8")} bytes.`);
+        ixs = [
+          ...createByTreasury,
+          ...transferMeteoraPosition(dao, p, to, { skipCreate: true }),
+          ...paramIxs,
+          ...mintIxs,
+          ...authorizationMemo(memo),
+        ];
+        say(
+          `ℹ️ ${ixs.length} instructions: NFT → ${to.toBase58().slice(0, 8)}…, ${dao.secondsPerProposal}s → ${vote}s, delay ${dao.twapStartDelaySeconds}s → ${delay}s` +
+            (mintRaw > 0n ? `, mint ${Number(mintUi).toLocaleString("en-US")} → ${mintTo.toBase58().slice(0, 8)}…` : "") +
+            `, memo ${Buffer.byteLength(memo, "utf8")} bytes. ` +
+            (createByTreasury.length ? `${createByTreasury.length} account(s) will be created by the treasury.` : "All destination accounts already exist."),
+        );
       } else if (kind === "memo") {
         const text = titleMemo.trim();
         if (!text) throw new Error("Write the memo first.");
@@ -1367,13 +1398,52 @@ export default function App(_: Props) {
                     <span className="hint">{echo(sparkDelay)}</span>
                   </label>
                 </div>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Mint new tokens (optional) — amount</span>
+                    <input inputMode="decimal" placeholder="2000000" value={sparkMint} onChange={(e) => setSparkMint(e.target.value)} />
+                  </label>
+                  <label className="field grow">
+                    <span>Mint recipient — empty = the Spark wallet above</span>
+                    <input placeholder="wallet" value={sparkMintTo} onChange={(e) => setSparkMintTo(e.target.value)} />
+                  </label>
+                </div>
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao || !wallet}
+                    onClick={() =>
+                      run("creating destination accounts", async () => {
+                        if (!dao || !wallet) throw new Error("Connect a wallet and load a DAO.");
+                        const to = new PublicKey(sparkTo.trim());
+                        const manual = sparkNft.trim();
+                        const found = await findMeteoraPositions(connection, dao, manual ? [new PublicKey(manual)] : undefined);
+                        if (found.length !== 1) throw new Error("Could not resolve exactly one Meteora position.");
+                        const needs = [{ mint: found[0].nftMint, owner: to, program: TOKEN_2022_PROGRAM_ID }];
+                        if (sparkMint.trim()) {
+                          const info = await connection.getAccountInfo(dao.baseMint);
+                          needs.push({ mint: dao.baseMint, owner: sparkMintTo.trim() ? new PublicKey(sparkMintTo.trim()) : to, program: info!.owner });
+                        }
+                        const missing = (await checkAtas(connection, needs)).filter((x) => !x.exists);
+                        if (missing.length === 0) return say("✅ Every destination account already exists.");
+                        const sig = await sendLocally(createAtasTx(wallet.publicKey, missing), connection, {});
+                        say(`✅ Created ${missing.length} destination account(s) from your wallet — ${sig}`);
+                      })
+                    }
+                  >
+                    Create destination accounts from my wallet
+                  </button>
+                </div>
                 <label className="field">
                   <span>Link to the full proposal text (optional, goes in the memo)</span>
                   <input placeholder="https://…" value={sparkLink} onChange={(e) => setSparkLink(e.target.value)} />
                 </label>
                 <p className="hint">
-                  <strong>Queues four instructions in one go</strong>: transfer of the position NFT (2),
-                  <code>update_dao</code> (1), memo (1) — about 1 000 bytes, under the 1 232-byte cap.
+                  <strong>Queues the whole initialization in one go</strong>: position NFT transfer,
+                  <code>update_dao</code>, an optional mint, a memo — about 1 020 bytes when the
+                  destination accounts already exist, under the 1 232-byte cap. Accounts that do not
+                  exist are created by the treasury only if it holds the SOL for their rent; a new
+                  DAO's vault may hold none, so create them from your wallet first.
                   Whoever holds the NFT owns the position and can withdraw top-level as a keypair.
                   The 24h length only applies to proposals created after this one executes; this
                   one votes at the current length.

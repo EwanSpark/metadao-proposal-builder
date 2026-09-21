@@ -284,6 +284,32 @@ export function jupiterDcaBuyback(
 }
 
 /** SPL Memo v2. */
+/* ------------------------------------------------------------------ mint */
+
+/**
+ * Mint new supply of the DAO's own token. On MetaDAO / Futardio launches the mint
+ * authority is the treasury vault itself (verified on TEST, ACCRUE, LFOWN, BASKET — the
+ * repo's mint_governor program is not in the path), so this is a plain SPL MintToChecked
+ * the vault signs. `destinationAta` must exist at execution; see lib/ata.ts.
+ */
+export async function mintBaseTokens(
+  connection: import("@solana/web3.js").Connection,
+  dao: DaoView,
+  destinationAta: PublicKey,
+  amountRaw: bigint,
+): Promise<TransactionInstruction[]> {
+  const info = await connection.getAccountInfo(dao.baseMint);
+  if (!info) throw new Error("Base mint not found.");
+  const { MintLayout, createMintToCheckedInstruction } = await import("@solana/spl-token");
+  const mint = MintLayout.decode((info.data as Buffer).subarray(0, MintLayout.span));
+  if (!mint.mintAuthorityOption) throw new Error("This token has no mint authority — its supply is fixed.");
+  if (!mint.mintAuthority.equals(dao.treasury)) {
+    throw new Error(`The mint authority is ${mint.mintAuthority.toBase58().slice(0, 8)}…, not this DAO's treasury — a proposal cannot mint.`);
+  }
+  if (amountRaw <= 0n) throw new Error("Mint amount must be positive.");
+  return [createMintToCheckedInstruction(dao.baseMint, destinationAta, dao.treasury, amountRaw, mint.decimals, [], info.owner)];
+}
+
 /* ------------------------------------------------------- DAO parameters */
 
 export type DaoParamChanges = {
@@ -463,6 +489,13 @@ export function describeInstruction(ix: TransactionInstruction): string {
   if (met) return met;
   const tm = describeTokenMetadataIx(ix);
   if (tm) return tm;
+  // SPL Token MintToChecked = 14, MintTo = 7
+  if ((ix.programId.equals(TOKEN_PROGRAM_ID)) && (ix.data[0] === 14 || ix.data[0] === 7) && ix.data.length >= 9) {
+    const raw = ix.data.readBigUInt64LE(1);
+    const dec = ix.data[0] === 14 ? ix.data[9] : 0;
+    const ui = dec ? Number(raw) / 10 ** dec : Number(raw);
+    return `Mint ${ui.toLocaleString("en-US")} → ${ix.keys[1]?.pubkey.toBase58().slice(0, 8)}…`;
+  }
   const limit = describeSpendingLimitIx(ix);
   if (limit) return limit;
   const signers = ix.keys.filter((k) => k.isSigner).length;

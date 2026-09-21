@@ -347,11 +347,15 @@ export function transferMeteoraPosition(
   dao: DaoView,
   p: MeteoraPosition,
   destination: PublicKey,
+  /** Leave the ATA creation out — the caller has checked the account exists (see lib/ata.ts). */
+  opts: { skipCreate?: boolean } = {},
 ): TransactionInstruction[] {
-  const to = getAssociatedTokenAddressSync(p.nftMint, destination, false, TOKEN_2022_PROGRAM_ID);
+  const to = getAssociatedTokenAddressSync(p.nftMint, destination, true, TOKEN_2022_PROGRAM_ID);
+  const transfer = createTransferCheckedInstruction(p.nftAccount, p.nftMint, to, dao.treasury, 1n, 0, [], TOKEN_2022_PROGRAM_ID);
+  if (opts.skipCreate) return [transfer];
   return [
     createAssociatedTokenAccountIdempotentInstruction(dao.treasury, to, destination, p.nftMint, TOKEN_2022_PROGRAM_ID),
-    createTransferCheckedInstruction(p.nftAccount, p.nftMint, to, dao.treasury, 1n, 0, [], TOKEN_2022_PROGRAM_ID),
+    transfer,
   ];
 }
 
