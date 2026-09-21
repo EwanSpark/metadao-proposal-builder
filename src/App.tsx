@@ -61,6 +61,7 @@ import {
   withdrawMeteoraPosition,
   type MeteoraPosition,
 } from "./lib/meteora";
+import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./lib/tokenMetadata";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
 type ActionKind =
@@ -72,6 +73,7 @@ type ActionKind =
   | "liquidate"
   | "memo"
   | "spark"
+  | "metadata"
   | "params"
   | "limit"
   | "coffre"
@@ -141,6 +143,10 @@ export default function App(_: Props) {
   const [sparkVote, setSparkVote] = useState("86401");
   const [sparkDelay, setSparkDelay] = useState("28800");
   const [sparkLink, setSparkLink] = useState("");
+  const [tokenMeta, setTokenMeta] = useState<TokenMetadata | null>(null);
+  const [metaName, setMetaName] = useState("");
+  const [metaSymbol, setMetaSymbol] = useState("");
+  const [metaUri, setMetaUri] = useState("");
   const [rawJson, setRawJson] = useState("");
   const [voteSeconds, setVoteSeconds] = useState("");
   const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
@@ -377,6 +383,12 @@ export default function App(_: Props) {
             `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
         );
         }
+      } else if (kind === "metadata") {
+        const current = tokenMeta ?? (await readTokenMetadata(connection, dao.baseMint));
+        const next = { name: metaName.trim(), symbol: metaSymbol.trim(), uri: metaUri.trim() };
+        ixs = updateTokenMetadata(dao, current, next);
+        say(`ℹ️ "${current.name}" (${current.symbol}) → "${next.name}" (${next.symbol}); uri → ${next.uri}`);
+        say("   Description and image come from the JSON at that uri — make sure it is live before the vote ends.");
       } else if (kind === "spark") {
         const to = new PublicKey(sparkTo.trim());
         const vote = Number(sparkVote), delay = Number(sparkDelay);
@@ -792,6 +804,10 @@ export default function App(_: Props) {
       sub: "Pull the launchpad's Meteora DAMM v2 position into the treasury and forward it to a wallet.",
     },
     liquidate: { title: "Liquidation mandate", sub: "A memo the market votes on. Transfers nothing by itself." },
+    metadata: {
+      title: "Token metadata",
+      sub: "Rename the token or repoint its image. The treasury is the update authority, so only a proposal can.",
+    },
     spark: {
       title: "Spark setup",
       sub: "One proposal: hand the Meteora LP position to Spark, shorten decision markets to 24h, and sign it with a memo.",
@@ -1077,6 +1093,7 @@ export default function App(_: Props) {
                   ["liquidate", "Liquidation"],
                   ["memo", "Memo"],
                   ["spark", "Spark setup"],
+                  ["metadata", "Token metadata"],
                   ["params", "Parameters"],
                   ["limit", "Spending limit"],
                   ["coffre", "Coffre"],
@@ -1278,6 +1295,52 @@ export default function App(_: Props) {
                     and take the proposal down with it. Whatever is not forwarded stays in the treasury.
                   </p>
                 )}
+              </div>
+            )}
+
+            {kind === "metadata" && (
+              <div className="form">
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao}
+                    onClick={() =>
+                      run("reading token metadata", async () => {
+                        if (!dao) throw new Error("Load a DAO first.");
+                        const m = await readTokenMetadata(connection, dao.baseMint);
+                        setTokenMeta(m);
+                        setMetaName(m.name);
+                        setMetaSymbol(m.symbol);
+                        setMetaUri(m.uri);
+                        const mine = m.updateAuthority.equals(dao.treasury);
+                        say(`🔎 "${m.name}" (${m.symbol}) · mutable: ${m.isMutable} · update authority ${m.updateAuthority.toBase58().slice(0, 8)}… ${mine ? "= this DAO's treasury ✅" : "≠ treasury ❌"}`);
+                      })
+                    }
+                  >
+                    Load current metadata
+                  </button>
+                </div>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Name (max 32 bytes)</span>
+                    <input value={metaName} onChange={(e) => setMetaName(e.target.value)} />
+                  </label>
+                  <label className="field grow">
+                    <span>Ticker (max 10 bytes)</span>
+                    <input value={metaSymbol} onChange={(e) => setMetaSymbol(e.target.value)} />
+                  </label>
+                </div>
+                <label className="field">
+                  <span>URI of the metadata JSON (max 200 bytes)</span>
+                  <input placeholder="https://…/token.json" value={metaUri} onChange={(e) => setMetaUri(e.target.value)} />
+                </label>
+                <p className="hint">
+                  <strong>Only name, ticker and uri are on-chain.</strong> Description and image live in
+                  the JSON the uri points to (<code>{"{ name, symbol, description, image }"}</code>), so
+                  host the new JSON and image first, then point the uri at it. Creators, collection
+                  and the update authority are carried over unchanged. Wallets and explorers cache
+                  metadata; expect hours before every surface shows the change.
+                </p>
               </div>
             )}
 

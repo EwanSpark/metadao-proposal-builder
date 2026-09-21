@@ -17,6 +17,7 @@ import type { DaoView } from "./futarchy";
 import { COFFRE_PROGRAM_ID, IDL as COFFRE_IDL } from "./coffre";
 import { describeSpendingLimitIx } from "./spendingLimit";
 import { describeMeteoraIx } from "./meteora";
+import { describeTokenMetadataIx } from "./tokenMetadata";
 
 /**
  * Every instruction below is executed later BY THE TREASURY (the Squads vault PDA),
@@ -460,6 +461,8 @@ export function describeInstruction(ix: TransactionInstruction): string {
   }
   const met = describeMeteoraIx(ix);
   if (met) return met;
+  const tm = describeTokenMetadataIx(ix);
+  if (tm) return tm;
   const limit = describeSpendingLimitIx(ix);
   if (limit) return limit;
   const signers = ix.keys.filter((k) => k.isSigner).length;

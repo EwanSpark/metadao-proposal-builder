@@ -122,6 +122,13 @@ vote means lowering the delay under 12h in the same instruction. The Parameters 
 unit the bounds land on (43,217s, not "12h") — echoes each back in hours, and enforces
 both bounds before the instruction is queued.
 
+**A token's name, ticker and image can only change by proposal.** On a MetaDAO or
+Futardio launch the Metaplex update authority is the DAO treasury, so the Token metadata
+tab builds `UpdateMetadataAccountV2` for the vault to sign. Only name, symbol and uri are
+on-chain; description and image live in the JSON at the uri, so host that first (files
+under `public/token/` ship with the Pages deploy). The instruction is hand-encoded and was
+validated by simulating it against the live Metaplex program — 88 bytes, 635 at creation.
+
 **Spark setup queues the whole onboarding proposal in one click**: transfer of the
 Meteora position NFT to a wallet, `update_dao` to a 24h vote with an 8h TWAP delay, and a
 memo naming the change — four instructions, ~1 000 bytes. Each piece is the same code as

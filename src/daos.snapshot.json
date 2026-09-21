@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-09-15T16:37:35.021Z",
+  "capturedAt": "2026-09-21T13:03:04.113Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -23,6 +23,17 @@
       "raised": 0,
       "treasury": 0,
       "official": false
+    },
+    {
+      "address": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
+      "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
+      "name": "Umbra",
+      "symbol": "UMBRA",
+      "proposalCount": 9,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 918978,
+      "official": true
     },
     {
       "address": "j6Hx7bdAzcj1NsoRBqdafFuRkgEU48QeZ1i5NVXz9fF",
@@ -66,17 +77,6 @@
       "poolPhase": "spot",
       "raised": 50000,
       "treasury": 5000,
-      "official": true
-    },
-    {
-      "address": "BLkBSE96kQys7SrMioKxeMiVbeo4Ckk2Y4n1JphKxYnv",
-      "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
-      "name": "Umbra",
-      "symbol": "UMBRA",
-      "proposalCount": 7,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 1318978,
       "official": true
     },
     {
@@ -146,6 +146,17 @@
       "official": false
     },
     {
+      "address": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
+      "baseMint": "omfgRBnxHsNJh6YeGbGAmWenNkenzsXyBXm3WDhmeta",
+      "name": "Omnipair",
+      "symbol": "OMFG",
+      "proposalCount": 4,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 495832,
+      "official": true
+    },
+    {
       "address": "1PAwyDkWNFCcR96GhEReXHJBv3YEFVazCaQgNicVuKv",
       "baseMint": "RNGRtJMbCveqCp7AC6U95KmrdKecFckaJZiWbPGmeta",
       "name": "Ranger",
@@ -157,14 +168,14 @@
       "official": true
     },
     {
-      "address": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
-      "baseMint": "omfgRBnxHsNJh6YeGbGAmWenNkenzsXyBXm3WDhmeta",
-      "name": "Omnipair",
-      "symbol": "OMFG",
+      "address": "5bRGZaeQoZaXziwaL9fwiybHCTAU8geYqd9sQf9RTTVR",
+      "baseMint": "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta",
+      "name": "LFOWN",
+      "symbol": "LFOWN",
       "proposalCount": 3,
       "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 640832,
+      "raised": 10000,
+      "treasury": 8321,
       "official": true
     },
     {
@@ -212,14 +223,36 @@
       "official": true
     },
     {
-      "address": "5bRGZaeQoZaXziwaL9fwiybHCTAU8geYqd9sQf9RTTVR",
-      "baseMint": "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta",
-      "name": "LFOWN",
-      "symbol": "LFOWN",
-      "proposalCount": 2,
+      "address": "7zexEnEDcdo93nyXbcR6syLfFpnFpLRukQUuAW32XxC1",
+      "baseMint": "31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta",
+      "name": "ACCRUE",
+      "symbol": "ACCRUE",
+      "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 8000,
+      "treasury": 8001,
+      "official": true
+    },
+    {
+      "address": "CATL7SAzmnytyYmr9sVs92PQ2YDWowS3LN2xz3MMnB6H",
+      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+      "name": "Cloud",
+      "symbol": "CLOUD",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
+    },
+    {
+      "address": "6yv1EcBitVUdf3YS4GTHdLmwrGGiPYT2jrh2xDjCxYQQ",
+      "baseMint": "CREDBHvVqREBCAxMihzr8D1nepHMr2gmQoZWpmgGmeta",
+      "name": "Credible Finance",
+      "symbol": "CRED",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 4000000,
+      "treasury": 2450000,
       "official": true
     },
     {
@@ -289,17 +322,6 @@
       "official": false
     },
     {
-      "address": "7zexEnEDcdo93nyXbcR6syLfFpnFpLRukQUuAW32XxC1",
-      "baseMint": "31hoVYavdrwYVcbWoZtXpUvf84D5Zroqai2wSnkAmeta",
-      "name": "ACCRUE",
-      "symbol": "ACCRUE",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 10000,
-      "treasury": 8000,
-      "official": true
-    },
-    {
       "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
       "baseMint": "6JSXRGMH6wNiukuLi4x6rSHazJMQL51WGbzirXxsmeta",
       "name": "Areal Finance",
@@ -331,17 +353,6 @@
       "raised": 0,
       "treasury": 0,
       "official": false
-    },
-    {
-      "address": "6yv1EcBitVUdf3YS4GTHdLmwrGGiPYT2jrh2xDjCxYQQ",
-      "baseMint": "CREDBHvVqREBCAxMihzr8D1nepHMr2gmQoZWpmgGmeta",
-      "name": "Credible Finance",
-      "symbol": "CRED",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 4000000,
-      "treasury": 2950000,
-      "official": true
     },
     {
       "address": "9u61DTe6UX9XEUNyNxD8z4vtCBNXTo4MnzVvuDz62VY",
@@ -483,7 +494,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 1000000,
-      "treasury": 723735,
+      "treasury": 729819,
       "official": true
     },
     {
@@ -582,7 +593,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 140000,
-      "treasury": 0,
+      "treasury": 102000,
       "official": true
     },
     {
@@ -749,6 +760,17 @@
       "raised": 7,
       "treasury": 0,
       "official": false
+    },
+    {
+      "address": "3kRM3ALGVZ6n2aNxzxUqZPpsuts5NRWRMN3FoXHcP2hy",
+      "baseMint": "6ysB4gbn6byAn9SRwMmkjBEFseK8cGneGBY1SZ4Cmeta",
+      "name": "Test",
+      "symbol": "TEST",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 0,
+      "official": true
     },
     {
       "address": "CJCgDqiDtkQvwXT2iiyY7QVajKLH3VRVbcsNQgtttrHn",
