@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-09-21T13:03:04.113Z",
+  "capturedAt": "2026-09-22T16:58:05.189Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -311,6 +311,17 @@
       "official": true
     },
     {
+      "address": "3kRM3ALGVZ6n2aNxzxUqZPpsuts5NRWRMN3FoXHcP2hy",
+      "baseMint": "6ysB4gbn6byAn9SRwMmkjBEFseK8cGneGBY1SZ4Cmeta",
+      "name": "Test",
+      "symbol": "TEST",
+      "proposalCount": 1,
+      "poolPhase": "futarchy",
+      "raised": 10000,
+      "treasury": 0,
+      "official": true
+    },
+    {
       "address": "7WnY1TZLfpxxTEbi1LN5JwKohuu49mE2sJpgZTSdmneH",
       "baseMint": "GCU4rpSTk2JavuTvYJGP6ah7RxEo5xaKrsRRfLwNkH45",
       "name": "Test",
@@ -494,7 +505,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 1000000,
-      "treasury": 729819,
+      "treasury": 730448,
       "official": true
     },
     {
@@ -630,6 +641,17 @@
       "official": false
     },
     {
+      "address": "9TW2pRqcmLn5saiw2YnfUxYjhoynk8ryoTfnKM8Po3vh",
+      "baseMint": "5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta",
+      "name": "PREDICT",
+      "symbol": "PREDICT",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 8000,
+      "official": true
+    },
+    {
       "address": "82XqLX4wEuiCcCWMx6mzhrkLuCEPVqaHKdUGqBWaWS7z",
       "baseMint": "GBXKJSjyx76MbsooT8kCnjhPrDxkvWwscxXw2BBftdio",
       "name": "Reid Is cool",
@@ -760,17 +782,6 @@
       "raised": 7,
       "treasury": 0,
       "official": false
-    },
-    {
-      "address": "3kRM3ALGVZ6n2aNxzxUqZPpsuts5NRWRMN3FoXHcP2hy",
-      "baseMint": "6ysB4gbn6byAn9SRwMmkjBEFseK8cGneGBY1SZ4Cmeta",
-      "name": "Test",
-      "symbol": "TEST",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 10000,
-      "treasury": 0,
-      "official": true
     },
     {
       "address": "CJCgDqiDtkQvwXT2iiyY7QVajKLH3VRVbcsNQgtttrHn",
