@@ -18,6 +18,7 @@ import { COFFRE_PROGRAM_ID, IDL as COFFRE_IDL } from "./coffre";
 import { describeSpendingLimitIx } from "./spendingLimit";
 import { describeMeteoraIx } from "./meteora";
 import { describeTokenMetadataIx } from "./tokenMetadata";
+import { describeClmmIx } from "./raydium";
 
 /**
  * Every instruction below is executed later BY THE TREASURY (the Squads vault PDA),
@@ -487,6 +488,8 @@ export function describeInstruction(ix: TransactionInstruction): string {
   }
   const met = describeMeteoraIx(ix);
   if (met) return met;
+  const ray = describeClmmIx(ix);
+  if (ray) return ray;
   const tm = describeTokenMetadataIx(ix);
   if (tm) return tm;
   // SPL Token MintToChecked = 14, MintTo = 7

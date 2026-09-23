@@ -65,7 +65,8 @@ import {
 import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./lib/tokenMetadata";
 import TradePanel from "./TradePanel";
 import { checkAtas, createAtasTx, planAtaCreates } from "./lib/ata";
-import { TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { MintLayout, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import { clmmPrice, clmmSwapIx, estimateClmmOut, findClmmPool, readClmmPool } from "./lib/raydium";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
 type ActionKind =
@@ -78,6 +79,7 @@ type ActionKind =
   | "memo"
   | "spark"
   | "metadata"
+  | "swap"
   | "params"
   | "limit"
   | "coffre"
@@ -153,6 +155,11 @@ export default function App(_: Props) {
   const [metaName, setMetaName] = useState("");
   const [metaSymbol, setMetaSymbol] = useState("");
   const [metaUri, setMetaUri] = useState("");
+  const [swapIn, setSwapIn] = useState("");
+  const [swapOut, setSwapOut] = useState("");
+  const [swapAmount, setSwapAmount] = useState("");
+  const [swapSlippage, setSwapSlippage] = useState("1");
+  const [swapPool, setSwapPool] = useState("");
   const [rawJson, setRawJson] = useState("");
   const [voteSeconds, setVoteSeconds] = useState("");
   const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
@@ -448,6 +455,58 @@ export default function App(_: Props) {
             `, memo ${Buffer.byteLength(memo, "utf8")} bytes. ` +
             (createByTreasury.length ? `${createByTreasury.length} account(s) will be created by the treasury.` : "All destination accounts already exist."),
         );
+      } else if (kind === "swap") {
+        const inputMint = swapIn.trim() ? new PublicKey(swapIn.trim()) : dao.quoteMint;
+        const outputMint = new PublicKey(swapOut.trim());
+        const [inInfo, outInfo] = await connection.getMultipleAccountsInfo([inputMint, outputMint]);
+        if (!inInfo || !outInfo) throw new Error("Input or output mint not found.");
+        const decIn = MintLayout.decode((inInfo.data as Buffer).subarray(0, MintLayout.span)).decimals;
+        const decOut = MintLayout.decode((outInfo.data as Buffer).subarray(0, MintLayout.span)).decimals;
+        const amountIn = uiToRaw(swapAmount, decIn);
+        if (amountIn.isZero()) throw new Error("Enter an amount.");
+
+        // The treasury must hold the input now; it must still hold it at execution.
+        const [held] = await checkAtas(connection, [{ mint: inputMint, owner: dao.treasury, program: inInfo.owner }]);
+        const heldInfo = held.exists ? await connection.getAccountInfo(held.ata) : null;
+        const balance = heldInfo ? new BN((heldInfo.data as Buffer).readBigUInt64LE(64).toString()) : new BN(0);
+        if (balance.lt(amountIn)) throw new Error(`The treasury holds ${rawToUi(balance, decIn)} of the input token, less than ${swapAmount}.`);
+
+        let poolAddr: PublicKey, quoted: BN | null = null;
+        if (swapPool.trim()) poolAddr = new PublicKey(swapPool.trim());
+        else {
+          const found = await findClmmPool(inputMint, outputMint, amountIn);
+          poolAddr = found.pool;
+          quoted = found.quotedOut;
+          setSwapPool(poolAddr.toBase58());
+        }
+        const pool = await readClmmPool(connection, poolAddr);
+        const pair = [pool.mint0, pool.mint1];
+        if (!pair.some((m) => m.equals(inputMint)) || !pair.some((m) => m.equals(outputMint)))
+          throw new Error("This pool does not pair the input and output tokens.");
+
+        const local = estimateClmmOut(pool, inputMint, amountIn);
+        const expected = quoted && quoted.lt(local) ? quoted : local;
+        const bps = Math.round(Number(swapSlippage) * 100);
+        if (!Number.isFinite(bps) || bps < 0 || bps > 5000) throw new Error("Slippage must be between 0 and 50%.");
+        const minOut = expected.muln(10_000 - bps).divn(10_000);
+
+        const { createByTreasury } = await planAtaCreates(connection, dao.treasury, [
+          { mint: outputMint, owner: dao.treasury, program: outInfo.owner },
+        ]);
+        const swapIx = await clmmSwapIx(connection, { pool, owner: dao.treasury, inputMint, amountIn, minOut });
+        ixs = [...createByTreasury, swapIx];
+        const tokenPrice = inputMint.equals(pool.mint1) ? 1 / clmmPrice(pool) : clmmPrice(pool);
+        say(
+          `ℹ️ Swap ${swapAmount} → ≈ ${rawToUi(expected, decOut)} (min ${rawToUi(minOut, decOut)}, ${swapSlippage}%) ` +
+            `through Raydium CLMM ${poolAddr.toBase58().slice(0, 8)}… · spot ${tokenPrice.toPrecision(6)} out per in · fee ${(pool.tradeFeeRate / 1e4).toFixed(2)}%` +
+            (quoted ? ` · Jupiter quotes ${rawToUi(quoted, decOut)}` : ""),
+        );
+        say(
+          createByTreasury.length
+            ? "   The treasury's output account does not exist; the treasury will create it (~0.002 SOL)."
+            : "   The treasury's output account already exists.",
+        );
+        say("   If the pool moves past the minimum before execution, the swap fails and nothing leaves the vault.");
       } else if (kind === "memo") {
         const text = titleMemo.trim();
         if (!text) throw new Error("Write the memo first.");
@@ -844,6 +903,10 @@ export default function App(_: Props) {
       title: "Spark setup",
       sub: "One proposal: hand the Meteora LP position to Spark, shorten decision markets to 24h, and sign it with a memo.",
     },
+    swap: {
+      title: "Treasury swap",
+      sub: "Swap treasury tokens through one Raydium CLMM pool, with a minimum output fixed now and enforced at execution.",
+    },
     memo: {
       title: "Memo",
       sub: "A title and a link, written into the transaction. The only on-chain text a proposal can carry.",
@@ -1126,6 +1189,7 @@ export default function App(_: Props) {
                   ["memo", "Memo"],
                   ["spark", "Spark setup"],
                   ["metadata", "Token metadata"],
+                  ["swap", "Swap"],
                   ["params", "Parameters"],
                   ["limit", "Spending limit"],
                   ["coffre", "Coffre"],
@@ -1447,6 +1511,63 @@ export default function App(_: Props) {
                   Whoever holds the NFT owns the position and can withdraw top-level as a keypair.
                   The 24h length only applies to proposals created after this one executes; this
                   one votes at the current length.
+                </p>
+              </div>
+            )}
+
+            {kind === "swap" && (
+              <div className="form">
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Sell (mint) — empty = the DAO's quote token{dao ? ` (${dao.quoteMint.toBase58().slice(0, 4)}…)` : ""}</span>
+                    <input placeholder="EPjF… (USDC)" value={swapIn} onChange={(e) => setSwapIn(e.target.value)} />
+                  </label>
+                  <label className="field grow">
+                    <span>Buy (mint)</span>
+                    <input placeholder="USDvUSpnhCr9yBgj3UyVrD239HRUv4RsHwH2FxsWuMk" value={swapOut} onChange={(e) => setSwapOut(e.target.value)} />
+                  </label>
+                </div>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Amount to sell</span>
+                    <input inputMode="decimal" placeholder="1000" value={swapAmount} onChange={(e) => setSwapAmount(e.target.value)} />
+                  </label>
+                  <label className="field" style={{ width: 160 }}>
+                    <span>Max slippage %</span>
+                    <input inputMode="decimal" value={swapSlippage} onChange={(e) => setSwapSlippage(e.target.value)} />
+                  </label>
+                </div>
+                <label className="field">
+                  <span>Raydium CLMM pool — empty = found through Jupiter</span>
+                  <input placeholder="leave empty to look it up" value={swapPool} onChange={(e) => setSwapPool(e.target.value)} />
+                </label>
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao || !wallet || !swapOut.trim()}
+                    onClick={() =>
+                      run("creating the treasury's output account", async () => {
+                        if (!dao || !wallet) throw new Error("Connect a wallet and load a DAO.");
+                        const mint = new PublicKey(swapOut.trim());
+                        const info = await connection.getAccountInfo(mint);
+                        if (!info) throw new Error("Output mint not found.");
+                        const missing = (await checkAtas(connection, [{ mint, owner: dao.treasury, program: info.owner }])).filter((x) => !x.exists);
+                        if (missing.length === 0) return say("✅ The treasury's output account already exists.");
+                        const sig = await sendLocally(createAtasTx(wallet.publicKey, missing), connection, {});
+                        say(`✅ Created the treasury's output account from your wallet — ${sig}`);
+                      })
+                    }
+                  >
+                    Create the treasury's output account from my wallet
+                  </button>
+                </div>
+                <p className="hint">
+                  <strong>One pool, not a Jupiter route.</strong> A route is only valid for the accounts of
+                  the moment it was quoted, and this executes after the vote. A single CLMM pool stays
+                  valid: the proposal carries the tick arrays around today's price and the program skips
+                  to the right one. The minimum output is fixed now; if the price has moved further
+                  than the slippage by execution, the swap fails and nothing leaves the vault. Creating
+                  the output account from your wallet first saves ~75 bytes for a memo.
                 </p>
               </div>
             )}

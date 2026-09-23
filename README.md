@@ -56,7 +56,8 @@ The full lifecycle, in the order the program enforces:
    currently possible.
 2. **Compose the instructions** the treasury will execute if the proposal passes:
    spend USDC, buyback via Jupiter DCA, add or remove liquidity, withdraw the launchpad's
-   Meteora LP, liquidation mandate, DAO parameter changes, or a raw JSON instruction.
+   Meteora LP, swap treasury tokens through a Raydium CLMM pool, liquidation mandate,
+   DAO parameter changes, or a raw JSON instruction.
 3. **Create** — Squads vault transaction and proposal, then the binary question, both
    conditional vaults and the futarchy proposal. Result: `Draft`.
 4. **Stake** up to `base_to_stake` (or sponsor if you hold `team_address`).
@@ -65,6 +66,17 @@ The full lifecycle, in the order the program enforces:
    a separate transaction (the Solana runtime forbids futarchy → squads → futarchy).
 
 ## Implementation notes worth knowing
+
+**Treasury swaps go through one Raydium CLMM pool, not a Jupiter route.** A route is
+only valid for the accounts of the moment it was quoted, and the vault executes it a
+day or more later. In a CLMM pool only the tick arrays depend on the price, and
+`swap_v2` skips leading tick arrays until it reaches the one holding the current price.
+So the proposal carries every initialized array from one span behind the price to
+three ahead, in the swap's direction, and still executes after a drift. The minimum
+output is fixed at creation and enforced on-chain. Verified by simulating LFOWN's
+vault swapping 1 000 USDC into USDv (pool `EYJkpMH4…`): 999.895303 USDv received,
+65k CU with the Token-2022 output account created, creation transaction 1 125 bytes
+(1 050 when the output account already exists).
 
 **The vault transaction is built by hand.** The SDK's `squadsProposalCreateTx` sets the
 inner message's `payerKey` to the proposer's wallet, while the program's own tests use
