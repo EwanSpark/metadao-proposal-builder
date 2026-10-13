@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-09-22T16:58:05.189Z",
+  "capturedAt": "2026-10-13T17:06:11.690Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -29,10 +29,10 @@
       "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
       "name": "Umbra",
       "symbol": "UMBRA",
-      "proposalCount": 9,
+      "proposalCount": 10,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 918978,
+      "treasury": 1104318,
       "official": true
     },
     {
@@ -58,6 +58,17 @@
       "official": false
     },
     {
+      "address": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
+      "baseMint": "Cbjr1Nvcay3QWDriyRKtokJ7V4PMknesGxeK8z7Zmeta",
+      "name": "Futardio cult",
+      "symbol": "FUTARDIO",
+      "proposalCount": 7,
+      "poolPhase": "spot",
+      "raised": 50000,
+      "treasury": 17124,
+      "official": true
+    },
+    {
       "address": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
       "baseMint": "4Ueb677S8FVCH5ot5rrB6MFq5XsFgpQBgri1oNCnx6HW",
       "name": "PreProd",
@@ -76,18 +87,7 @@
       "proposalCount": 7,
       "poolPhase": "spot",
       "raised": 50000,
-      "treasury": 5000,
-      "official": true
-    },
-    {
-      "address": "CkEUCAooQi64UFhPFS5MWpZw6LQqjsDQBj3Z5uiXS1eN",
-      "baseMint": "Cbjr1Nvcay3QWDriyRKtokJ7V4PMknesGxeK8z7Zmeta",
-      "name": "Futardio cult",
-      "symbol": "FUTARDIO",
-      "proposalCount": 6,
-      "poolPhase": "spot",
-      "raised": 50000,
-      "treasury": 22174,
+      "treasury": 2,
       "official": true
     },
     {
@@ -98,8 +98,19 @@
       "proposalCount": 6,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 3703551,
+      "treasury": 3463551,
       "official": true
+    },
+    {
+      "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
+      "baseMint": "SoLo9oxzLDpcq1dpqAgMwgce5WqkRDtNXK7EPnbmeta",
+      "name": "Solomon",
+      "symbol": "SOLO",
+      "proposalCount": 6,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
     },
     {
       "address": "6FRXzTe3HajL8Fwmmkupp8g3y3wn3g3QEjj8sABndre3",
@@ -113,17 +124,6 @@
       "official": false
     },
     {
-      "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
-      "baseMint": "SoLo9oxzLDpcq1dpqAgMwgce5WqkRDtNXK7EPnbmeta",
-      "name": "Solomon",
-      "symbol": "SOLO",
-      "proposalCount": 5,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 100000,
-      "official": true
-    },
-    {
       "address": "DHjQLd6LCM4yzZ9e8eabyGofDJLjbouqpuX8wh1rQuBs",
       "baseMint": "C5yXcUj9stvaW6cPTmmxWyCCjLxxCiJtYnwKGS129vGJ",
       "name": "Test",
@@ -133,6 +133,28 @@
       "raised": 0,
       "treasury": 0,
       "official": false
+    },
+    {
+      "address": "3szfyfczcGxe6zpTQQBfnkF24SMakWChxp3aU68HNYij",
+      "baseMint": "CARSsxWPkpQWvfyRBwfGMGvysJBHdHGfE46X5MNgmeta",
+      "name": "Rip Cars",
+      "symbol": "CARS",
+      "proposalCount": 4,
+      "poolPhase": "spot",
+      "raised": 250000,
+      "treasury": 725000,
+      "official": true
+    },
+    {
+      "address": "5bRGZaeQoZaXziwaL9fwiybHCTAU8geYqd9sQf9RTTVR",
+      "baseMint": "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta",
+      "name": "LFOWN",
+      "symbol": "LFOWN",
+      "proposalCount": 4,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 7971,
+      "official": true
     },
     {
       "address": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
@@ -153,7 +175,7 @@
       "proposalCount": 4,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 495832,
+      "treasury": 482832,
       "official": true
     },
     {
@@ -168,14 +190,14 @@
       "official": true
     },
     {
-      "address": "5bRGZaeQoZaXziwaL9fwiybHCTAU8geYqd9sQf9RTTVR",
-      "baseMint": "5gDnzAC4EEFmTjFzFjHUXS7wx5Cdvi2NTKGZT61meta",
-      "name": "LFOWN",
-      "symbol": "LFOWN",
+      "address": "6yv1EcBitVUdf3YS4GTHdLmwrGGiPYT2jrh2xDjCxYQQ",
+      "baseMint": "CREDBHvVqREBCAxMihzr8D1nepHMr2gmQoZWpmgGmeta",
+      "name": "Credible Finance",
+      "symbol": "CRED",
       "proposalCount": 3,
       "poolPhase": "spot",
-      "raised": 10000,
-      "treasury": 8321,
+      "raised": 4000000,
+      "treasury": 1950000,
       "official": true
     },
     {
@@ -186,7 +208,29 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 6000000,
-      "treasury": 3308997,
+      "treasury": 3142397,
+      "official": true
+    },
+    {
+      "address": "9TW2pRqcmLn5saiw2YnfUxYjhoynk8ryoTfnKM8Po3vh",
+      "baseMint": "5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta",
+      "name": "PREDICT",
+      "symbol": "PREDICT",
+      "proposalCount": 3,
+      "poolPhase": "spot",
+      "raised": 10000,
+      "treasury": 7021,
+      "official": true
+    },
+    {
+      "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
+      "baseMint": "6JSXRGMH6wNiukuLi4x6rSHazJMQL51WGbzirXxsmeta",
+      "name": "Areal Finance",
+      "symbol": "ARL",
+      "proposalCount": 2,
+      "poolPhase": "futarchy",
+      "raised": 10000,
+      "treasury": 1400,
       "official": true
     },
     {
@@ -208,18 +252,7 @@
       "proposalCount": 2,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 6076,
-      "official": true
-    },
-    {
-      "address": "3szfyfczcGxe6zpTQQBfnkF24SMakWChxp3aU68HNYij",
-      "baseMint": "CARSsxWPkpQWvfyRBwfGMGvysJBHdHGfE46X5MNgmeta",
-      "name": "Rip Cars",
-      "symbol": "CARS",
-      "proposalCount": 2,
-      "poolPhase": "spot",
-      "raised": 250000,
-      "treasury": 90000,
+      "treasury": 5077,
       "official": true
     },
     {
@@ -230,29 +263,7 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 8001,
-      "official": true
-    },
-    {
-      "address": "CATL7SAzmnytyYmr9sVs92PQ2YDWowS3LN2xz3MMnB6H",
-      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
-      "name": "Cloud",
-      "symbol": "CLOUD",
-      "proposalCount": 1,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 0,
-      "official": false
-    },
-    {
-      "address": "6yv1EcBitVUdf3YS4GTHdLmwrGGiPYT2jrh2xDjCxYQQ",
-      "baseMint": "CREDBHvVqREBCAxMihzr8D1nepHMr2gmQoZWpmgGmeta",
-      "name": "Credible Finance",
-      "symbol": "CRED",
-      "proposalCount": 1,
-      "poolPhase": "spot",
-      "raised": 4000000,
-      "treasury": 2450000,
+      "treasury": 8124,
       "official": true
     },
     {
@@ -296,8 +307,30 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 60000,
-      "treasury": 28800,
+      "treasury": 19200,
       "official": true
+    },
+    {
+      "address": "Ffi7Ba7w2fhiCZ9H4ZRixuoi1peCVsL3YBc1Ay2JnD4A",
+      "baseMint": "LASocYgQAo8GfypSjedNQgLft8y8DVGg1kSqR3smeta",
+      "name": "Laso Finance",
+      "symbol": "LASO",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 1000000,
+      "treasury": 677763,
+      "official": true
+    },
+    {
+      "address": "FU7mKs4cyAV9pCha1map4K5xTtkWN7uAjeM2dsGVBnGy",
+      "baseMint": "6tSJq2sA4kdqEMy9WxgRPTYpdtAiC954quENGvj6meta",
+      "name": "Rabid Racers",
+      "symbol": "RABD",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 100,
+      "treasury": 80,
+      "official": false
     },
     {
       "address": "6wmteHRgbJRSVPg8jaieZziKf7n1itADmWjJWQjCHcG1",
@@ -311,15 +344,15 @@
       "official": true
     },
     {
-      "address": "3kRM3ALGVZ6n2aNxzxUqZPpsuts5NRWRMN3FoXHcP2hy",
-      "baseMint": "6ysB4gbn6byAn9SRwMmkjBEFseK8cGneGBY1SZ4Cmeta",
-      "name": "Test",
-      "symbol": "TEST",
+      "address": "CATL7SAzmnytyYmr9sVs92PQ2YDWowS3LN2xz3MMnB6H",
+      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+      "name": "Sanctum",
+      "symbol": "SANC",
       "proposalCount": 1,
-      "poolPhase": "futarchy",
-      "raised": 10000,
+      "poolPhase": "spot",
+      "raised": 0,
       "treasury": 0,
-      "official": true
+      "official": false
     },
     {
       "address": "7WnY1TZLfpxxTEbi1LN5JwKohuu49mE2sJpgZTSdmneH",
@@ -333,26 +366,15 @@
       "official": false
     },
     {
-      "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
-      "baseMint": "6JSXRGMH6wNiukuLi4x6rSHazJMQL51WGbzirXxsmeta",
-      "name": "Areal Finance",
-      "symbol": "ARL",
-      "proposalCount": 0,
+      "address": "3kRM3ALGVZ6n2aNxzxUqZPpsuts5NRWRMN3FoXHcP2hy",
+      "baseMint": "6ysB4gbn6byAn9SRwMmkjBEFseK8cGneGBY1SZ4Cmeta",
+      "name": "Tset",
+      "symbol": "TSET",
+      "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 3050,
+      "treasury": 8000,
       "official": true
-    },
-    {
-      "address": "CYyoxDKnQm4RgYdFS9JDt6aQxZUKmoJe8QU5Mdgxw9kM",
-      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
-      "name": "Cloud",
-      "symbol": "CLOUD",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 0,
-      "official": false
     },
     {
       "address": "BpHjC6EK2TuFt1SwHa2HbxMv4rvUbdr4wkNJ8XJCQTzK",
@@ -443,6 +465,17 @@
       "official": false
     },
     {
+      "address": "7YktVLcciZ12HnsM2VektRZuxaPE9VRSyYhGBid47b2A",
+      "baseMint": "syQqkspvb2PRr1meJ5pJDmhgxwc4hUou2TMjjrTmeta",
+      "name": "The Syndicate",
+      "symbol": "GANG",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 600000,
+      "treasury": 480000,
+      "official": true
+    },
+    {
       "address": "CWxhqXkav3cum8nqjprZCr24qTacskDMRcSrFSQD6TeM",
       "baseMint": "DwCBrWrAGokHmysLL2XbY7TCZpbRH9QUAZxHnyWxmeta",
       "name": "GeSIM",
@@ -450,7 +483,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 28000,
-      "treasury": 14000,
+      "treasury": 9400,
       "official": true
     },
     {
@@ -498,14 +531,14 @@
       "official": false
     },
     {
-      "address": "Ffi7Ba7w2fhiCZ9H4ZRixuoi1peCVsL3YBc1Ay2JnD4A",
-      "baseMint": "LASocYgQAo8GfypSjedNQgLft8y8DVGg1kSqR3smeta",
-      "name": "Laso Finance",
-      "symbol": "LASO",
+      "address": "HMKEdwzp7d3cg8hGz1sQ1mfgn828dyeEmMzXVCn1Hoob",
+      "baseMint": "5Xg5fq7PgLNafbgXYfpWNmPhYpkSMEAqb7SPeHNdmeta",
+      "name": "MimiKrew",
+      "symbol": "KREW",
       "proposalCount": 0,
       "poolPhase": "spot",
-      "raised": 1000000,
-      "treasury": 730448,
+      "raised": 20000,
+      "treasury": 16000,
       "official": true
     },
     {
@@ -626,7 +659,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 150000,
-      "treasury": 90000,
+      "treasury": 75000,
       "official": true
     },
     {
@@ -641,17 +674,6 @@
       "official": false
     },
     {
-      "address": "9TW2pRqcmLn5saiw2YnfUxYjhoynk8ryoTfnKM8Po3vh",
-      "baseMint": "5FtV5gisCyCqJHsiCne4pX2r6d2YPRF9Kcfx2DKvmeta",
-      "name": "PREDICT",
-      "symbol": "PREDICT",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 10000,
-      "treasury": 8000,
-      "official": true
-    },
-    {
       "address": "82XqLX4wEuiCcCWMx6mzhrkLuCEPVqaHKdUGqBWaWS7z",
       "baseMint": "GBXKJSjyx76MbsooT8kCnjhPrDxkvWwscxXw2BBftdio",
       "name": "Reid Is cool",
@@ -660,17 +682,6 @@
       "poolPhase": "spot",
       "raised": 10,
       "treasury": 0,
-      "official": false
-    },
-    {
-      "address": "FU7mKs4cyAV9pCha1map4K5xTtkWN7uAjeM2dsGVBnGy",
-      "baseMint": "6tSJq2sA4kdqEMy9WxgRPTYpdtAiC954quENGvj6meta",
-      "name": "Rabid Racers",
-      "symbol": "RABD",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 100,
-      "treasury": 80,
       "official": false
     },
     {
@@ -700,6 +711,17 @@
       "baseMint": "ey9DmQUxPKnABU6LrWsQCvFVhZcYk2j4BmBSXLKmeta",
       "name": "Rustfully",
       "symbol": "RSTFUL",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 0,
+      "official": false
+    },
+    {
+      "address": "CYyoxDKnQm4RgYdFS9JDt6aQxZUKmoJe8QU5Mdgxw9kM",
+      "baseMint": "CLoUDKc4Ane7HeQcPpE3YHnznRxhMimJ4MyaUqyHFzAu",
+      "name": "Sanctum",
+      "symbol": "SANC",
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 0,
