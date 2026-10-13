@@ -162,6 +162,9 @@ hold exactly 0 SOL — which would fail the whole transaction after a multi-day 
 preset skips the create when the account exists, lets the treasury create it only when it
 holds the lamports, and otherwise refuses and offers to create the accounts from the
 proposer's wallet first. Pre-created accounts also save ~120 bytes (1022 vs 1140–1172).
+The same check covers the Meteora LP tab (both the NFT transfer and the forwarded
+tokens of a withdrawal) and the Swap tab. MimiKrew's first proposal hit exactly this:
+its vault held 0 SOL and the transfer would have failed on the recipient's NFT account.
 
 **Spark setup queues the whole onboarding proposal in one click**: transfer of the
 Meteora position NFT to a wallet, `update_dao` to a 24h vote with an 8h TWAP delay, and a

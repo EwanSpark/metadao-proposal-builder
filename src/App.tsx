@@ -58,6 +58,7 @@ import {
 } from "./lib/flow";
 import {
   findMeteoraPositions,
+  meteoraDestinationNeeds,
   transferMeteoraPosition,
   withdrawMeteoraPosition,
   type MeteoraPosition,
@@ -376,8 +377,15 @@ export default function App(_: Props) {
         const p = meteoraPositions[meteoraSel];
         if (!p) throw new Error("Scan the treasury and pick a position first.");
         const to = new PublicKey(meteoraTo.trim());
+        // Destination accounts: created by the treasury only if it can pay their rent.
+        // A launchpad vault can hold 0 SOL, and a missing lamport fails the whole
+        // proposal after the vote.
+        const needs = meteoraDestinationNeeds(p, meteoraMode, to, Number(meteoraA), Number(meteoraB));
+        const { createByTreasury } = await planAtaCreates(connection, dao.treasury, needs);
+        if (createByTreasury.length) say(`   ${createByTreasury.length} destination account(s) will be created by the treasury.`);
+        else say("   Every destination account already exists.");
         if (meteoraMode === "transfer") {
-          ixs = transferMeteoraPosition(dao, p, to);
+          ixs = [...createByTreasury, ...transferMeteoraPosition(dao, p, to, { skipCreate: true })];
           say(
             `ℹ️ Transferring position NFT ${p.nftMint.toBase58().slice(0, 8)}… (${(p.share * 100).toFixed(2)}% of pool ` +
               `${p.pool.toBase58().slice(0, 8)}…, ~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today) to ${to.toBase58().slice(0, 8)}…. ` +
@@ -390,7 +398,7 @@ export default function App(_: Props) {
           throw new Error(
             `Forwarding more than the withdrawal is expected to return (${p.expectedA.toFixed(2)} ${p.labelA} / ${p.expectedB.toFixed(2)} ${p.labelB}) would fail at execution.`,
           );
-        ixs = withdrawMeteoraPosition(dao, p, to, a, b);
+        ixs = [...createByTreasury, ...withdrawMeteoraPosition(dao, p, to, a, b, { skipCreate: true })];
         say(
           `ℹ️ Withdrawing ${(p.share * 100).toFixed(2)}% of pool ${p.pool.toBase58().slice(0, 8)}… ` +
             `(~${p.expectedA.toFixed(2)} ${p.labelA} + ~${p.expectedB.toFixed(2)} ${p.labelB} today), forwarding ${a} + ${b} to ${to.toBase58().slice(0, 8)}…`,
@@ -1363,6 +1371,26 @@ export default function App(_: Props) {
                   <span>Destination wallet</span>
                   <input placeholder="wallet that receives the tokens" value={meteoraTo} onChange={(e) => setMeteoraTo(e.target.value)} />
                 </label>
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao || !wallet || !meteoraPositions[meteoraSel] || !meteoraTo.trim()}
+                    onClick={() =>
+                      run("creating destination accounts", async () => {
+                        if (!dao || !wallet) throw new Error("Connect a wallet and load a DAO.");
+                        const p = meteoraPositions[meteoraSel];
+                        if (!p) throw new Error("Scan the treasury and pick a position first.");
+                        const needs = meteoraDestinationNeeds(p, meteoraMode, new PublicKey(meteoraTo.trim()), Number(meteoraA), Number(meteoraB));
+                        const missing = (await checkAtas(connection, needs)).filter((x) => !x.exists);
+                        if (missing.length === 0) return say("✅ Every destination account already exists.");
+                        const sig = await sendLocally(createAtasTx(wallet.publicKey, missing), connection, {});
+                        say(`✅ Created ${missing.length} destination account(s) from your wallet — ${sig}`);
+                      })
+                    }
+                  >
+                    Create destination accounts from my wallet
+                  </button>
+                </div>
                 {meteoraMode === "withdraw" && (
                   <div className="row wrap">
                     <label className="field grow">
@@ -1377,7 +1405,9 @@ export default function App(_: Props) {
                 )}
                 {meteoraMode === "transfer" ? (
                   <p className="hint">
-                    <strong>Two instructions, ~730 bytes.</strong> The position NFT moves as-is; whoever
+                    <strong>Two instructions, ~730 bytes; one if the destination account exists.</strong>
+                    A launchpad vault can hold 0 SOL, so the account is only created by the treasury
+                    when it can pay the rent — otherwise create it from your wallet with the button above. The position NFT moves as-is; whoever
                     holds it owns the position and can withdraw, claim fees, or keep it. Nothing is
                     unwound and no amount needs guessing — and it leaves room for a parameter change
                     and a memo in the same proposal. Fails only if Meteora has frozen the position

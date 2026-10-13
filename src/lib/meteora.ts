@@ -267,6 +267,8 @@ export function withdrawMeteoraPosition(
   destination: PublicKey,
   amountA: number,
   amountB: number,
+  /** Leave the destination ATA creations out — the caller has checked they exist (see lib/ata.ts). */
+  opts: { skipCreate?: boolean } = {},
 ): TransactionInstruction[] {
   const treasury = dao.treasury;
   const [eventAuthority] = PublicKey.findProgramAddressSync(
@@ -304,8 +306,8 @@ export function withdrawMeteoraPosition(
   const forward = (mint: PublicKey, program: PublicKey, decimals: number, from: PublicKey, amount: number) => {
     if (amount <= 0) return;
     const to = getAssociatedTokenAddressSync(mint, destination, false, program);
+    if (!opts.skipCreate) ixs.push(createAssociatedTokenAccountIdempotentInstruction(treasury, to, destination, mint, program));
     ixs.push(
-      createAssociatedTokenAccountIdempotentInstruction(treasury, to, destination, mint, program),
       createTransferCheckedInstruction(
         from,
         mint,
@@ -321,6 +323,24 @@ export function withdrawMeteoraPosition(
   forward(p.tokenAMint, p.tokenAProgram, p.tokenADecimals, treasuryA, amountA);
   forward(p.tokenBMint, p.tokenBProgram, p.tokenBDecimals, treasuryB, amountB);
   return ixs;
+}
+
+/**
+ * The accounts a Meteora LP action creates for its destination: the NFT's account when
+ * the position is transferred, or one account per forwarded token when it is withdrawn.
+ */
+export function meteoraDestinationNeeds(
+  p: MeteoraPosition,
+  mode: "transfer" | "withdraw",
+  destination: PublicKey,
+  amountA = 0,
+  amountB = 0,
+): { mint: PublicKey; owner: PublicKey; program: PublicKey }[] {
+  if (mode === "transfer") return [{ mint: p.nftMint, owner: destination, program: TOKEN_2022_PROGRAM_ID }];
+  const needs = [];
+  if (amountA > 0) needs.push({ mint: p.tokenAMint, owner: destination, program: p.tokenAProgram });
+  if (amountB > 0) needs.push({ mint: p.tokenBMint, owner: destination, program: p.tokenBProgram });
+  return needs;
 }
 
 export function describeMeteoraIx(ix: TransactionInstruction): string | null {
