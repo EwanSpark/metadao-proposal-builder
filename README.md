@@ -67,6 +67,15 @@ The full lifecycle, in the order the program enforces:
 
 ## Implementation notes worth knowing
 
+**Founder package proposals are mandates, not changes.** The tab reads the DAO's
+price-based performance package (tranches, unlock date, recipient, authority) and writes
+the memo of a proposal asking for new terms: no cliff, a dollar and a percentage cap on
+sales per rolling 30 days. That is all CARS-002 was: a memo. The deployed program can only
+change its oracle and its recipient, so Rip Cars' package is unchanged on-chain after the
+vote. Moving the unlock date and capping withdrawals arrive with MetaDAO's
+"Performance package withdrawal limits" (programs PR #494, not deployed). A memo-only
+proposal fits 719 bytes of text.
+
 **Treasury swaps go through one Raydium CLMM pool, not a Jupiter route.** A route is
 only valid for the accounts of the moment it was quoted, and the vault executes it a
 day or more later. In a CLMM pool only the tick arrays depend on the price, and

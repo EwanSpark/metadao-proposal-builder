@@ -67,6 +67,13 @@ import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./li
 import TradePanel from "./TradePanel";
 import { checkAtas, createAtasTx, planAtaCreates } from "./lib/ata";
 import { MintLayout, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
+import {
+  MAX_MANDATE_MEMO_BYTES,
+  findPerformancePackages,
+  packageMandateMemo,
+  readPerformancePackage,
+  type PerformancePackageView,
+} from "./lib/performancePackage";
 import { clmmPrice, clmmSwapIx, estimateClmmOut, findClmmPool, readClmmPool } from "./lib/raydium";
 
 type Mode = "create" | "stake" | "finalize" | "manager";
@@ -81,6 +88,7 @@ type ActionKind =
   | "spark"
   | "metadata"
   | "swap"
+  | "package"
   | "params"
   | "limit"
   | "coffre"
@@ -161,6 +169,14 @@ export default function App(_: Props) {
   const [swapAmount, setSwapAmount] = useState("");
   const [swapSlippage, setSwapSlippage] = useState("1");
   const [swapPool, setSwapPool] = useState("");
+  const [pkg, setPkg] = useState<PerformancePackageView | null>(null);
+  const [pkgAddress, setPkgAddress] = useState("");
+  const [pkgRemoveCliff, setPkgRemoveCliff] = useState(true);
+  const [pkgUsdCap, setPkgUsdCap] = useState("100000");
+  const [pkgPctCap, setPkgPctCap] = useState("5");
+  const [pkgMonths, setPkgMonths] = useState("18");
+  const [pkgLink, setPkgLink] = useState("");
+  const [pkgMemo, setPkgMemo] = useState("");
   const [rawJson, setRawJson] = useState("");
   const [voteSeconds, setVoteSeconds] = useState("");
   const [twapDelaySeconds, setTwapDelaySeconds] = useState("");
@@ -515,6 +531,13 @@ export default function App(_: Props) {
             : "   The treasury's output account already exists.",
         );
         say("   If the pool moves past the minimum before execution, the swap fails and nothing leaves the vault.");
+      } else if (kind === "package") {
+        const text = pkgMemo.trim();
+        if (!text) throw new Error("Load the package and generate the memo first.");
+        const bytes = Buffer.byteLength(text, "utf8");
+        if (bytes > MAX_MANDATE_MEMO_BYTES) throw new Error(`The memo is ${bytes} bytes; a proposal fits ${MAX_MANDATE_MEMO_BYTES}. Shorten it or move detail behind the link.`);
+        ixs = authorizationMemo(text);
+        say(`ℹ️ Mandate memo, ${bytes} bytes. Executing it writes this text; it changes nothing in the package by itself.`);
       } else if (kind === "memo") {
         const text = titleMemo.trim();
         if (!text) throw new Error("Write the memo first.");
@@ -915,6 +938,10 @@ export default function App(_: Props) {
       title: "Treasury swap",
       sub: "Swap treasury tokens through one Raydium CLMM pool, with a minimum output fixed now and enforced at execution.",
     },
+    package: {
+      title: "Founder package",
+      sub: "Read the founder's performance package and propose new terms — a mandate the market votes on, like CARS-002.",
+    },
     memo: {
       title: "Memo",
       sub: "A title and a link, written into the transaction. The only on-chain text a proposal can carry.",
@@ -1198,6 +1225,7 @@ export default function App(_: Props) {
                   ["spark", "Spark setup"],
                   ["metadata", "Token metadata"],
                   ["swap", "Swap"],
+                  ["package", "Founder package"],
                   ["params", "Parameters"],
                   ["limit", "Spending limit"],
                   ["coffre", "Coffre"],
@@ -1598,6 +1626,118 @@ export default function App(_: Props) {
                   to the right one. The minimum output is fixed now; if the price has moved further
                   than the slippage by execution, the swap fails and nothing leaves the vault. Creating
                   the output account from your wallet first saves ~75 bytes for a memo.
+                </p>
+              </div>
+            )}
+
+            {kind === "package" && (
+              <div className="form">
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={busy || !dao}
+                    onClick={() =>
+                      run("reading the performance package", async () => {
+                        if (!dao) throw new Error("Load a DAO first.");
+                        let address: PublicKey;
+                        if (pkgAddress.trim()) address = new PublicKey(pkgAddress.trim());
+                        else {
+                          let found: PublicKey[];
+                          try {
+                            found = await findPerformancePackages(connection, dao.baseMint);
+                          } catch {
+                            throw new Error("This RPC refuses the scan. Paste the package address (Backable and Solscan show it).");
+                          }
+                          if (found.length === 0) throw new Error("No performance package pays out this token.");
+                          if (found.length > 1) say(`⚠️ ${found.length} packages pay out this token; showing the first. Paste another address to switch.`);
+                          address = found[0];
+                          setPkgAddress(address.toBase58());
+                        }
+                        const p = await readPerformancePackage(connection, address, dao.baseDecimals, dao.quoteDecimals);
+                        setPkg(p);
+                        const own = p.authority.equals(dao.treasury);
+                        say(
+                          `🔎 Package ${address.toBase58().slice(0, 8)}… · ${p.totalTokens.toLocaleString()} tokens in ${p.tranches.length} tranches · ` +
+                            `unlock no earlier than ${p.minUnlock.toISOString().slice(0, 10)} · ${p.changesApplied} change(s) applied · authority ${own ? "= this treasury ✅" : p.authority.toBase58().slice(0, 8) + "… ≠ treasury"}`,
+                        );
+                      })
+                    }
+                  >
+                    Load the founder package
+                  </button>
+                  <input
+                    className="grow"
+                    placeholder="…or paste the performance package address"
+                    value={pkgAddress}
+                    onChange={(e) => setPkgAddress(e.target.value)}
+                  />
+                </div>
+                {pkg && (
+                  <>
+                    <div className="stats">
+                      <div className="stat"><div className="k">Package</div><div className="v">{pkg.totalTokens.toLocaleString()}</div></div>
+                      <div className="stat"><div className="k">Unlock from</div><div className="v">{pkg.minUnlock.toISOString().slice(0, 10)}</div></div>
+                      <div className="stat"><div className="k">TWAP</div><div className="v">{pkg.twapDays}<small> days</small></div></div>
+                      <div className="stat"><div className="k">Unlocked</div><div className="v">{pkg.alreadyUnlocked.toLocaleString()}</div></div>
+                    </div>
+                    <p className="hint">
+                      Tranches: {pkg.tranches.map((t) => `${t.tokens.toLocaleString()} at $${t.price.toPrecision(3)}${t.unlocked ? " ✓" : ""}`).join(" · ")}.
+                      Recipient {pkg.recipient.toBase58().slice(0, 8)}…, state {pkg.state}.
+                    </p>
+                  </>
+                )}
+                <label className="check">
+                  <input type="checkbox" checked={pkgRemoveCliff} onChange={(e) => setPkgRemoveCliff(e.target.checked)} />
+                  Remove the cliff
+                </label>
+                <div className="row wrap">
+                  <label className="field grow">
+                    <span>Max sold per 30 days, $ (0 = none)</span>
+                    <input inputMode="decimal" value={pkgUsdCap} onChange={(e) => setPkgUsdCap(e.target.value)} />
+                  </label>
+                  <label className="field grow">
+                    <span>Max sold per 30 days, % of package (0 = none)</span>
+                    <input inputMode="decimal" value={pkgPctCap} onChange={(e) => setPkgPctCap(e.target.value)} />
+                  </label>
+                  <label className="field" style={{ width: 150 }}>
+                    <span>Caps apply for (months)</span>
+                    <input inputMode="numeric" value={pkgMonths} onChange={(e) => setPkgMonths(e.target.value)} />
+                  </label>
+                </div>
+                <label className="field">
+                  <span>Link to the full proposal text (optional)</span>
+                  <input placeholder="https://…" value={pkgLink} onChange={(e) => setPkgLink(e.target.value)} />
+                </label>
+                <div className="row wrap">
+                  <button
+                    className="ghost"
+                    disabled={!pkg}
+                    onClick={() => {
+                      if (!pkg) return;
+                      const symbol = daoList.find((d) => dao && d.address.equals(dao.address))?.symbol ?? "the token";
+                      setPkgMemo(
+                        packageMandateMemo(pkg, {
+                          symbol,
+                          removeCliff: pkgRemoveCliff,
+                          usdCap: Number(pkgUsdCap) || 0,
+                          pctCap: Number(pkgPctCap) || 0,
+                          months: Number(pkgMonths) || 18,
+                          link: pkgLink,
+                        }),
+                      );
+                    }}
+                  >
+                    Generate the memo
+                  </button>
+                </div>
+                <textarea rows={6} value={pkgMemo} onChange={(e) => setPkgMemo(e.target.value)} placeholder="Load the package, then generate — or write the mandate yourself." />
+                <p className="hint">
+                  {Buffer.byteLength(pkgMemo, "utf8")} / {MAX_MANDATE_MEMO_BYTES} bytes.{" "}
+                  <strong>This is a mandate, not a change.</strong> The deployed performance package
+                  program can only change its oracle and its recipient; moving the unlock date or capping
+                  sales arrives with MetaDAO's withdrawal-limits upgrade (programs PR #494, not deployed).
+                  CARS-002 passed exactly like this — a memo — and Rip Cars' package is unchanged on-chain.
+                  Nothing else fits in the same proposal if the memo is long.
                 </p>
               </div>
             )}
