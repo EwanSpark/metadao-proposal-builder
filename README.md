@@ -263,6 +263,8 @@ Generic tools, usable on any DAO or proposal:
 
 ```bash
 node scripts/decode-proposal.mjs <proposalAddress>   # decode a proposal's vault transaction
+npx tsx scripts/check-proposal.mts <proposal>         # decode and simulate it as the treasury, with token deltas
+npx tsx scripts/dao-info.mts <daoAddress>             # vault SOL, mint authority, parameters, Meteora position
 node scripts/snapshot-daos.mjs                       # regenerate the bundled DAO list
 node scripts/survey-proposals.mjs                    # decode every proposal on every DAO
 node scripts/rank-activity.mjs count                 # transactions per proposal, real projects only
