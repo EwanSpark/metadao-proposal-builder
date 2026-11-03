@@ -32,6 +32,17 @@ node scripts/snapshot-daos.mjs
 RPC=https://mainnet.helius-rpc.com/?api-key=… node scripts/snapshot-daos.mjs
 ```
 
+### Links
+
+`?project=<symbol|name|address>&section=<step>` opens a DAO on a step, e.g.
+`/?project=krew&section=allowance`. Steps: `create`, `stake` (or `launch`), `finalize`
+(or `execute`), `allowance` (or `budget`), `manager` (or `coffre`). A second `?` in place
+of `&` is accepted. When several DAOs share a symbol, the link picks the official one
+with the most proposals; a project missing from the snapshot is looked up in the live
+list, so it needs an RPC that allows `getProgramAccounts`, or the DAO address instead.
+The address bar follows the DAO and step you pick, so the current URL is always the
+link to share.
+
 ## Modes
 
 **1 · Create** — compose the instructions, then create the proposal (Draft state).

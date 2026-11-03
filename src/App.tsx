@@ -2,7 +2,7 @@ import { useAnchorWallet, useConnection } from "@solana/wallet-adapter-react";
 import { WalletMultiButton } from "@solana/wallet-adapter-react-ui";
 import { PublicKey, TransactionInstruction } from "@solana/web3.js";
 import BN from "bn.js";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GENESIS, RPC_ENDPOINT, RPC_HINT } from "./config";
 import {
   authorizationMemo,
@@ -78,6 +78,43 @@ import {
 import { clmmPrice, clmmSwapIx, estimateClmmOut, findClmmPool, readClmmPool } from "./lib/raydium";
 
 type Mode = "create" | "stake" | "finalize" | "allowance" | "manager";
+
+/** `?section=` values, with the step labels people actually type. */
+const SECTIONS: Record<string, Mode> = {
+  create: "create",
+  stake: "stake",
+  launch: "stake",
+  finalize: "finalize",
+  execute: "finalize",
+  allowance: "allowance",
+  budget: "allowance",
+  manager: "manager",
+  coffre: "manager",
+};
+
+/**
+ * `?project=drawup&section=allowance`. A stray second `?` (`?project=x?section=y`) is
+ * read as `&`, since that is the link people write by hand.
+ */
+function readDeepLink(): { project: string | null; mode: Mode | null } {
+  const q = new URLSearchParams(window.location.search.slice(1).replace(/\?/g, "&"));
+  const section = q.get("section")?.trim().toLowerCase();
+  return { project: q.get("project")?.trim() || null, mode: (section && SECTIONS[section]) || null };
+}
+
+/** Address, then symbol, then name; among same-symbol DAOs the official, busiest one. */
+function findProject(list: DaoSummary[], query: string): DaoSummary | null {
+  const q = query.toLowerCase();
+  const byAddress = list.find((d) => d.address.toBase58() === query);
+  if (byAddress) return byAddress;
+  const rank = (a: DaoSummary, b: DaoSummary) =>
+    Number(b.official) - Number(a.official) || b.proposalCount - a.proposalCount;
+  return (
+    list.filter((d) => d.symbol?.toLowerCase() === q).sort(rank)[0] ??
+    list.filter((d) => d.name?.toLowerCase() === q).sort(rank)[0] ??
+    null
+  );
+}
 type ActionKind =
   | "spend"
   | "buyback"
@@ -299,6 +336,65 @@ export default function App(_: Props) {
             .join(", #")} — no futarchy proposal yet.`,
         );
     });
+
+  /* ------------------------------------------------------------ deep link */
+
+  const deepLink = useRef(readDeepLink());
+  /** Off until the link's project is resolved, so the URL sync doesn't erase it first. */
+  const linkSettled = useRef(!deepLink.current.project);
+
+  const linkStarted = useRef(false);
+
+  useEffect(() => {
+    // StrictMode runs mount effects twice in dev; the DAO loads once.
+    if (linkStarted.current) return;
+    linkStarted.current = true;
+    const { project, mode: section } = deepLink.current;
+    if (section) setMode(section);
+    if (!project) return;
+    (async () => {
+      let hit = findProject(daoList, project);
+      if (!hit) {
+        // Newer than the bundled snapshot: ask the RPC for the live list.
+        try {
+          const { daos } = await loadDaoList(connection, client);
+          setDaoList(daos);
+          hit = findProject(daos, project);
+        } catch {
+          /* fall through to the address check */
+        }
+      }
+      let address = hit?.address.toBase58();
+      if (!address) {
+        try {
+          address = new PublicKey(project).toBase58();
+        } catch {
+          linkSettled.current = true;
+          say(`❌ link — no project matches “${project}”.`);
+          return;
+        }
+      }
+      linkSettled.current = true;
+      doLoadDao(address);
+    })();
+    // Once, on arrival.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  /** The address bar follows the DAO and the step, so the page is always shareable. */
+  useEffect(() => {
+    if (!linkSettled.current) return;
+    const q = new URLSearchParams();
+    if (dao) {
+      const sym = daoList.find((d) => d.address.equals(dao.address))?.symbol;
+      const unique = sym && findProject(daoList, sym)?.address.equals(dao.address);
+      q.set("project", unique ? sym.toLowerCase() : dao.address.toBase58());
+    }
+    if (dao || mode !== "create") q.set("section", mode);
+    const search = q.toString() ? `?${q}` : "";
+    if (search !== window.location.search)
+      window.history.replaceState(null, "", `${window.location.pathname}${search}${window.location.hash}`);
+  }, [dao, mode, daoList]);
 
   const doDiscover = () =>
     run("discovering proposals", async () => {

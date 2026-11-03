@@ -1,6 +1,6 @@
 {
   "cluster": "mainnet-beta",
-  "capturedAt": "2026-10-13T17:06:11.690Z",
+  "capturedAt": "2026-11-03T09:11:33.412Z",
   "daos": [
     {
       "address": "BQjNtXjZB7b9WrqgJZQWfR52T1MqZoqMELAoombywDi8",
@@ -29,10 +29,10 @@
       "baseMint": "PRVT6TB7uss3FrUd2D9xs2zqDBsa3GbMJMwCQsgmeta",
       "name": "Umbra",
       "symbol": "UMBRA",
-      "proposalCount": 10,
+      "proposalCount": 12,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 1104318,
+      "treasury": 954318,
       "official": true
     },
     {
@@ -69,6 +69,17 @@
       "official": true
     },
     {
+      "address": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
+      "baseMint": "METAwkXcqyXKy1AtsSgJ8JiUHwGCafnZL38n3vYmeta",
+      "name": "MetaDAO",
+      "symbol": "META",
+      "proposalCount": 7,
+      "poolPhase": "spot",
+      "raised": 0,
+      "treasury": 3223551,
+      "official": true
+    },
+    {
       "address": "AE7jPb9jYzbUE5GYJToKvXaRkJL2Q7Mm3Ek6KqyBGuxe",
       "baseMint": "4Ueb677S8FVCH5ot5rrB6MFq5XsFgpQBgri1oNCnx6HW",
       "name": "PreProd",
@@ -91,17 +102,6 @@
       "official": true
     },
     {
-      "address": "CUPoiqkK4hxyCiJcLC4yE9AtJP1MoV1vFV2vx3jqwWeS",
-      "baseMint": "METAwkXcqyXKy1AtsSgJ8JiUHwGCafnZL38n3vYmeta",
-      "name": "MetaDAO",
-      "symbol": "META",
-      "proposalCount": 6,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 3463551,
-      "official": true
-    },
-    {
       "address": "DzYtzoNvPbyFCzwZA6cSm9eDEEmxEB9f8AGkJXUXgnSA",
       "baseMint": "SoLo9oxzLDpcq1dpqAgMwgce5WqkRDtNXK7EPnbmeta",
       "name": "Solomon",
@@ -109,7 +109,29 @@
       "proposalCount": 6,
       "poolPhase": "spot",
       "raised": 0,
+      "treasury": 100000,
+      "official": true
+    },
+    {
+      "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
+      "baseMint": "6JSXRGMH6wNiukuLi4x6rSHazJMQL51WGbzirXxsmeta",
+      "name": "Areal Finance",
+      "symbol": "ARL",
+      "proposalCount": 5,
+      "poolPhase": "spot",
+      "raised": 10000,
       "treasury": 0,
+      "official": true
+    },
+    {
+      "address": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
+      "baseMint": "LYLikzBQtpa9ZgVrJsqYGQpR3cC1WMJrBHaXGrQmeta",
+      "name": "Loyal",
+      "symbol": "LOYAL",
+      "proposalCount": 5,
+      "poolPhase": "futarchy",
+      "raised": 0,
+      "treasury": 2,
       "official": false
     },
     {
@@ -142,7 +164,7 @@
       "proposalCount": 4,
       "poolPhase": "spot",
       "raised": 250000,
-      "treasury": 725000,
+      "treasury": 685000,
       "official": true
     },
     {
@@ -153,19 +175,8 @@
       "proposalCount": 4,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 7971,
+      "treasury": 7953,
       "official": true
-    },
-    {
-      "address": "GxpJkPEsPmuRCCTNnfZaDKg4X3gf4ZPgmqgFqtibaPtK",
-      "baseMint": "LYLikzBQtpa9ZgVrJsqYGQpR3cC1WMJrBHaXGrQmeta",
-      "name": "Loyal",
-      "symbol": "LOYAL",
-      "proposalCount": 4,
-      "poolPhase": "spot",
-      "raised": 0,
-      "treasury": 1,
-      "official": false
     },
     {
       "address": "s45fTDhkzKPMFbNmUXA3bJNdF92z5cbVvHdY8LpznWQ",
@@ -175,7 +186,7 @@
       "proposalCount": 4,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 482832,
+      "treasury": 445832,
       "official": true
     },
     {
@@ -197,7 +208,18 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 4000000,
-      "treasury": 1950000,
+      "treasury": 1700000,
+      "official": true
+    },
+    {
+      "address": "3s6wbZfYT9zBh94uahMm17VJpKdNs1RNRhnw6hSta2y2",
+      "baseMint": "CMFmrTNfNEYNnauug1mi2LMkghaVT3Sx6CxJ8xLcmeta",
+      "name": "HiveBits",
+      "symbol": "NECTAR",
+      "proposalCount": 3,
+      "poolPhase": "spot",
+      "raised": 140000,
+      "treasury": 92000,
       "official": true
     },
     {
@@ -208,7 +230,7 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 6000000,
-      "treasury": 3142397,
+      "treasury": 2975505,
       "official": true
     },
     {
@@ -219,18 +241,7 @@
       "proposalCount": 3,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 7021,
-      "official": true
-    },
-    {
-      "address": "5BhKSFDV3mNzUxCaAyMZtbakhkbApwzLBD4gnQmNoz3Z",
-      "baseMint": "6JSXRGMH6wNiukuLi4x6rSHazJMQL51WGbzirXxsmeta",
-      "name": "Areal Finance",
-      "symbol": "ARL",
-      "proposalCount": 2,
-      "poolPhase": "futarchy",
-      "raised": 10000,
-      "treasury": 1400,
+      "treasury": 7100,
       "official": true
     },
     {
@@ -241,7 +252,7 @@
       "proposalCount": 2,
       "poolPhase": "spot",
       "raised": 0,
-      "treasury": 1700001,
+      "treasury": 1600001,
       "official": true
     },
     {
@@ -252,7 +263,7 @@
       "proposalCount": 2,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 5077,
+      "treasury": 5078,
       "official": true
     },
     {
@@ -276,6 +287,17 @@
       "raised": 0,
       "treasury": 0,
       "official": false
+    },
+    {
+      "address": "5hEhwsH6jf3U5mpRSEoLFC1LZkuMyUAV62raftzJcQHQ",
+      "baseMint": "2HPNEWcxDDnLhdSmfsNPf6TC1byJXPNj6mczqY5ymeta",
+      "name": "DRAWUP",
+      "symbol": "DRAWUP",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 20000,
+      "treasury": 16000,
+      "official": true
     },
     {
       "address": "Gxvt2wKNiDZcnEK8GQ6Cyb8x1Kvm4nm2kT2itDmYdEFa",
@@ -311,6 +333,17 @@
       "official": true
     },
     {
+      "address": "HMKEdwzp7d3cg8hGz1sQ1mfgn828dyeEmMzXVCn1Hoob",
+      "baseMint": "5Xg5fq7PgLNafbgXYfpWNmPhYpkSMEAqb7SPeHNdmeta",
+      "name": "MimiKrew",
+      "symbol": "KREW",
+      "proposalCount": 1,
+      "poolPhase": "spot",
+      "raised": 20000,
+      "treasury": 14010,
+      "official": true
+    },
+    {
       "address": "Ffi7Ba7w2fhiCZ9H4ZRixuoi1peCVsL3YBc1Ay2JnD4A",
       "baseMint": "LASocYgQAo8GfypSjedNQgLft8y8DVGg1kSqR3smeta",
       "name": "Laso Finance",
@@ -318,7 +351,7 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 1000000,
-      "treasury": 677763,
+      "treasury": 624982,
       "official": true
     },
     {
@@ -340,7 +373,7 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 200000,
-      "treasury": 101000,
+      "treasury": 93000,
       "official": true
     },
     {
@@ -373,7 +406,7 @@
       "proposalCount": 1,
       "poolPhase": "spot",
       "raised": 10000,
-      "treasury": 8000,
+      "treasury": 0,
       "official": true
     },
     {
@@ -472,7 +505,7 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 600000,
-      "treasury": 480000,
+      "treasury": 438334,
       "official": true
     },
     {
@@ -529,17 +562,6 @@
       "raised": 0,
       "treasury": 0,
       "official": false
-    },
-    {
-      "address": "HMKEdwzp7d3cg8hGz1sQ1mfgn828dyeEmMzXVCn1Hoob",
-      "baseMint": "5Xg5fq7PgLNafbgXYfpWNmPhYpkSMEAqb7SPeHNdmeta",
-      "name": "MimiKrew",
-      "symbol": "KREW",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 20000,
-      "treasury": 16000,
-      "official": true
     },
     {
       "address": "3uQ1F8ZWS4yRHAxSNiYo1K8Dpb4q7WZFCCGVykdpAkm4",
@@ -630,17 +652,6 @@
       "official": false
     },
     {
-      "address": "3s6wbZfYT9zBh94uahMm17VJpKdNs1RNRhnw6hSta2y2",
-      "baseMint": "CMFmrTNfNEYNnauug1mi2LMkghaVT3Sx6CxJ8xLcmeta",
-      "name": "HiveBits",
-      "symbol": "NECTAR",
-      "proposalCount": 0,
-      "poolPhase": "spot",
-      "raised": 140000,
-      "treasury": 102000,
-      "official": true
-    },
-    {
       "address": "UHThZd3AeVpS2mKREGyVWmCLRyk6qmgWwJFAwjenwYW",
       "baseMint": "EmJXFEg22CsXt7gZcBTME2shA6gJ3BJyYZ5SGp1QNkm8",
       "name": "NewTOKEN",
@@ -659,7 +670,18 @@
       "proposalCount": 0,
       "poolPhase": "spot",
       "raised": 150000,
-      "treasury": 75000,
+      "treasury": 60000,
+      "official": true
+    },
+    {
+      "address": "4ZD49sMkvB1sh9nTcgHpVaA8BxGrm5b2hFcu1QDnL42r",
+      "baseMint": "95XVMy1tQcn4gsxu88JiCCw6k5oLJ74xhbAa7Gr3meta",
+      "name": "Orendal",
+      "symbol": "ORENDAL",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 20000,
+      "treasury": 13000,
       "official": true
     },
     {
@@ -672,6 +694,17 @@
       "raised": 0,
       "treasury": 6,
       "official": false
+    },
+    {
+      "address": "9UuMVqMdjtuUKxqmcUFmXD6t6nzLQrrgbZcnkg4WGyBm",
+      "baseMint": "GYYCX5q47qDU7ctwCjZv7KKgW2L3788f4vtdR3Kjmeta",
+      "name": "The Inner Table",
+      "symbol": "POKER",
+      "proposalCount": 0,
+      "poolPhase": "spot",
+      "raised": 159454,
+      "treasury": 127563,
+      "official": true
     },
     {
       "address": "82XqLX4wEuiCcCWMx6mzhrkLuCEPVqaHKdUGqBWaWS7z",
