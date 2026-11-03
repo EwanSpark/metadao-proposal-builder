@@ -65,6 +65,7 @@ import {
 } from "./lib/meteora";
 import { readTokenMetadata, updateTokenMetadata, type TokenMetadata } from "./lib/tokenMetadata";
 import TradePanel from "./TradePanel";
+import AllowancePanel from "./AllowancePanel";
 import { checkAtas, createAtasTx, planAtaCreates } from "./lib/ata";
 import { MintLayout, TOKEN_2022_PROGRAM_ID } from "@solana/spl-token";
 import {
@@ -76,7 +77,7 @@ import {
 } from "./lib/performancePackage";
 import { clmmPrice, clmmSwapIx, estimateClmmOut, findClmmPool, readClmmPool } from "./lib/raydium";
 
-type Mode = "create" | "stake" | "finalize" | "manager";
+type Mode = "create" | "stake" | "finalize" | "allowance" | "manager";
 type ActionKind =
   | "spend"
   | "buyback"
@@ -820,6 +821,8 @@ export default function App(_: Props) {
   const nextStep = (() => {
     if (!wallet) return "Connect a wallet to act. Reading works without one.";
     if (!dao) return "Load a DAO: pick one from the list or paste its address.";
+    if (mode === "allowance")
+      return "Monthly allowance: a listed wallet withdraws with its own signature, no proposal.";
     if (mode === "manager")
       return "Manager console: trades need no vote. The connected wallet must be the coffre's manager.";
     if (mode === "create")
@@ -978,6 +981,7 @@ export default function App(_: Props) {
     ["create", "Create", "Compose and submit"],
     ["stake", "Stake & launch", "Reach the threshold"],
     ["finalize", "Finalize & execute", "After the vote"],
+    ["allowance", "Allowance", "Monthly budget"],
     ["manager", "Coffre", "Manager console"],
   ];
 
@@ -1970,6 +1974,25 @@ export default function App(_: Props) {
             )}
           </div>
         )}
+
+        {mode === "allowance" &&
+          (dao ? (
+            <AllowancePanel
+              key={dao.address.toBase58()}
+              dao={dao}
+              connection={connection}
+              wallet={wallet ?? null}
+              busy={busy}
+              send={sendLocally}
+              say={say}
+              run={run}
+            />
+          ) : (
+            <div className="panel">
+              <h2>Monthly allowance</h2>
+              <div className="empty">Load a DAO first.</div>
+            </div>
+          ))}
 
         {mode === "manager" &&
           (dao ? (

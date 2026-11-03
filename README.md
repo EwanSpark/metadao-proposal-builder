@@ -32,7 +32,7 @@ node scripts/snapshot-daos.mjs
 RPC=https://mainnet.helius-rpc.com/?api-key=… node scripts/snapshot-daos.mjs
 ```
 
-## Three modes
+## Modes
 
 **1 · Create** — compose the instructions, then create the proposal (Draft state).
 **2 · Stake & Launch** — works on **any** existing proposal, not just the one created in
@@ -40,6 +40,13 @@ this session: it lists the DAO's proposals automatically, or takes a pasted addr
 Stake, unstake, sponsor, launch.
 **3 · Finalize & Execute** — same picker, then finalization and vault-transaction
 execution.
+**4 · Allowance** — the treasury's spending limit, withdrawn by a listed member's own
+signature with no proposal. Shows the amount, what is left now (applying Squads' reset
+rule: a full 30-day period since the last reset restores the amount), the next reset, the
+treasury balance and the members. The withdrawal is one transaction: the destination's
+token account if missing (rent paid by the member), then `spending_limit_use`. Simulated
+on Umbra and Superclaw; LFOWN and MimiKrew had used their whole allowance that period.
+**5 · Coffre** — the manager console of the card-buying vault.
 
 Discovery does not use `getProgramAccounts` (public RPCs throttle or refuse it). Since
 every futarchy proposal is a PDA of a Squads proposal, itself a PDA of
